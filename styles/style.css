@@ -2,3 +2,15 @@ body {
   font-family: 'Roboto Slab', serif;
   text-align: justify;
 }
+
+blockquote {
+  background-color: #b8b8b8;
+  font-size: 20px;
+  color: #ffffff;
+  border-color: gray;
+  text-transform: uppercase;
+}
+
+h6 {
+  font-size: 16px;
+}
