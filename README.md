@@ -46,27 +46,46 @@ The helicopter, starting from the top left corner of the scene, will have to des
 
 ## Main Features
 
-### Movement Controls and Time Factor
+### Initial Scene
+
+#### Objects
+There will be a helicopter, placed in the top left corner of the screen, as well as some randomly generated monsters and buildings below them.
+
+### Movement Control and Time Factor
+
 #### Vertical Movement
-*The vertical movement of the helicopter is controlled both by the player and by a time factor*
-- The player can move the helicopter up and down  a little bit by using up/down arrow keys to escape the flying monsters that move towards him from the right side.
-- The altitude of the helicopter is decreased by one each time the helicopter enters the scene from the left side.
-- The Flying monsters can also move vertically by one/two units. That movement can vary randomly as they move towards the helicopter.
+The vertical movement of the helicopter is controlled not only by the player, but also by a time factor.
+- The player can move the helicopter up or down a little bit, using the arrow keys, to escape the monsters that are flying towards him from the right side.
+- The altitude of the helicopter decreases by one unit each time it enters the scene from the left side.
+- The monsters randomly change their vertical position by one or two units, as they fly towards the helicopter.
+
 #### Horizontal Movement
- - The velocity of the helicopter's horizontal movement gives the user time to launch the bombs and shoot the monsters without making it to hard or to easy to win the game.
-- The flying monsters will move towards the helicopter possibly with different moving techniques.
+- The velocity of the helicopter's horizontal movement gives the user time to launch the bombs and shoot the monsters without making it too hard or too easy to finish the game.
+- The flying monsters are moving horizontally towards the helicopter, possibly with different moving techniques and speeds.
+
 ### Bomb & Missile Launching
-- The right arrow key will allow the user to launch a frontal missile
-- Pressing the Space key will launch a bomb 
-- The number of missiles and bombs should be limited and, therefore, should be refreshed every time the user presses the space or right arrow key. Also, every time the helicopter comes from the right side the number of missiles and bombs should be recalculated.
+- The right arrow key will allow the user to launch a frontal missile.
+- Pressing the space key will launch a bomb onto the buildings.
+- The number of missiles and bombs should be limited and, therefore, should be updated every time the user presses the space or right arrow key. Also, every time the helicopter comes from the left side, this number should be recalculated.
+
 ### Collision Detection
-- If the helicopter collides with a skyscrapper the game ends.
-- Colliding with monsters decreases the energy/life of the player.
-###  Player's Score
- The player’s score, which will show ont the bottom of the screen, will increase every time it successfully reaches the right side of the screen and also when it destroys the monsters or the buildings
-### Energy/Lifes
- The Player has limited energy that decreases on every collision with a monster. The energy should be shown on the bottom of the screen.
-### Start/End of Game Messages
-The Player should be presented with a message before starting the game and when the game ends - to congratulate the winner if he won or a game over message if he lost. Also, the score should be shown in the game screen. 
-### Restart Game
+- If the helicopter collides with a skyscraper, the game ends.
+- Colliding with monsters weakens the helicopter, reducing its energy.
+
+### Score
+The score will be shown on the bottom of the screen. This will be increased every time the helicopter successfully reaches the right side, or when it destroys monsters or buildings.
+
+### Energy
+The helicopter has limited energy. This will also be shown on the bottom of the screen and will be reduced every time there is a collision with a monster.
+
+### Game Messages
+The player should be presented with a message when starting or ending the game, giving him instructions or showing him the final score.
+
+### Ending
+The game ends by three reasons:
+- As mentioned before, if the helicopter collides with a building;
+- If it loses all the energy, from clashing with monsters;
+- Or if every building is successfully put on the ground by its bombs.
+
+### Restarting
 It should be possible to restart the game when it ends.
