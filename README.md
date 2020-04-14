@@ -49,7 +49,7 @@ The helicopter, starting from the top left corner of the scene, will have to des
 ### Initial Scene
 
 #### Objects
-There will be a helicopter, placed in the top left corner of the screen, as well as some randomly generated monsters and buildings below them.
+There will be a helicopter, placed in the top left corner of the screen, some randomly generated monsters moving towards the helicopter in the top right corner and buildings below them.
 
 ### Movement Control and Time Factor
 
@@ -82,7 +82,7 @@ The helicopter has limited energy. This will also be shown on the bottom of the 
 The player should be presented with a message when starting or ending the game, giving him instructions or showing him the final score.
 
 ### Ending
-The game ends by three reasons:
+The game ends for three reasons:
 - As mentioned before, if the helicopter collides with a building;
 - If it loses all the energy, from clashing with monsters;
 - Or if every building is successfully put on the ground by its bombs.
