@@ -2,5 +2,8 @@
     "markdown.styles": [
         "./styles/style.css"
     ],
-    "cSpell.language": "en-GB,en"
+    "cSpell.language": "en-GB,en",
+    "files.associations": {
+        "T04.C": "cpp"
+    }
 }
