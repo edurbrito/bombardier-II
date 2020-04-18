@@ -3,6 +3,7 @@ package com.lpoo.g72.scene;
 public class Scene {
     private int width;
     private int height;
+    private char[][] buildings;
 
     public Scene(int width, int height){
         this.width = width;
@@ -17,4 +18,11 @@ public class Scene {
         return this.height;
     }
 
+    public void setBuildings(char[][] buildings) {
+        this.buildings = buildings;
+    }
+
+    public char[][] getBuildings() {
+        return buildings;
+    }
 }

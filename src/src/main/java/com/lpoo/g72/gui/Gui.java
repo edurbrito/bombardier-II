@@ -5,9 +5,12 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import com.lpoo.g72.creator.RandomScene;
 import com.lpoo.g72.scene.Scene;
 
 import java.io.IOException;
+
+import static java.lang.Thread.sleep;
 
 public class Gui {
     private Scene scene;
@@ -16,7 +19,7 @@ public class Gui {
     private final int fixedHeight;
     private final int fixedWidth;
 
-    public final boolean mainMenu() throws IOException {
+    public final boolean mainMenu() throws IOException, InterruptedException {
 
         // TODO: Choose city to attack
 
@@ -43,6 +46,10 @@ public class Gui {
         }
 
         screen.refresh();
+
+        sleep(1000);
+
+        this.setScene(new RandomScene().createScene(this.fixedWidth,this.fixedHeight));
 
         return true;
     }
@@ -79,6 +86,21 @@ public class Gui {
                 new TerminalSize(scene.getWidth(), scene.getHeight()),
                 ' '
         );
+        this.drawSceneBuildings(graphics);
+    }
+
+    public void drawSceneBuildings(TextGraphics graphics){
+        graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
+
+        int height = this.scene.getHeight();
+        int width = this.scene.getWidth();
+        char[][] buildings = this.scene.getBuildings();
+
+        for(int h = 0; h < height; ++h){
+            for(int w = 0; w < width; ++w){
+                graphics.putString( width - w - 1, height - h - 5, String.valueOf(buildings[h][w]));
+            }
+        }
     }
 
     public int getFixedHeight() {

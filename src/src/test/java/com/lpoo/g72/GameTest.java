@@ -17,13 +17,13 @@ public class GameTest {
 
     private Game game;
 
-    public void helper() throws IOException {
+    public void helper() throws IOException, InterruptedException {
         this.game = new Game();
         this.game.start();
     }
 
     @Test
-    public void gameGui() throws IOException {
+    public void gameGui() throws IOException, InterruptedException {
         helper();
 
         int fixedWidth = 100, fixedHeight = 50;
@@ -33,7 +33,7 @@ public class GameTest {
     }
 
     @Test
-    public void mockGameGui() throws IOException {
+    public void mockGameGui() throws IOException, InterruptedException {
 
         Game g = Mockito.mock(Game.class);
 
