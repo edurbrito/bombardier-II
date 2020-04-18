@@ -3,3 +3,5 @@ src/.gradle/
 src/out/
 src/build/
 src/*.iml
+.vscode
+.gradle
