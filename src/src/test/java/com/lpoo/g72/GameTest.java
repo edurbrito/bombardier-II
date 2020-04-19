@@ -28,8 +28,8 @@ public class GameTest {
 
         int fixedWidth = 100, fixedHeight = 50;
 
-        assertEquals("Gui must always have a pre-determined fixed Width", fixedWidth, this.game.getGui().getFixedWidth());
-        assertEquals("Gui must always have a pre-determined fixed Height", fixedHeight, this.game.getGui().getFixedHeight());
+        assertEquals("Gui must always have a pre-determined fixed Width", fixedWidth, this.game.getGui().getWidth());
+        assertEquals("Gui must always have a pre-determined fixed Height", fixedHeight, this.game.getGui().getHeight());
     }
 
     @Test
@@ -47,8 +47,8 @@ public class GameTest {
             int fixedWidth = 1 + r.nextInt(200);
             int fixedHeight = 1 + r.nextInt(100);
             g.setGui(new Gui(fixedWidth, fixedHeight));
-            assertEquals("Gui must always have a pre-determined fixed Width", fixedWidth, g.getGui().getFixedWidth());
-            assertEquals("Gui must always have a pre-determined fixed Height", fixedHeight, g.getGui().getFixedHeight());
+            assertEquals("Gui must always have a pre-determined fixed Width", fixedWidth, g.getGui().getWidth());
+            assertEquals("Gui must always have a pre-determined fixed Height", fixedHeight, g.getGui().getHeight());
             return null;
         }).when(g).start();
 

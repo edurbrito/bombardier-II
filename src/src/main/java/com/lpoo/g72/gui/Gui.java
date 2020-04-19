@@ -5,24 +5,53 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.lpoo.g72.creator.RandomScene;
 import com.lpoo.g72.scene.Scene;
+import com.lpoo.g72.scene.SceneObserver;
 
 import java.io.IOException;
 
-import static java.lang.Thread.sleep;
-
-public class Gui {
-    private Scene scene;
+public class Gui implements SceneObserver {
     private final TerminalScreen screen;
+    private final int width;
+    private final int height;
 
-    private final int fixedHeight;
-    private final int fixedWidth;
+    public Gui(int width, int height) throws IOException {
+        this.width = width;
+        this.height = height;
+        this.screen = createTerminalScreen();
+        setScreenProperties();
+    }
 
-    public final boolean mainMenu() throws IOException, InterruptedException {
+    private TerminalScreen createTerminalScreen() throws IOException {
+        TerminalSize terminalSize = new TerminalSize(this.width, this.height);
+        DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
 
-        // TODO: Choose city to attack
+        Terminal terminal = terminalFactory.createTerminal();
+        return new TerminalScreen(terminal);
+    }
 
+    private void setScreenProperties() throws IOException {
+        screen.setCursorPosition(null);
+        screen.startScreen();
+        screen.doResizeIfNecessary();
+    }
+
+    public void drawSceneBuildings(TextGraphics graphics, Scene scene){
+        graphics.enableModifiers(SGR.BOLD);
+        graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
+
+        int height = scene.getHeight();
+        int width = scene.getWidth();
+        char[][] buildings = scene.getBuildings();
+
+        for(int h = 0; h < height; ++h){
+            for(int w = 0; w < width; ++w){
+                graphics.putString( width - w - 1, height - h - 5, String.valueOf(buildings[h][w]));
+            }
+        }
+    }
+
+    public void drawMenu() throws IOException {
         screen.clear();
 
         TextGraphics graphics = this.screen.newTextGraphics();
@@ -30,7 +59,7 @@ public class Gui {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#A0A0A0"));
         graphics.fillRectangle(
                 new TerminalPosition(0, 0),
-                new TerminalSize(this.fixedWidth, this.fixedHeight),
+                new TerminalSize(this.width, this.height),
                 ' '
         );
 
@@ -46,39 +75,11 @@ public class Gui {
         }
 
         screen.refresh();
-
-        sleep(1000);
-
-        this.setScene(new RandomScene().createScene(this.fixedWidth,this.fixedHeight));
-
-        return true;
     }
 
-    public Gui(int fixedWidth, int fixedHeight) throws IOException {
-        this.fixedWidth = fixedWidth;
-        this.fixedHeight = fixedHeight;
-        TerminalSize terminalSize = new TerminalSize(this.fixedWidth, this.fixedHeight);
-        DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
-
-        Terminal terminal = terminalFactory.createTerminal();
-        screen = new TerminalScreen(terminal);
-
-        screen.setCursorPosition(null);   // we don't need a cursor
-        screen.startScreen();             // screens must be started
-        screen.doResizeIfNecessary();     // resize screen if necessary
-    }
-
-    public void setScene(Scene scene){
-        this.scene = scene;
-    }
-
-    public void draw() throws IOException {
+    public void drawScene(Scene scene) throws IOException {
         screen.clear();
-        this.drawScene();
-        screen.refresh();
-    }
 
-    private void drawScene() {
         TextGraphics graphics = screen.newTextGraphics();
         graphics.setBackgroundColor(TextColor.Factory.fromString("#A0A0A0"));
         graphics.fillRectangle(
@@ -86,28 +87,22 @@ public class Gui {
                 new TerminalSize(scene.getWidth(), scene.getHeight()),
                 ' '
         );
-        this.drawSceneBuildings(graphics);
+
+        this.drawSceneBuildings(graphics,scene);
+
+        screen.refresh();
     }
 
-    public void drawSceneBuildings(TextGraphics graphics){
-        graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
-
-        int height = this.scene.getHeight();
-        int width = this.scene.getWidth();
-        char[][] buildings = this.scene.getBuildings();
-
-        for(int h = 0; h < height; ++h){
-            for(int w = 0; w < width; ++w){
-                graphics.putString( width - w - 1, height - h - 5, String.valueOf(buildings[h][w]));
-            }
-        }
+    public int getWidth() {
+        return width;
     }
 
-    public int getFixedHeight() {
-        return fixedHeight;
+    public int getHeight() {
+        return height;
     }
 
-    public int getFixedWidth() {
-        return fixedWidth;
+    @Override
+    public void sceneChanged(Scene scene) throws IOException {
+        drawScene(scene);
     }
 }
