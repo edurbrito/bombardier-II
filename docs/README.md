@@ -50,7 +50,73 @@ This project was developed by Diana Freitas ([up201806230@fe.up.pt](mailto:up201
 
 ## IMPLEMENTED FEATURES
 
+### Initial Scene
+
+#### Objects
+At this moment, there is a helicopter placed in the top left corner of the screen and some random generated buildings. Monsters are yet to come.
+
+### Info Bar
+This bar is already set on the screen. It will always be below the buildings' bottom line and will contain the following info, when a new game starts.
+
+#### Blocks
+There will be an indication here for the number of blocks of buildings remaining for destroying.
+
+#### City
+The city name, chosen when the main menu is set, will be presented here.
+
+#### Score
+The place where the score will be shown.
+
+#### Lives
+Not yet configured for the helicopter.
+
+> The above may change as we fully implement new things...
+
 ## PLANNED FEATURES
+
+### Initial Scene
+
+#### Objects
+There will be a helicopter, placed in the top left corner of the screen, some randomly generated monsters moving towards the helicopter in the top right corner and buildings below them.
+
+### Movement Control and Time Factor
+
+#### Vertical Movement
+The vertical movement of the helicopter is controlled not only by the player, but also by a time factor.
+- The player can move the helicopter up or down a little bit, using the arrow keys, to escape the monsters that are flying towards him from the right side.
+- The altitude of the helicopter decreases by one unit each time it enters the scene from the left side.
+- The monsters randomly change their vertical position by one or two units, as they fly towards the helicopter.
+
+#### Horizontal Movement
+- The velocity of the helicopter's horizontal movement gives the user time to launch the bombs and shoot the monsters without making it too hard or too easy to finish the game.
+- The flying monsters are moving horizontally towards the helicopter, possibly with different moving techniques and speeds.
+
+### Bomb & Missile Launching
+- The right arrow key will allow the user to launch a frontal missile.
+- Pressing the space key will launch a bomb onto the buildings.
+- The number of missiles and bombs should be limited and, therefore, should be updated every time the user presses the space or right arrow key. Also, every time the helicopter comes from the left side, this number should be recalculated.
+
+### Collision Detection
+- If the helicopter collides with a skyscraper, the game ends.
+- Colliding with monsters weakens the helicopter, reducing its energy.
+
+### Score
+The score will be shown on the bottom of the screen. This will be increased every time the helicopter successfully reaches the right side, or when it destroys monsters or buildings.
+
+### Energy
+The helicopter has limited energy. This will also be shown on the bottom of the screen and will be reduced every time there is a collision with a monster.
+
+### Game Messages
+The player should be presented with a message when starting or ending the game, giving him instructions or showing him the final score.
+
+### Ending
+The game ends for three reasons:
+- As mentioned before, if the helicopter collides with a building;
+- If it loses all the energy, from clashing with monsters;
+- Or if every building is successfully put on the ground by its bombs.
+
+### Restarting
+It should be possible to restart the game when it ends.
 
 ## DESIGN
 
