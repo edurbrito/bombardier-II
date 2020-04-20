@@ -22,4 +22,12 @@ public class Game {
         controller = new SceneController(gui,scene);
         controller.execute();
     }
+
+    public Gui getGui() {
+        return gui;
+    }
+
+    public void setGui(Gui gui) {
+        this.gui = gui;
+    }
 }
