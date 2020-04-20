@@ -1,6 +1,6 @@
 package com.lpoo.g72.scene;
 
-public class Element {
+public class Element{
     private Position position;
 
     public Element(int x, int y) {

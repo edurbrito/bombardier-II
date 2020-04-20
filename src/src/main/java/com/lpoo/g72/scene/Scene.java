@@ -9,6 +9,11 @@ public class Scene{
     private int height;
     private List<SceneObserver> observers;
     private char[][] buildings;
+    private Helicopter helicopter;
+
+    public Helicopter getHelicopter() {
+        return helicopter;
+    }
 
     public Scene(int width, int height){
         this.width = width;
@@ -40,5 +45,9 @@ public class Scene{
         for (SceneObserver observer : observers) {
             observer.sceneChanged(this);
         }
+    }
+
+    public void setHelicopter(Helicopter helicopter) {
+        this.helicopter = helicopter;
     }
 }

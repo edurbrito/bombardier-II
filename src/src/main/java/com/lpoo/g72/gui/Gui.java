@@ -5,8 +5,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.lpoo.g72.scene.Scene;
-import com.lpoo.g72.scene.SceneObserver;
+import com.lpoo.g72.scene.*;
 
 import java.io.IOException;
 
@@ -36,9 +35,17 @@ public class Gui implements SceneObserver {
         screen.doResizeIfNecessary();
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public void drawSceneBuildings(TextGraphics graphics, Scene scene){
         graphics.enableModifiers(SGR.BOLD);
-        graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
+        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
 
         int height = scene.getHeight();
         int width = scene.getWidth();
@@ -81,24 +88,43 @@ public class Gui implements SceneObserver {
         screen.clear();
 
         TextGraphics graphics = screen.newTextGraphics();
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#A0A0A0"));
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
         graphics.fillRectangle(
                 new TerminalPosition(0, 0),
                 new TerminalSize(scene.getWidth(), scene.getHeight()),
                 ' '
         );
 
+        this.drawScoreBar(graphics,scene);
+
         this.drawSceneBuildings(graphics,scene);
+
+        this.drawElement(scene.getHelicopter());
 
         screen.refresh();
     }
 
-    public int getWidth() {
-        return width;
+    private void drawScoreBar(TextGraphics graphics, Scene scene){
+        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
+        graphics.drawLine(0, scene.getHeight()-4, 8, scene.getHeight()-4,'=');
+        graphics.drawLine(scene.getWidth() - 9, scene.getHeight()-4, scene.getWidth(), scene.getHeight()-4,'=');
+
+        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
+        graphics.putString(10, scene.getHeight()-4,"Blocks: ");
+        graphics.putString(30, scene.getHeight()-4,"City: ");
+        graphics.putString(scene.getWidth()-45, scene.getHeight()-4,"Score: ");
+        graphics.putString(scene.getWidth()-20, scene.getHeight()-4,"Lives: ");
     }
 
-    public int getHeight() {
-        return height;
+    private void drawElement(Element element) {
+        if (element instanceof Helicopter) drawCharacter(element.getPosition(), " \\-O", "#2a2a2a");
+    }
+
+    private void drawCharacter(Position position, String character, String color) {
+        TextGraphics graphics = screen.newTextGraphics();
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        graphics.setForegroundColor(TextColor.Factory.fromString(color));
+        graphics.putString(position.getX(), position.getY(), character);
     }
 
     @Override
