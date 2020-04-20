@@ -18,9 +18,17 @@ public class SceneController{
     }
 
     public void updateView() throws IOException {
+        Command cmd;
+        Gui.Key key = gui.getKey();
 
-        Command cmd = gui.getCommand();
-        cmd.execute(scene.getHelicopter());
+        if(key == Gui.Key.DOWN){
+            cmd = new DownCommand(scene.getHelicopter());
+            cmd.execute();
+        }
+        else if(key == Gui.Key.UP){
+            cmd = new UpCommand(scene.getHelicopter());
+            cmd.execute();
+        }
 
         gui.drawScene(scene);
     }
@@ -54,8 +62,8 @@ public class SceneController{
     }
 
     void moveHelicopterForward(){
-        Command right = new RightCommand();
-        right.execute(scene.getHelicopter());
+        Command right = new RightCommand(scene.getHelicopter());
+        right.execute();
     }
 
     void decreaseAltitude(Element element){

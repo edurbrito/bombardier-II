@@ -9,7 +9,7 @@ public class DoNothingCommand implements Command{
     public DoNothingCommand () {}
 
     @Override
-    public void execute(Element element) {
+    public void execute() {
 
     }
 }

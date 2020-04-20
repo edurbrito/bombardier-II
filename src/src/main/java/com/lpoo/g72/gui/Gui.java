@@ -20,6 +20,8 @@ public class Gui{
     private final int width;
     private final int height;
 
+    public enum Key{UP,DOWN,NULL};
+
     public Gui(int width, int height) throws IOException {
         this.width = width;
         this.height = height;
@@ -135,19 +137,19 @@ public class Gui{
         graphics.putString(position.getX(), position.getY(), character);
     }
 
-    public Command getCommand() throws IOException {
+    public Key getKey() throws IOException {
         try{
             KeyStroke input = screen.pollInput();
 
-        if (input.getKeyType() == KeyType.ArrowDown)
-            return new DownCommand();
-        if (input.getKeyType() == KeyType.ArrowUp)
-            return new UpCommand();
-    }
+            if (input.getKeyType() == KeyType.ArrowDown)
+                return Key.DOWN;
+            if (input.getKeyType() == KeyType.ArrowUp)
+                return Key.UP;
+        }
         catch(NullPointerException n){
-            return new DoNothingCommand();
+            return Key.NULL;
         }
 
-        return new DoNothingCommand();
+        return Key.NULL;
     }
 }
