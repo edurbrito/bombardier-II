@@ -2,14 +2,20 @@ package com.lpoo.g72.gui;
 
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import com.lpoo.g72.controller.Command;
+import com.lpoo.g72.controller.DoNothingCommand;
+import com.lpoo.g72.controller.DownCommand;
+import com.lpoo.g72.controller.UpCommand;
 import com.lpoo.g72.scene.*;
 
 import java.io.IOException;
 
-public class Gui implements SceneObserver {
+public class Gui{
     private final TerminalScreen screen;
     private final int width;
     private final int height;
@@ -123,13 +129,25 @@ public class Gui implements SceneObserver {
 
     private void drawCharacter(Position position, String character, String color) {
         TextGraphics graphics = screen.newTextGraphics();
+        graphics.enableModifiers(SGR.BOLD);
         graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
         graphics.setForegroundColor(TextColor.Factory.fromString(color));
         graphics.putString(position.getX(), position.getY(), character);
     }
 
-    @Override
-    public void sceneChanged(Scene scene) throws IOException {
-        drawScene(scene);
+    public Command getCommand() throws IOException {
+        try{
+            KeyStroke input = screen.pollInput();
+
+            if (input.getKeyType() == KeyType.ArrowDown)
+                return new DownCommand();
+            if (input.getKeyType() == KeyType.ArrowUp)
+                return new UpCommand();
+        }
+        catch(NullPointerException n){
+            return new DoNothingCommand();
+        }
+
+        return new DoNothingCommand();
     }
 }

@@ -19,16 +19,6 @@ public class Game {
         scene = new RandomScene().createScene(100,50);
         gui = new Gui(scene.getWidth(), scene.getHeight());
         controller = new SceneController(gui,scene);
-        scene.notifyObservers(); // JUST FOR TESTING THE BUILDINGS
-        controller.init();
+        controller.execute();
     }
-
-    public Gui getGui() {
-        return this.gui;
-    }
-
-    public void setGui(Gui gui) {
-        this.gui = gui;
-    }
-
 }

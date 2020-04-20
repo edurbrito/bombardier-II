@@ -12,7 +12,6 @@ public class RandomScene extends SceneCreator {
     public Scene createScene(int width, int height) {
 
         Scene scene = super.createScene(width,height);
-        scene.setHelicopter(new Helicopter(new Position(0,0)," \\-O", "#2a2a2a"));
         // TODO: Create some elements like buildings, monsters, etc
 
         return scene;
