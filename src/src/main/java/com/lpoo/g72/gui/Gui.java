@@ -139,11 +139,11 @@ public class Gui{
         try{
             KeyStroke input = screen.pollInput();
 
-            if (input.getKeyType() == KeyType.ArrowDown)
-                return new DownCommand();
-            if (input.getKeyType() == KeyType.ArrowUp)
-                return new UpCommand();
-        }
+        if (input.getKeyType() == KeyType.ArrowDown)
+            return new DownCommand();
+        if (input.getKeyType() == KeyType.ArrowUp)
+            return new UpCommand();
+    }
         catch(NullPointerException n){
             return new DoNothingCommand();
         }
