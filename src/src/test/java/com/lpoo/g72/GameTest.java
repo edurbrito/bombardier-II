@@ -1,5 +1,7 @@
 package com.lpoo.g72;
+import com.lpoo.g72.creator.LisbonScene;
 import com.lpoo.g72.gui.Gui;
+import com.lpoo.g72.scene.Scene;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -10,10 +12,28 @@ import static org.junit.Assert.*;
 
 public class GameTest {
 
-    private Game game;
+    class GameStub extends Game{
+        private Scene scene;
+        private Gui gui;
+        @Override
+        public void start() throws IOException, InterruptedException {
+            scene = new LisbonScene().createScene(100,50);
+            gui = new Gui(scene.getWidth(), scene.getHeight());
+        }
+
+        public Gui getGui() {
+            return gui;
+        }
+
+        public void setGui(Gui gui) {
+            this.gui = gui;
+        }
+    }
+
+    private GameStub game;
 
     public void helper() throws IOException, InterruptedException {
-        this.game = new Game();
+        this.game = new GameStub();
         this.game.start();
     }
 
@@ -30,7 +50,7 @@ public class GameTest {
     @Test
     public void mockGameGui() throws IOException, InterruptedException {
 
-        Game g = Mockito.mock(Game.class);
+        GameStub g = Mockito.mock(GameStub.class);
 
         Mockito.when(g.getGui()).thenCallRealMethod();
         Mockito.doCallRealMethod().when(g).setGui(Mockito.any(Gui.class));
