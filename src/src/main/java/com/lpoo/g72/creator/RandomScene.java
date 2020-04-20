@@ -1,8 +1,22 @@
 package com.lpoo.g72.creator;
 
+import com.lpoo.g72.scene.Helicopter;
+import com.lpoo.g72.scene.Position;
+import com.lpoo.g72.scene.Scene;
+
 import java.util.Random;
 
 public class RandomScene extends SceneCreator {
+
+    @Override
+    public Scene createScene(int width, int height) {
+
+        Scene scene = super.createScene(width,height);
+        scene.setHelicopter(new Helicopter(new Position(0,0)," \\-O", "#2a2a2a"));
+        // TODO: Create some elements like buildings, monsters, etc
+
+        return scene;
+    }
 
     @Override
     char[][] generateBuildings(int width, int height) {

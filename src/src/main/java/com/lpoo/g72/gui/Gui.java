@@ -107,6 +107,7 @@ public class Gui implements SceneObserver {
     private void drawScoreBar(TextGraphics graphics, Scene scene){
         graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
         graphics.drawLine(0, scene.getHeight()-4, 8, scene.getHeight()-4,'=');
+
         graphics.drawLine(scene.getWidth() - 9, scene.getHeight()-4, scene.getWidth(), scene.getHeight()-4,'=');
 
         graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
@@ -117,7 +118,7 @@ public class Gui implements SceneObserver {
     }
 
     private void drawElement(Element element) {
-        if (element instanceof Helicopter) drawCharacter(element.getPosition(), " \\-O", "#2a2a2a");
+        drawCharacter(element.getPosition(), element.getStr(), element.getColor());
     }
 
     private void drawCharacter(Position position, String character, String color) {
