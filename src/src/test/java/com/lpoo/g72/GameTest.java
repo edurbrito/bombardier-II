@@ -1,12 +1,8 @@
 package com.lpoo.g72;
 
 import com.lpoo.g72.gui.Gui;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.util.Random;

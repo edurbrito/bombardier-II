@@ -1,5 +1,6 @@
 package com.lpoo.g72;
 import com.lpoo.g72.controller.SceneController;
+import com.lpoo.g72.creator.LisbonScene;
 import com.lpoo.g72.creator.RandomScene;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.scene.Scene;
@@ -16,7 +17,7 @@ public class Game {
     }
 
     public void start() throws IOException, InterruptedException {
-        scene = new RandomScene().createScene(100,50);
+        scene = new LisbonScene().createScene(100,50);
         gui = new Gui(scene.getWidth(), scene.getHeight());
         controller = new SceneController(gui,scene);
         scene.notifyObservers(); // JUST FOR TESTING THE BUILDINGS
