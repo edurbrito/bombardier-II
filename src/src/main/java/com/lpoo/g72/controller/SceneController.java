@@ -17,15 +17,15 @@ public class SceneController{
         this.scene = scene;
     }
 
-    public void updateView() throws IOException {
+    public void updateView(int previousAltitude) throws IOException {
         Command cmd;
         Gui.Key key = gui.getKey();
 
-        if(key == Gui.Key.DOWN){
+        if(key == Gui.Key.DOWN && isWithinDownLimit(previousAltitude)){
             cmd = new DownCommand(scene.getHelicopter());
             cmd.execute();
         }
-        else if(key == Gui.Key.UP){
+        else if(key == Gui.Key.UP && isWithinUpLimit(previousAltitude)){
             cmd = new UpCommand(scene.getHelicopter());
             cmd.execute();
         }
@@ -40,12 +40,15 @@ public class SceneController{
         Duration duration;
         long interval = 200000000;
 
+        int previousAltitude = scene.getHelicopter().getPosition().getY();
+
         while(true){
             current = Instant.now();
             duration = Duration.between(start , current);
 
             if(newRound()){
-                decreaseAltitude(scene.getHelicopter());
+                decreaseAltitude(scene.getHelicopter(), previousAltitude);
+                previousAltitude++;
             }
 
             if(duration.getNano() >= interval){
@@ -53,7 +56,7 @@ public class SceneController{
                 start = current;
             }
 
-            updateView();
+            updateView(previousAltitude);
         }
     }
 
@@ -61,13 +64,20 @@ public class SceneController{
         return scene.getHelicopter().getPosition().getX() == scene.getWidth()-1;
     }
 
+    boolean isWithinUpLimit(int previousAltitude){
+        return scene.getHelicopter().getPosition().getY() - 1 > previousAltitude - 1;
+    }
+
+    boolean isWithinDownLimit(int previousAltitude){
+        return scene.getHelicopter().getPosition().getY() - 1 < previousAltitude + 2;
+    }
+
     void moveHelicopterForward(){
         Command right = new RightCommand(scene.getHelicopter());
         right.execute();
     }
 
-    void decreaseAltitude(Element element){
-        int y = element.getPosition().getY() + 1;
-        element.setPosition(new Position(0,y));
+    void decreaseAltitude(Element element, int previousAltitude){
+        element.setPosition(new Position(0,previousAltitude + 1));
     }
 }
