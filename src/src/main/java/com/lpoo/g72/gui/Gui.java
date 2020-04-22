@@ -16,7 +16,7 @@ public class Gui{
     private final int width;
     private final int height;
 
-    private VisualElement visualHelicopter;
+    private VisualHelicopter visualHelicopter;
 
     public enum Key{UP,DOWN,NULL};
 
@@ -24,7 +24,7 @@ public class Gui{
         this.width = width;
         this.height = height;
 
-        this.visualHelicopter = new VisualElement("\\-O","#2a2a2a");
+        this.visualHelicopter = new VisualHelicopter();
 
         this.screen = createTerminalScreen();
         setScreenProperties();
