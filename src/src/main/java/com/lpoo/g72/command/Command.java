@@ -1,4 +1,4 @@
-package com.lpoo.g72.controller;
+package com.lpoo.g72.command;
 
 import com.lpoo.g72.scene.Element;
 import com.lpoo.g72.scene.Scene;

@@ -1,6 +1,4 @@
 package com.lpoo.g72.creator;
-import com.lpoo.g72.scene.Helicopter;
-import com.lpoo.g72.scene.Position;
 import com.lpoo.g72.scene.Scene;
 import java.util.Random;
 

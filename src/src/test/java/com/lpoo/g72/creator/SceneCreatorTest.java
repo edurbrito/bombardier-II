@@ -35,7 +35,7 @@ public class SceneCreatorTest {
         public Scene createScene(int width, int height) {
 
             this.scene = new Scene(width, height);
-            this.scene.setHelicopter(new Helicopter(new Position(0,0)," \\-O", "#2a2a2a"));
+            this.scene.setHelicopter(new Helicopter(new Position(0,0)));
             this.scene.setBuildings(this.generateBuildings(width,height,new Random(),4));
 
             return this.scene;

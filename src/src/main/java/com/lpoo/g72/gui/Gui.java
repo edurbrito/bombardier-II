@@ -7,10 +7,6 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.lpoo.g72.controller.Command;
-import com.lpoo.g72.controller.DoNothingCommand;
-import com.lpoo.g72.controller.DownCommand;
-import com.lpoo.g72.controller.UpCommand;
 import com.lpoo.g72.scene.*;
 
 import java.io.IOException;
@@ -20,11 +16,16 @@ public class Gui{
     private final int width;
     private final int height;
 
+    private VisualElement visualHelicopter;
+
     public enum Key{UP,DOWN,NULL};
 
     public Gui(int width, int height) throws IOException {
         this.width = width;
         this.height = height;
+
+        this.visualHelicopter = new VisualElement("\\-O","#2a2a2a");
+
         this.screen = createTerminalScreen();
         setScreenProperties();
     }
@@ -107,7 +108,7 @@ public class Gui{
 
         this.drawSceneBuildings(graphics,scene);
 
-        this.drawElement(scene.getHelicopter());
+        visualHelicopter.draw(this.screen.newTextGraphics(), scene.getHelicopter().getPosition());
 
         screen.refresh();
     }
@@ -123,18 +124,6 @@ public class Gui{
         graphics.putString(30, scene.getHeight()-4,"City: ");
         graphics.putString(scene.getWidth()-45, scene.getHeight()-4,"Score: ");
         graphics.putString(scene.getWidth()-20, scene.getHeight()-4,"Lives: ");
-    }
-
-    private void drawElement(Element element) {
-        drawCharacter(element.getPosition(), element.getStr(), element.getColor());
-    }
-
-    private void drawCharacter(Position position, String character, String color) {
-        TextGraphics graphics = screen.newTextGraphics();
-        graphics.enableModifiers(SGR.BOLD);
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
-        graphics.setForegroundColor(TextColor.Factory.fromString(color));
-        graphics.putString(position.getX(), position.getY(), character);
     }
 
     public Key getKey() throws IOException {

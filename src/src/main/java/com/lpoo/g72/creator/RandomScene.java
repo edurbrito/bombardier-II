@@ -13,7 +13,7 @@ public class RandomScene extends SceneCreator {
 
         this.scene = new Scene(width,height);
 
-        this.scene.setHelicopter(new Helicopter(new Position(0,1)," \\-O", "#2a2a2a"));
+        this.scene.setHelicopter(new Helicopter(new Position(0,1)));
 
         // TODO: Create some elements like buildings, monsters, etc
 

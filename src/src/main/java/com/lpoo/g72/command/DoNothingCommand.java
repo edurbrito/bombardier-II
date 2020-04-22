@@ -1,8 +1,4 @@
-package com.lpoo.g72.controller;
-
-import com.lpoo.g72.scene.Element;
-import com.lpoo.g72.scene.Position;
-import com.lpoo.g72.scene.Scene;
+package com.lpoo.g72.command;
 
 public class DoNothingCommand implements Command{
 
