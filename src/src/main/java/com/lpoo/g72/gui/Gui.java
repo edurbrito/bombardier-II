@@ -18,7 +18,7 @@ public class Gui{
 
     private VisualHelicopter visualHelicopter;
 
-    public enum Key{UP,DOWN,NULL};
+    public enum Key{UP,DOWN,SPACE,QUIT,NULL};
 
     public Gui(int width, int height) throws IOException {
         this.width = width;
@@ -28,6 +28,18 @@ public class Gui{
 
         this.screen = createTerminalScreen();
         setScreenProperties();
+    }
+
+    public TerminalScreen getScreen() {
+        return screen;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     private TerminalScreen createTerminalScreen() throws IOException {
@@ -42,14 +54,6 @@ public class Gui{
         screen.setCursorPosition(null);
         screen.startScreen();
         screen.doResizeIfNecessary();
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
     }
 
     public void drawSceneBuildings(TextGraphics graphics, Scene scene){
@@ -134,6 +138,10 @@ public class Gui{
                 return Key.DOWN;
             if (input.getKeyType() == KeyType.ArrowUp)
                 return Key.UP;
+            if ((input.getKeyType() == KeyType.Character && input.getCharacter() == ' '))
+                return Key.SPACE;
+            if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))
+                return Key.QUIT;
         }
         catch(NullPointerException n){
             return Key.NULL;
@@ -142,5 +150,7 @@ public class Gui{
         return Key.NULL;
     }
 
-
+    public VisualHelicopter getVisualHelicopter() {
+        return visualHelicopter;
+    }
 }

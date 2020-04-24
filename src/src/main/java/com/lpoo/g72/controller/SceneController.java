@@ -1,17 +1,9 @@
 package com.lpoo.g72.controller;
-import com.lpoo.g72.command.Command;
-import com.lpoo.g72.command.DownCommand;
-import com.lpoo.g72.command.RightCommand;
-import com.lpoo.g72.command.UpCommand;
+import com.lpoo.g72.command.*;
 import com.lpoo.g72.creator.LisbonScene;
 import com.lpoo.g72.gui.Gui;
-import com.lpoo.g72.scene.Element;
-import com.lpoo.g72.scene.Helicopter;
-import com.lpoo.g72.scene.Position;
 import com.lpoo.g72.scene.Scene;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
 
 public class SceneController{
     private final Gui gui;
@@ -26,15 +18,24 @@ public class SceneController{
         this.helicopterController = new HelicopterController(gui,scene);
     }
 
-    public void start() throws IOException {
+    public void start() throws IOException, InterruptedException {
         gui.drawScene(scene);
         this.run();
     }
 
-    public void run() throws IOException {
+    public void run() throws IOException, InterruptedException {
 
         while(true){
-            helicopterController.executeCommand();
+
+            Gui.Key key = gui.getKey();
+
+            if(key == Gui.Key.QUIT){
+                Command cmd = new QuitCommand(gui.getScreen());
+                cmd.execute();
+                break;
+            }
+
+            helicopterController.executeCommand(key);
             gui.drawScene(scene);
         }
     }

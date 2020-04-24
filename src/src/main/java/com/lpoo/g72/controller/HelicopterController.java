@@ -4,6 +4,7 @@ import com.lpoo.g72.command.DownCommand;
 import com.lpoo.g72.command.RightCommand;
 import com.lpoo.g72.command.UpCommand;
 import com.lpoo.g72.gui.Gui;
+import com.lpoo.g72.gui.VisualHelicopter;
 import com.lpoo.g72.scene.Element;
 import com.lpoo.g72.scene.Position;
 import com.lpoo.g72.scene.Scene;
@@ -27,10 +28,11 @@ public class HelicopterController {
         this.start = Instant.now();
     }
 
-    public void executeCommand() throws IOException {
+    public void executeCommand(Gui.Key key) throws IOException, InterruptedException {
         Command cmd;
-        Gui.Key key = gui.getKey();
         this.moveForward();
+
+        this.launchBomb(key);
 
         if(key == Gui.Key.DOWN && isWithinDownLimit()){
             cmd = new DownCommand(scene.getHelicopter());
@@ -40,6 +42,10 @@ public class HelicopterController {
             cmd = new UpCommand(scene.getHelicopter());
             cmd.execute();
         }
+    }
+
+    private void launchBomb(Gui.Key key) throws InterruptedException, IOException {
+
     }
 
     boolean newRound(){

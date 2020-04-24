@@ -1,7 +1,6 @@
 package com.lpoo.g72;
 import com.lpoo.g72.controller.SceneController;
 import com.lpoo.g72.gui.Gui;
-import com.lpoo.g72.scene.Scene;
 
 import java.io.IOException;
 
