@@ -16,7 +16,7 @@ public class Game {
     public void start() throws IOException, InterruptedException {
         this.gui = new Gui(100, 50);
 
-        this.controller = new SceneController(gui);
+        this.controller = new SceneController(this.gui);
         this.controller.start();
     }
 
@@ -29,7 +29,7 @@ public class Game {
     }
 
     public SceneController getController() {
-        return controller;
+        return this.controller;
     }
 
     public void setController(SceneController controller) {
