@@ -20,11 +20,11 @@ public class Gui{
 
     public enum Key{UP,DOWN,SPACE,QUIT,NULL};
 
-    public Gui(int width, int height) throws IOException {
+    public Gui(int width, int height, VisualHelicopter visualHelicopter) throws IOException {
         this.width = width;
         this.height = height;
 
-        this.visualHelicopter = new VisualHelicopter();
+        this.visualHelicopter = visualHelicopter;
 
         this.screen = createTerminalScreen();
         setScreenProperties();
@@ -150,7 +150,11 @@ public class Gui{
         return Key.NULL;
     }
 
-    public VisualHelicopter getVisualHelicopter() {
-        return visualHelicopter;
+    public void changeWing(Key key){
+        visualHelicopter.bombDropAction(key);
+    }
+
+    public void setStartBombDropProperties(double droppingBombTime, int bombsDisabledTime){
+        visualHelicopter.setStartBombDropProperties(droppingBombTime,bombsDisabledTime);
     }
 }

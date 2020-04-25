@@ -1,5 +1,5 @@
 package com.lpoo.g72.controller;
-import com.lpoo.g72.command.*;
+import com.lpoo.g72.commands.*;
 import com.lpoo.g72.creator.LisbonScene;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.scene.Scene;
@@ -18,12 +18,12 @@ public class SceneController{
         this.helicopterController = new HelicopterController(gui,scene);
     }
 
-    public void start() throws IOException, InterruptedException {
+    public void start() throws IOException {
         gui.drawScene(scene);
         this.run();
     }
 
-    public void run() throws IOException, InterruptedException {
+    public void run() throws IOException {
 
         while(true){
 

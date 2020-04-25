@@ -1,18 +1,18 @@
-package com.lpoo.g72.command;
+package com.lpoo.g72.commands;
 
 import com.lpoo.g72.scene.Element;
 import com.lpoo.g72.scene.Position;
 
-public class DownCommand implements Command{
+public class UpCommand implements Command {
     Element element;
 
-    public DownCommand(Element element){
+    public UpCommand(Element element){
         this.element = element;
     }
 
     @Override
     public void execute() {
-        Position position = element.getPosition().down();
+        Position position = element.getPosition().up();
         element.setPosition(position);
     }
 }

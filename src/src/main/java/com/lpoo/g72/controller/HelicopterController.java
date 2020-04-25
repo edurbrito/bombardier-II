@@ -1,38 +1,40 @@
 package com.lpoo.g72.controller;
-import com.lpoo.g72.command.Command;
-import com.lpoo.g72.command.DownCommand;
-import com.lpoo.g72.command.RightCommand;
-import com.lpoo.g72.command.UpCommand;
+import com.lpoo.g72.commands.Command;
+import com.lpoo.g72.commands.DownCommand;
+import com.lpoo.g72.commands.RightCommand;
+import com.lpoo.g72.commands.UpCommand;
 import com.lpoo.g72.gui.Gui;
-import com.lpoo.g72.gui.VisualHelicopter;
 import com.lpoo.g72.scene.Element;
 import com.lpoo.g72.scene.Position;
 import com.lpoo.g72.scene.Scene;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
 public class HelicopterController {
     private  Gui gui;
     private Scene scene;
-    int altitude;
-    long velocity;
-    Instant start;
+
+    private int altitude;
+    private double velocity;
+    private Instant lastForwardMove;
 
     public HelicopterController(Gui gui, Scene scene){
         this.scene = scene;
         this.gui = gui;
+
         this.altitude = scene.getHelicopter().getPosition().getY();
-        this.velocity = 200000000;
-        this.start = Instant.now();
+        this.lastForwardMove = Instant.now();
+        this.velocity = 0.2 * Math.pow(10,9);
+
+        gui.setStartBombDropProperties(0.5 * Math.pow(10,9),1);
     }
 
-    public void executeCommand(Gui.Key key) throws IOException, InterruptedException {
+    public void executeCommand(Gui.Key key){
         Command cmd;
         this.moveForward();
 
-        this.launchBomb(key);
+        gui.changeWing(key);
 
         if(key == Gui.Key.DOWN && isWithinDownLimit()){
             cmd = new DownCommand(scene.getHelicopter());
@@ -44,41 +46,37 @@ public class HelicopterController {
         }
     }
 
-    private void launchBomb(Gui.Key key) throws InterruptedException, IOException {
-
-    }
-
-    boolean newRound(){
+    private boolean newRound(){
         return scene.getHelicopter().getPosition().getX() == scene.getWidth()-1;
     }
 
-    void moveForward(){
+    private void moveForward(){
 
         Instant current = Instant.now();
-        Duration timePassed = Duration.between(start , current);
+        Duration timePassed = Duration.between(lastForwardMove , current);
 
         if(newRound()){
             decreaseAltitude(scene.getHelicopter());
             altitude++;
-            start = Instant.now();
+            lastForwardMove = Instant.now();
         }
 
         if(timePassed.getNano() >= velocity){
             Command right = new RightCommand(scene.getHelicopter());
             right.execute();
-            start = current;
+            lastForwardMove = current;
         }
     }
 
-    void decreaseAltitude(Element element){
+    private void decreaseAltitude(Element element){
         element.setPosition(new Position(0,altitude + 1));
     }
 
-    boolean isWithinUpLimit(){
+    private boolean isWithinUpLimit(){
         return scene.getHelicopter().getPosition().getY() - 1 > altitude - 1;
     }
 
-    boolean isWithinDownLimit(){
+    private boolean isWithinDownLimit(){
         return scene.getHelicopter().getPosition().getY() - 1 < altitude + 2;
     }
 }

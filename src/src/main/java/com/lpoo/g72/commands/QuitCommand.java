@@ -1,6 +1,5 @@
-package com.lpoo.g72.command;
+package com.lpoo.g72.commands;
 
-import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 
 import java.io.IOException;

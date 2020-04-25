@@ -4,15 +4,29 @@ import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.lpoo.g72.scene.Position;
+import com.lpoo.g72.states.BombDropState;
+import com.lpoo.g72.states.bombDropStates.CanDropBomb;
+
+import java.time.Instant;
 
 public class VisualHelicopter {
 
     WING wing;
 
+    BombDropState bombDropState;
+
+    private double droppingBombTime;
+    private double bombsDisabledTime;
+
+    private Instant lastBombDropStart;
+    private Instant lastBombDropEnd;
+
     public enum WING {LAUNCHING, NORMAL};
 
     public VisualHelicopter() {
         this.wing = WING.NORMAL;
+        this.lastBombDropStart = null;
+        this.lastBombDropEnd = null;
     }
 
     public void draw(TextGraphics graphics, Position position){
@@ -40,5 +54,43 @@ public class VisualHelicopter {
 
     public WING getWing() {
         return wing;
+    }
+
+    public double getLaunchingTime() {
+        return droppingBombTime;
+    }
+
+    public double getUnlaunchableTime() {
+        return bombsDisabledTime;
+    }
+
+    public Instant getLastBombDropStart() {
+        return lastBombDropStart;
+    }
+
+    public Instant getLastBombDropEnd() {
+        return lastBombDropEnd;
+    }
+
+    public void setBombDropState(BombDropState state) {
+        this.bombDropState = state;
+    }
+
+    public void setLastBombDropStart(Instant lastBombDropStart) {
+        this.lastBombDropStart = lastBombDropStart;
+    }
+
+    public void setLastBombDropEnd(Instant lastBombDropEnd) {
+        this.lastBombDropEnd = lastBombDropEnd;
+    }
+
+    public void bombDropAction(Gui.Key key){
+        bombDropState.bombDropAction(key);
+    }
+
+    public void setStartBombDropProperties(double droppingBombTime, double bombsDisabledTime){
+        this.droppingBombTime = droppingBombTime;
+        this.bombsDisabledTime = bombsDisabledTime;
+        this.bombDropState = new CanDropBomb(this);
     }
 }
