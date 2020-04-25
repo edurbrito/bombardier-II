@@ -1,10 +1,9 @@
 package com.lpoo.g72.controller;
 import com.lpoo.g72.commands.*;
-import com.lpoo.g72.creator.LisbonScene;
+import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.gui.VisualHelicopter;
 import com.lpoo.g72.scene.Scene;
-import org.graalvm.compiler.asm.amd64.AMD64Assembler;
 
 import java.io.IOException;
 
@@ -18,7 +17,7 @@ public class SceneController{
     public SceneController(Gui gui, VisualHelicopter visualHelicopter){
         this.gui = gui;
         // The scene should be set in the menu then when the user chooses the city
-        this.scene = new LisbonScene().createScene(gui.getWidth(),gui.getHeight());
+        this.scene = new LisbonSceneCreator().createScene(gui.getWidth(),gui.getHeight());
         this.helicopterController = new HelicopterController(scene,visualHelicopter);
         this.visualHelicopter = visualHelicopter;
     }

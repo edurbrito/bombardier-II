@@ -136,7 +136,7 @@ Mapping the pattern's roles to our classes, we have:
 * Creator = [SceneCreator](../src/src/main/java/com/lpoo/g72/creator/SceneCreator.java), an abstract class with some methods:
   * AnOperation() = `protected char[][] generateBuildings(int width, int height, Random r, int heightFactor)`
   * FactoryMethod() = `public abstract Scene createScene(int width, int height)`
-* ConcreteCreator = [LisbonScene](../src/src/main/java/com/lpoo/g72/creator/LisbonScene.java), [OportoScene](../src/src/main/java/com/lpoo/g72/creator/OportoScene.java), [RandomScene](../src/src/main/java/com/lpoo/g72/creator/RandomScene.java), etc...
+* ConcreteCreator = [LisbonSceneCreator](../src/src/main/java/com/lpoo/g72/creator/LisbonSceneCreator.java), [OportoSceneCreator](../src/src/main/java/com/lpoo/g72/creator/OportoSceneCreator.java), [RandomSceneCreator](../src/src/main/java/com/lpoo/g72/creator/RandomSceneCreator.java), etc...
   * These, in fact, implement the FactoryMethod from their base class, returning a brand new featured scene.
 * Product = [Scene](../src/src/main/java/com/lpoo/g72/scene/Scene.java), as the concrete product built and returned.
 

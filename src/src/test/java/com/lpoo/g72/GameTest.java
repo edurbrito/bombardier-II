@@ -1,5 +1,5 @@
 package com.lpoo.g72;
-import com.lpoo.g72.creator.LisbonScene;
+import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.scene.Scene;
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class GameTest {
         private Gui gui;
         @Override
         public void start() throws IOException, InterruptedException {
-            scene = new LisbonScene().createScene(100,50);
+            scene = new LisbonSceneCreator().createScene(100,50);
             gui = new Gui(scene.getWidth(), scene.getHeight());
         }
 

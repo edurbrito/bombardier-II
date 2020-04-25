@@ -6,7 +6,7 @@ import com.lpoo.g72.scene.Scene;
 
 import java.util.Random;
 
-public class RandomScene extends SceneCreator {
+public class RandomSceneCreator extends SceneCreator {
 
     @Override
     public Scene createScene(int width, int height) {

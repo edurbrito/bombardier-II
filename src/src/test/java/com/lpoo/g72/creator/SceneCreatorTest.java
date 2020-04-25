@@ -14,16 +14,16 @@ public class SceneCreatorTest {
     @Test
     public void testDimensions(){
 
-        SceneCreator sc1 = new OportoScene();
+        SceneCreator sc1 = new OportoSceneCreator();
         assertEquals(200,sc1.createScene(50,200).getHeight());
         assertEquals(50,sc1.createScene(50,200).getWidth());
 
-        SceneCreator sc2 = new LisbonScene();
+        SceneCreator sc2 = new LisbonSceneCreator();
         assertEquals(11,sc2.createScene(50,11).getHeight());
         assertEquals(85,sc2.createScene(85,300).getWidth());
 
 
-        SceneCreator sc3 = new RandomScene();
+        SceneCreator sc3 = new RandomSceneCreator();
         assertEquals(27,sc2.createScene(34,27).getHeight());
         assertEquals(89,sc2.createScene(89,303).getWidth());
 
@@ -100,7 +100,7 @@ public class SceneCreatorTest {
 
     @Test
     public void testOporto(){
-        OportoScene oporto = new OportoScene();
+        OportoSceneCreator oporto = new OportoSceneCreator();
         Scene scene = oporto.createScene(50,100);
 
         assertEquals(50, scene.getWidth());
@@ -115,7 +115,7 @@ public class SceneCreatorTest {
 
     @Test
     public void testLisbon(){
-        LisbonScene lisbon = new LisbonScene();
+        LisbonSceneCreator lisbon = new LisbonSceneCreator();
         Scene scene = lisbon.createScene(30,70);
 
         assertEquals(30, scene.getWidth());
@@ -128,7 +128,7 @@ public class SceneCreatorTest {
 
     @Test
     public void testRandom(){
-        RandomScene random = new RandomScene();
+        RandomSceneCreator random = new RandomSceneCreator();
         Scene scene = random.createScene(41,90);
 
         assertEquals(41, scene.getWidth());

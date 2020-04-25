@@ -6,7 +6,7 @@ import com.lpoo.g72.scene.Scene;
 
 import java.util.Random;
 
-public class OportoScene extends SceneCreator {
+public class LisbonSceneCreator extends SceneCreator {
 
     @Override
     public Scene createScene(int width, int height) {
@@ -17,7 +17,7 @@ public class OportoScene extends SceneCreator {
 
         // TODO: Create some elements like buildings, monsters, etc
 
-        this.scene.setBuildings(this.generateBuildings(scene.getWidth(),scene.getHeight(), new Random(1),1));
+        this.scene.setBuildings(this.generateBuildings(scene.getWidth(),scene.getHeight(), new Random(2),2));
 
         return this.scene;
     }
