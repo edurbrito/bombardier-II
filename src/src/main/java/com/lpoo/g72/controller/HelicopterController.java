@@ -1,46 +1,49 @@
 package com.lpoo.g72.controller;
-import com.lpoo.g72.commands.Command;
-import com.lpoo.g72.commands.DownCommand;
-import com.lpoo.g72.commands.RightCommand;
-import com.lpoo.g72.commands.UpCommand;
-import com.lpoo.g72.gui.Gui;
+import com.lpoo.g72.commands.*;
+import com.lpoo.g72.gui.VisualHelicopter;
 import com.lpoo.g72.scene.Element;
 import com.lpoo.g72.scene.Position;
 import com.lpoo.g72.scene.Scene;
+import com.lpoo.g72.states.BombDropStart;
 
 import java.time.Duration;
 import java.time.Instant;
 
+import static com.lpoo.g72.gui.Gui.*;
+
 public class HelicopterController {
-    private  Gui gui;
+    private VisualHelicopter visualHelicopter;
     private Scene scene;
 
     private int altitude;
     private double velocity;
     private Instant lastForwardMove;
 
-    public HelicopterController(Gui gui, Scene scene){
+    public HelicopterController(Scene scene, VisualHelicopter visualHelicopter){
         this.scene = scene;
-        this.gui = gui;
+        this.visualHelicopter = visualHelicopter;
 
         this.altitude = scene.getHelicopter().getPosition().getY();
         this.lastForwardMove = Instant.now();
         this.velocity = 0.2 * Math.pow(10,9);
 
-        gui.setStartBombDropProperties(0.5 * Math.pow(10,9),1);
+        visualHelicopter.setStartBombDropProperties(0.5 * Math.pow(10,9),1);
     }
 
-    public void executeCommand(Gui.Key key){
+    public void executeCommand(Key key){
         Command cmd;
         this.moveForward();
 
-        gui.changeWing(key);
+        visualHelicopter.bombDropAction();
 
-        if(key == Gui.Key.DOWN && isWithinDownLimit()){
+        if(key == Key.SPACE && visualHelicopter.canDropBomb()){
+            visualHelicopter.setBombDropState(new BombDropStart(visualHelicopter));
+        }
+        if(key == Key.DOWN && isWithinDownLimit()){
             cmd = new DownCommand(scene.getHelicopter());
             cmd.execute();
         }
-        else if(key == Gui.Key.UP && isWithinUpLimit()){
+        else if(key == Key.UP && isWithinUpLimit()){
             cmd = new UpCommand(scene.getHelicopter());
             cmd.execute();
         }

@@ -5,7 +5,7 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.lpoo.g72.scene.Position;
 import com.lpoo.g72.states.BombDropState;
-import com.lpoo.g72.states.bombDropStates.CanDropBomb;
+import com.lpoo.g72.states.CanDropBomb;
 
 import java.time.Instant;
 
@@ -84,13 +84,17 @@ public class VisualHelicopter {
         this.lastBombDropEnd = lastBombDropEnd;
     }
 
-    public void bombDropAction(Gui.Key key){
-        bombDropState.bombDropAction(key);
+    public void bombDropAction(){
+        bombDropState.bombDropAction();
     }
 
     public void setStartBombDropProperties(double droppingBombTime, double bombsDisabledTime){
         this.droppingBombTime = droppingBombTime;
         this.bombsDisabledTime = bombsDisabledTime;
         this.bombDropState = new CanDropBomb(this);
+    }
+
+    public boolean canDropBomb() {
+        return bombDropState.getClass() == CanDropBomb.class;
     }
 }

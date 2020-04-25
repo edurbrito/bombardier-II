@@ -9,5 +9,5 @@ public abstract class BombDropState {
         this.visualHelicopter = visualHelicopter;
     }
 
-    public abstract void bombDropAction(Gui.Key key);
+    public abstract void bombDropAction();
 }

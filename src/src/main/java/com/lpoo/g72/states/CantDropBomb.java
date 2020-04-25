@@ -1,7 +1,5 @@
-package com.lpoo.g72.states.bombDropStates;
-import com.lpoo.g72.gui.Gui;
+package com.lpoo.g72.states;
 import com.lpoo.g72.gui.VisualHelicopter;
-import com.lpoo.g72.states.BombDropState;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -13,7 +11,7 @@ public class CantDropBomb extends BombDropState {
     }
 
     @Override
-    public void bombDropAction(Gui.Key key){
+    public void bombDropAction(){
         Duration timePassed = Duration.between(visualHelicopter.getLastBombDropEnd(), Instant.now());
 
         if(timePassed.getSeconds() >= visualHelicopter.getUnlaunchableTime())

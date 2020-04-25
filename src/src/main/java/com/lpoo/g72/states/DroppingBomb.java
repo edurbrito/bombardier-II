@@ -1,8 +1,6 @@
-package com.lpoo.g72.states.bombDropStates;
+package com.lpoo.g72.states;
 
-import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.gui.VisualHelicopter;
-import com.lpoo.g72.states.BombDropState;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -14,7 +12,7 @@ public class DroppingBomb extends BombDropState {
     }
 
     @Override
-    public void bombDropAction(Gui.Key key){
+    public void bombDropAction(){
         Duration timePassed = Duration.between(visualHelicopter.getLastBombDropStart(), Instant.now());
 
         if(timePassed.getNano() >= visualHelicopter.getLaunchingTime())

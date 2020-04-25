@@ -16,15 +16,11 @@ public class Gui{
     private final int width;
     private final int height;
 
-    private VisualHelicopter visualHelicopter;
-
     public enum Key{UP,DOWN,SPACE,QUIT,NULL};
 
-    public Gui(int width, int height, VisualHelicopter visualHelicopter) throws IOException {
+    public Gui(int width, int height) throws IOException {
         this.width = width;
         this.height = height;
-
-        this.visualHelicopter = visualHelicopter;
 
         this.screen = createTerminalScreen();
         setScreenProperties();
@@ -71,6 +67,30 @@ public class Gui{
         }
     }
 
+    public void drawScene(Scene scene){
+        screen.clear();
+
+        TextGraphics graphics = screen.newTextGraphics();
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        graphics.fillRectangle(
+                new TerminalPosition(0, 0),
+                new TerminalSize(scene.getWidth(), scene.getHeight()),
+                ' '
+        );
+
+        this.drawScoreBar(graphics,scene);
+
+        this.drawSceneBuildings(graphics,scene);
+    }
+
+    public void drawHelicopter(VisualHelicopter visualHelicopter, Scene scene){
+        visualHelicopter.draw(this.screen.newTextGraphics(), scene.getHelicopter().getPosition());
+    }
+
+    public void refreshScreen() throws IOException {
+        screen.refresh();
+    }
+
     public void drawMenu() throws IOException {
         screen.clear();
 
@@ -93,26 +113,6 @@ public class Gui{
         for( char character : gameOver.toCharArray()) {
             graphics.putString(new TerminalPosition(start++,height), String.valueOf(character));
         }
-
-        screen.refresh();
-    }
-
-    public void drawScene(Scene scene) throws IOException {
-        screen.clear();
-
-        TextGraphics graphics = screen.newTextGraphics();
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
-        graphics.fillRectangle(
-                new TerminalPosition(0, 0),
-                new TerminalSize(scene.getWidth(), scene.getHeight()),
-                ' '
-        );
-
-        this.drawScoreBar(graphics,scene);
-
-        this.drawSceneBuildings(graphics,scene);
-
-        visualHelicopter.draw(this.screen.newTextGraphics(), scene.getHelicopter().getPosition());
 
         screen.refresh();
     }
@@ -148,13 +148,5 @@ public class Gui{
         }
 
         return Key.NULL;
-    }
-
-    public void changeWing(Key key){
-        visualHelicopter.bombDropAction(key);
-    }
-
-    public void setStartBombDropProperties(double droppingBombTime, int bombsDisabledTime){
-        visualHelicopter.setStartBombDropProperties(droppingBombTime,bombsDisabledTime);
     }
 }

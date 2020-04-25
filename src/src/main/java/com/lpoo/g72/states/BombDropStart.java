@@ -1,7 +1,5 @@
-package com.lpoo.g72.states.bombDropStates;
-import com.lpoo.g72.gui.Gui;
+package com.lpoo.g72.states;
 import com.lpoo.g72.gui.VisualHelicopter;
-import com.lpoo.g72.states.BombDropState;
 
 import java.time.Instant;
 
@@ -12,7 +10,7 @@ public class BombDropStart extends BombDropState {
     }
 
     @Override
-    public void bombDropAction(Gui.Key key){
+    public void bombDropAction(){
         visualHelicopter.setLastBombDropStart(Instant.now());
         visualHelicopter.setWing(VisualHelicopter.WING.LAUNCHING);
         visualHelicopter.setBombDropState(new DroppingBomb(visualHelicopter));

@@ -2,7 +2,6 @@ package com.lpoo.g72;
 import com.lpoo.g72.controller.SceneController;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.gui.VisualHelicopter;
-import com.lpoo.g72.states.bombDropStates.CanDropBomb;
 
 import java.io.IOException;
 
@@ -15,9 +14,10 @@ public class Game {
     }
 
     public void start() throws IOException, InterruptedException {
-        gui = new Gui(100, 50, new VisualHelicopter());
+        VisualHelicopter visualHelicopter = new VisualHelicopter();
+        gui = new Gui(100, 50);
 
-        controller = new SceneController(gui);
+        controller = new SceneController(gui,visualHelicopter);
         controller.start();
     }
 
