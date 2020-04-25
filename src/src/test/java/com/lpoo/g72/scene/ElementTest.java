@@ -1,6 +1,6 @@
 package com.lpoo.g72.scene;
 
-import com.lpoo.g72.gui.VisualElementTest;
+import com.lpoo.g72.gui.VisualHelicopterTest;
 import org.junit.Test;
 import org.mockito.Mockito;
 
