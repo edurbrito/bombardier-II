@@ -11,12 +11,13 @@ import com.lpoo.g72.scene.*;
 
 import java.io.IOException;
 
-public class Gui{
+public class Gui {
+
     private final TerminalScreen screen;
     private final int width;
     private final int height;
 
-    public enum Key{UP,DOWN,SPACE,QUIT,NULL};
+    public enum Key {UP, DOWN, SPACE, QUIT, NULL}
 
     public Gui(int width, int height) throws IOException {
         this.width = width;
@@ -40,19 +41,20 @@ public class Gui{
         this.screen.doResizeIfNecessary();
     }
 
-    public TerminalScreen getScreen() {
-        return this.screen;
+    private void drawScoreBar(TextGraphics graphics, Scene scene) {
+        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
+        graphics.drawLine(0, scene.getHeight() - 4, 8, scene.getHeight() - 4, '=');
+
+        graphics.drawLine(scene.getWidth() - 9, scene.getHeight() - 4, scene.getWidth(), scene.getHeight() - 4, '=');
+
+        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
+        graphics.putString(10, scene.getHeight() - 4, "Blocks: ");
+        graphics.putString(30, scene.getHeight() - 4, "City: ");
+        graphics.putString(scene.getWidth() - 45, scene.getHeight() - 4, "Score: ");
+        graphics.putString(scene.getWidth() - 20, scene.getHeight() - 4, "Lives: ");
     }
 
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
-    public void drawSceneBuildings(TextGraphics graphics, Scene scene){
+    public void drawSceneBuildings(TextGraphics graphics, Scene scene) {
         graphics.enableModifiers(SGR.BOLD);
         graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
 
@@ -60,30 +62,28 @@ public class Gui{
         int width = scene.getWidth();
         char[][] buildings = scene.getBuildings();
 
-        for(int h = 0; h < height; ++h){
-            for(int w = 0; w < width; ++w){
-                graphics.putString( width - w - 1, height - h - 5, String.valueOf(buildings[h][w]));
+        for (int h = 0; h < height; ++h) {
+            for (int w = 0; w < width; ++w) {
+                graphics.putString(width - w - 1, height - h - 5, String.valueOf(buildings[h][w]));
             }
         }
     }
 
-    private void drawScoreBar(TextGraphics graphics, Scene scene){
-        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
-        graphics.drawLine(0, scene.getHeight()-4, 8, scene.getHeight()-4,'=');
+    public void drawHelicopter(TextGraphics graphics, VisualHelicopter visualHelicopter) {
 
-        graphics.drawLine(scene.getWidth() - 9, scene.getHeight()-4, scene.getWidth(), scene.getHeight()-4,'=');
+        graphics.enableModifiers(SGR.BOLD);
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
 
-        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
-        graphics.putString(10, scene.getHeight()-4,"Blocks: ");
-        graphics.putString(30, scene.getHeight()-4,"City: ");
-        graphics.putString(scene.getWidth()-45, scene.getHeight()-4,"Score: ");
-        graphics.putString(scene.getWidth()-20, scene.getHeight()-4,"Lives: ");
+        for (int i = 0; i < visualHelicopter.getForm().length; i++) {
+            graphics.setForegroundColor(TextColor.Factory.fromString(visualHelicopter.getColorPallet()[i]));
+            graphics.setCharacter(visualHelicopter.getHelicopterX() + i, visualHelicopter.getHelicopterY(), visualHelicopter.getForm()[i]);
+        }
     }
 
-    public void drawScene(Scene scene){
-        screen.clear();
+    public void drawScene(Scene scene, VisualHelicopter visualHelicopter) {
+        this.screen.clear();
 
-        TextGraphics graphics = screen.newTextGraphics();
+        TextGraphics graphics = this.screen.newTextGraphics();
         graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
         graphics.fillRectangle(
                 new TerminalPosition(0, 0),
@@ -91,13 +91,11 @@ public class Gui{
                 ' '
         );
 
-        this.drawScoreBar(graphics,scene);
+        this.drawScoreBar(graphics, scene);
 
-        this.drawSceneBuildings(graphics,scene);
-    }
+        this.drawSceneBuildings(graphics, scene);
 
-    public void drawHelicopter(VisualHelicopter visualHelicopter, Scene scene){
-        visualHelicopter.draw(this.screen.newTextGraphics(), scene.getHelicopter().getPosition());
+        this.drawHelicopter(graphics, visualHelicopter);
     }
 
     public void refreshScreen() throws IOException {
@@ -105,7 +103,7 @@ public class Gui{
     }
 
     public Key getKey() throws IOException {
-        try{
+        try {
             KeyStroke input = screen.pollInput();
 
             if (input.getKeyType() == KeyType.ArrowDown)
@@ -116,8 +114,7 @@ public class Gui{
                 return Key.SPACE;
             if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))
                 return Key.QUIT;
-        }
-        catch(NullPointerException n){
+        } catch (NullPointerException n) {
             return Key.NULL;
         }
 
@@ -143,10 +140,23 @@ public class Gui{
         graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
         graphics.enableModifiers(SGR.BOLD);
 
-        for( char character : gameOver.toCharArray()) {
-            graphics.putString(new TerminalPosition(start++,height), String.valueOf(character));
+        for (char character : gameOver.toCharArray()) {
+            graphics.putString(new TerminalPosition(start++, height), String.valueOf(character));
         }
 
         screen.refresh();
     }
+
+    public TerminalScreen getScreen() {
+        return this.screen;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
 }

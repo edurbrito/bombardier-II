@@ -13,7 +13,6 @@ public class BombDropEnd extends BombDropState {
     @Override
     public void bombDropAction(){
         visualHelicopter.setLastBombDropEnd(Instant.now());
-        visualHelicopter.setWing(VisualHelicopter.WING.NORMAL);
         visualHelicopter.setBombDropState(new CantDropBomb(visualHelicopter));
     }
 }

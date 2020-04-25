@@ -1,9 +1,6 @@
 package com.lpoo.g72.gui;
 
-import com.googlecode.lanterna.SGR;
-import com.googlecode.lanterna.TextColor;
-import com.googlecode.lanterna.graphics.TextGraphics;
-import com.lpoo.g72.scene.Position;
+import com.lpoo.g72.scene.Helicopter;
 import com.lpoo.g72.states.BombDropState;
 import com.lpoo.g72.states.CanDropBomb;
 
@@ -11,7 +8,9 @@ import java.time.Instant;
 
 public class VisualHelicopter {
 
-    WING wing;
+    private Helicopter helicopter;
+    private char[] form;
+    private String[] colorPallet;
 
     BombDropState bombDropState;
 
@@ -21,39 +20,56 @@ public class VisualHelicopter {
     private Instant lastBombDropStart;
     private Instant lastBombDropEnd;
 
-    public enum WING {LAUNCHING, NORMAL};
-
-    public VisualHelicopter() {
-        this.wing = WING.NORMAL;
+    public VisualHelicopter(Helicopter helicopter) {
         this.lastBombDropStart = null;
         this.lastBombDropEnd = null;
+
+        this.helicopter = helicopter;
+        this.form = new char[]{'/', '-', 'Õ'};
+        this.colorPallet = new String[]{"#2a2a2a", "#e60000", "#2a2a2a"};
     }
 
-    public void draw(TextGraphics graphics, Position position){
-        graphics.enableModifiers(SGR.BOLD);
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
-
-        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
-        if(wing != WING.LAUNCHING){
-            graphics.setCharacter(position.getX(), position.getY(),'\\');
+    public void wingRotation() {
+        if (this.form[0] == '/'){
+            this.form[0] = '\\';
+            this.form[2] = 'O';
         }
         else{
-            graphics.setCharacter(position.getX(), position.getY(),'/');
+            this.form[0] = '/';
+            this.form[2] = 'Õ';
         }
-
-        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
-        graphics.setCharacter(position.getX()+1, position.getY(),'-');
-
-        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
-        graphics.setCharacter(position.getX()+2, position.getY(),'O');
     }
 
-    public void setWing(WING wing){
-        this.wing = wing;
+    public Helicopter getHelicopter() {
+        return helicopter;
     }
 
-    public WING getWing() {
-        return wing;
+    public void setHelicopter(Helicopter helicopter) {
+        this.helicopter = helicopter;
+    }
+
+    public int getHelicopterX() {
+        return this.helicopter.getPosition().getX();
+    }
+
+    public int getHelicopterY() {
+        return this.helicopter.getPosition().getY();
+    }
+
+    public char[] getForm() {
+        return this.form;
+    }
+
+    public void setForm(char[] form) {
+        this.form = form;
+    }
+
+    public String[] getColorPallet() {
+        return this.colorPallet;
+    }
+
+    public void setColorPallet(String[] colorPallet) {
+        this.colorPallet = colorPallet;
     }
 
     public double getLaunchingTime() {
@@ -68,27 +84,27 @@ public class VisualHelicopter {
         return lastBombDropStart;
     }
 
-    public Instant getLastBombDropEnd() {
-        return lastBombDropEnd;
-    }
-
-    public void setBombDropState(BombDropState state) {
-        this.bombDropState = state;
-    }
-
     public void setLastBombDropStart(Instant lastBombDropStart) {
         this.lastBombDropStart = lastBombDropStart;
+    }
+
+    public Instant getLastBombDropEnd() {
+        return lastBombDropEnd;
     }
 
     public void setLastBombDropEnd(Instant lastBombDropEnd) {
         this.lastBombDropEnd = lastBombDropEnd;
     }
 
-    public void bombDropAction(){
+    public void setBombDropState(BombDropState state) {
+        this.bombDropState = state;
+    }
+
+    public void bombDropAction() {
         bombDropState.bombDropAction();
     }
 
-    public void setStartBombDropProperties(double droppingBombTime, double bombsDisabledTime){
+    public void setStartBombDropProperties(double droppingBombTime, double bombsDisabledTime) {
         this.droppingBombTime = droppingBombTime;
         this.bombsDisabledTime = bombsDisabledTime;
         this.bombDropState = new CanDropBomb(this);

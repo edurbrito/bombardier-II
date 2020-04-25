@@ -1,4 +1,5 @@
 package com.lpoo.g72;
+
 import com.lpoo.g72.controller.SceneController;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.gui.VisualHelicopter;
@@ -6,6 +7,7 @@ import com.lpoo.g72.gui.VisualHelicopter;
 import java.io.IOException;
 
 public class Game {
+
     private Gui gui;
     private SceneController controller;
 

@@ -67,6 +67,8 @@ public class HelicopterController {
             Command right = new RightCommand(this.helicopter);
             right.execute();
 
+            this.visualHelicopter.wingRotation();
+
             this.lastForwardMove = current;
         }
     }
@@ -76,8 +78,7 @@ public class HelicopterController {
     }
 
     private void decreaseAltitude(){
-        this.helicopter.setPosition(new Position(0,this.altitude + 1));
-        this.altitude++;
+        this.helicopter.setPosition(new Position(0, ++this.altitude));
     }
 
     private boolean isWithinUpLimit(){
