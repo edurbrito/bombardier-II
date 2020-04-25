@@ -14,18 +14,25 @@ public class Game {
     }
 
     public void start() throws IOException, InterruptedException {
-        VisualHelicopter visualHelicopter = new VisualHelicopter();
-        gui = new Gui(100, 50);
+        this.gui = new Gui(100, 50);
 
-        controller = new SceneController(gui,visualHelicopter);
-        controller.start();
+        this.controller = new SceneController(gui);
+        this.controller.start();
     }
 
     public Gui getGui() {
-        return gui;
+        return this.gui;
     }
 
     public void setGui(Gui gui) {
         this.gui = gui;
+    }
+
+    public SceneController getController() {
+        return controller;
+    }
+
+    public void setController(SceneController controller) {
+        this.controller = controller;
     }
 }

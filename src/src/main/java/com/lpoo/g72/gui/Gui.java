@@ -23,19 +23,7 @@ public class Gui{
         this.height = height;
 
         this.screen = createTerminalScreen();
-        setScreenProperties();
-    }
-
-    public TerminalScreen getScreen() {
-        return screen;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
+        this.setScreenProperties();
     }
 
     private TerminalScreen createTerminalScreen() throws IOException {
@@ -47,9 +35,21 @@ public class Gui{
     }
 
     private void setScreenProperties() throws IOException {
-        screen.setCursorPosition(null);
-        screen.startScreen();
-        screen.doResizeIfNecessary();
+        this.screen.setCursorPosition(null);
+        this.screen.startScreen();
+        this.screen.doResizeIfNecessary();
+    }
+
+    public TerminalScreen getScreen() {
+        return this.screen;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 
     public void drawSceneBuildings(TextGraphics graphics, Scene scene){
@@ -65,6 +65,19 @@ public class Gui{
                 graphics.putString( width - w - 1, height - h - 5, String.valueOf(buildings[h][w]));
             }
         }
+    }
+
+    private void drawScoreBar(TextGraphics graphics, Scene scene){
+        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
+        graphics.drawLine(0, scene.getHeight()-4, 8, scene.getHeight()-4,'=');
+
+        graphics.drawLine(scene.getWidth() - 9, scene.getHeight()-4, scene.getWidth(), scene.getHeight()-4,'=');
+
+        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
+        graphics.putString(10, scene.getHeight()-4,"Blocks: ");
+        graphics.putString(30, scene.getHeight()-4,"City: ");
+        graphics.putString(scene.getWidth()-45, scene.getHeight()-4,"Score: ");
+        graphics.putString(scene.getWidth()-20, scene.getHeight()-4,"Lives: ");
     }
 
     public void drawScene(Scene scene){
@@ -88,7 +101,27 @@ public class Gui{
     }
 
     public void refreshScreen() throws IOException {
-        screen.refresh();
+        this.screen.refresh();
+    }
+
+    public Key getKey() throws IOException {
+        try{
+            KeyStroke input = screen.pollInput();
+
+            if (input.getKeyType() == KeyType.ArrowDown)
+                return Key.DOWN;
+            if (input.getKeyType() == KeyType.ArrowUp)
+                return Key.UP;
+            if ((input.getKeyType() == KeyType.Character && input.getCharacter() == ' '))
+                return Key.SPACE;
+            if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))
+                return Key.QUIT;
+        }
+        catch(NullPointerException n){
+            return Key.NULL;
+        }
+
+        return Key.NULL;
     }
 
     public void drawMenu() throws IOException {
@@ -115,38 +148,5 @@ public class Gui{
         }
 
         screen.refresh();
-    }
-
-    private void drawScoreBar(TextGraphics graphics, Scene scene){
-        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
-        graphics.drawLine(0, scene.getHeight()-4, 8, scene.getHeight()-4,'=');
-
-        graphics.drawLine(scene.getWidth() - 9, scene.getHeight()-4, scene.getWidth(), scene.getHeight()-4,'=');
-
-        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
-        graphics.putString(10, scene.getHeight()-4,"Blocks: ");
-        graphics.putString(30, scene.getHeight()-4,"City: ");
-        graphics.putString(scene.getWidth()-45, scene.getHeight()-4,"Score: ");
-        graphics.putString(scene.getWidth()-20, scene.getHeight()-4,"Lives: ");
-    }
-
-    public Key getKey() throws IOException {
-        try{
-            KeyStroke input = screen.pollInput();
-
-            if (input.getKeyType() == KeyType.ArrowDown)
-                return Key.DOWN;
-            if (input.getKeyType() == KeyType.ArrowUp)
-                return Key.UP;
-            if ((input.getKeyType() == KeyType.Character && input.getCharacter() == ' '))
-                return Key.SPACE;
-            if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))
-                return Key.QUIT;
-        }
-        catch(NullPointerException n){
-            return Key.NULL;
-        }
-
-        return Key.NULL;
     }
 }

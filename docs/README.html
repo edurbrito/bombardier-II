@@ -17,9 +17,7 @@
                 line-height: 1.6;
             }
         </style>
-        <style>
-body { font-family: 'Roboto Slab', serif; text-align: justify; font-size: 16px; } h2 { background-color: #b8b8b8; font-size: 28px; color: #ffffff; text-transform: uppercase; padding-left: 8px; border-left: 6px solid grey; } h3 { font-size: 24px; } h4 { font-size: 20px; } a { color: grey; } blockquote { font-size: 28px; border-color: gray; color: #5f5f5f; }
-</style>
+        
         
     </head>
     <body class="vscode-light">
@@ -124,8 +122,38 @@ G# #  # #   #   G ##### ## # # ##G ## ##G ##   # #   #  #G#  ###   # #### #  # #
 <h3 id="restarting">Restarting</h3>
 <p>It should be possible to restart the game when it ends.</p>
 <h2 id="design">DESIGN</h2>
+<h3 id="the-scene-should-be-created-differently-for-different-cities">The Scene should be created differently for different Cities</h3>
+<h5 id="problem-in-context">Problem in Context</h5>
+<p>As we've had imagined the possibility to play in different scenes, which, here, represent different cities with their own buildings, monsters, and some other features, we needed to ensure their custom creation every time a new scene was returned. In order to accomplish this, in respect to SRP - in terms of relating the specific purpose of creating a new custom scene to a module only-, we decided to add some SceneCreators. There is, now, a base class, providing us with the necessary abstraction to also ensure the OCP, and its subclasses, each one creating its own detailed/featured city. <a href="https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/creator">See here more of the details on the evolution of this problem and its solution.</a></p>
+<h5 id="the-pattern">The Pattern</h5>
+<p>We have applied the <strong>Factory Method</strong> pattern, which allowed us to represent different SceneCreators, each one returning a different scene, with their own features. Now, we may have tons of different scenes, different cities, random ones, etc.</p>
+<h5 id="implementation">Implementation</h5>
+<img src="file:////run/media/edurbrito/Work/FEUP-2Y2S-PROJECTS/lpoo-2020-g72/images/factoryPattern.svg">
+<p>Mapping the pattern's roles to our classes, we have:</p>
+<ul>
+<li>Creator = <a href="../src/src/main/java/com/lpoo/g72/creator/SceneCreator.java">SceneCreator</a>, an abstract class with some methods:
+<ul>
+<li>AnOperation() = <code>protected char[][] generateBuildings(int width, int height, Random r, int heightFactor)</code></li>
+<li>FactoryMethod() = <code>public abstract Scene createScene(int width, int height)</code></li>
+</ul>
+</li>
+<li>ConcreteCreator = <a href="../src/src/main/java/com/lpoo/g72/creator/LisbonSceneCreator.java">LisbonSceneCreator</a>, <a href="../src/src/main/java/com/lpoo/g72/creator/OportoSceneCreator.java">OportoSceneCreator</a>, <a href="../src/src/main/java/com/lpoo/g72/creator/RandomSceneCreator.java">RandomSceneCreator</a>, etc...
+<ul>
+<li>These, in fact, implement the FactoryMethod from their base class, returning a brand new featured scene.</li>
+</ul>
+</li>
+<li>Product = <a href="../src/src/main/java/com/lpoo/g72/scene/Scene.java">Scene</a>, as the concrete product built and returned.</li>
+</ul>
+<h5 id="consequences">Consequences</h5>
+<p>Some benefits of this pattern:</p>
+<ul>
+<li>Firstly, it allowed the SRPrinciple, as the creation of a scene is now the task of only this module. Then, LSP, ISP and specially OCPrinciple followed. The last one is accomplished notoriously because of the simplicity that exists on arranging a new featured scene, with its own characteristics. It only takes creating a new subclasse and overriding the <code>createScene(...)</code> method.</li>
+<li>It can be particularly interesting when having a main menu or something similar, where the user may choose the next city to attack, or even a random one, from a list of cities that can be drawn on the screen.</li>
+<li>As mentioned, the knowledge of creating a scene is delegated to one of the several subclasses. These, indeed, only depend on one thing to create their predefined, or not, sequence of buildings: a random seed, that will generate the exact sequence of random numbers needed in the <code>generateBuildings(...)</code> method. This is the algorithm that &quot;lifts&quot; the cities and fills the array of characters for the scene. That approach reduced the extensive amount of code and allowed a lot of pseudo creativity when creating new scenarios for the game.</li>
+</ul>
 <h2 id="known-code-smells-and-refactoring-suggestions">KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS</h2>
 <h2 id="self-evaluation">SELF-EVALUATION</h2>
 <!-- MORE INFO AT https://web.fe.up.pt/~arestivo/page/courses/2020/lpoo/template/ -->
+
     </body>
     </html>

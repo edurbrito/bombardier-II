@@ -10,10 +10,6 @@ public class Scene{
     private char[][] buildings;
     private Helicopter helicopter;
 
-    public Helicopter getHelicopter() {
-        return helicopter;
-    }
-
     public Scene(int width, int height){
         this.width = width;
         this.height = height;
@@ -27,12 +23,16 @@ public class Scene{
         return this.height;
     }
 
+    public char[][] getBuildings() {
+        return buildings;
+    }
+
     public void setBuildings(char[][] buildings) {
         this.buildings = buildings;
     }
 
-    public char[][] getBuildings() {
-        return buildings;
+    public Helicopter getHelicopter() {
+        return this.helicopter;
     }
 
     public void setHelicopter(Helicopter helicopter) {

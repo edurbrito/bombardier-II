@@ -14,16 +14,16 @@ public class SceneController{
 
     private HelicopterController helicopterController;
 
-    public SceneController(Gui gui, VisualHelicopter visualHelicopter){
+    public SceneController(Gui gui){
         this.gui = gui;
         // The scene should be set in the menu then when the user chooses the city
         this.scene = new LisbonSceneCreator().createScene(gui.getWidth(),gui.getHeight());
-        this.helicopterController = new HelicopterController(scene,visualHelicopter);
-        this.visualHelicopter = visualHelicopter;
+        this.visualHelicopter = new VisualHelicopter();
+        this.helicopterController = new HelicopterController(this.scene, this.visualHelicopter);
     }
 
     public void start() throws IOException {
-        gui.drawScene(scene);
+        this.gui.drawScene(this.scene);
         this.run();
     }
 
@@ -31,19 +31,19 @@ public class SceneController{
 
         while(true){
 
-            Gui.Key key = gui.getKey();
+            Gui.Key key = this.gui.getKey();
 
             if(key == Gui.Key.QUIT){
-                QuitCommand cmd = new QuitCommand(gui.getScreen());
+                QuitCommand cmd = new QuitCommand(this.gui.getScreen());
                 cmd.execute();
                 break;
             }
 
-            helicopterController.executeCommand(key);
+            this.helicopterController.executeCommand(key);
 
-            gui.drawScene(scene);
-            gui.drawHelicopter(visualHelicopter,scene);
-            gui.refreshScreen();
+            this.gui.drawScene(this.scene);
+            this.gui.drawHelicopter(this.visualHelicopter, this.scene);
+            this.gui.refreshScreen();
         }
     }
 }
