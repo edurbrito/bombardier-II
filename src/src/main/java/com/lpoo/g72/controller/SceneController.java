@@ -35,7 +35,7 @@ public class SceneController{
             Gui.Key key = gui.getKey();
 
             if(key == Gui.Key.QUIT){
-                Command cmd = new QuitCommand(gui.getScreen());
+                QuitCommand cmd = new QuitCommand(gui.getScreen());
                 cmd.execute();
                 break;
             }

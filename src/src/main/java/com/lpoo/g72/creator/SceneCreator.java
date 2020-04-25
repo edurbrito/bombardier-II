@@ -10,9 +10,9 @@ public abstract class SceneCreator {
     protected char[][] generateBuildings(int width, int height, Random r, int heightFactor) {
 
         int minHeight = 1;
-        int maxHeight = height * 5 / 10;
+        int maxHeight = height * 5 / 10; // ratio of maximum building height in relation to the scene dimension
 
-        char[] btops = {'T', 'L', 'N', 'H', 'S', 'R'};
+        char[] btops = {'T', 'L', 'N', 'H', 'S', 'R'}; // building allowed tops
 
         char[][] buildings = new char[height][width];
 
@@ -27,12 +27,14 @@ public abstract class SceneCreator {
 
                 else{
 
-                    if(h < maxHeight + 1){
+                    if(h < maxHeight + 1){ // while not reaching the maxHeight
 
-                        if(buildings[h-1][w] == '#'){
+                        if(buildings[h-1][w] == '#'){ // If the current building does not have a top yet
 
-                            if (heightFactor(r,heightFactor) && h < maxHeight){ // If the current building does not have a top yet
+                            if (heightFactor(r,heightFactor) && h < maxHeight){ // See heightFactor function for more details
+
                                 buildings[h][w] = buildings[h][w+1] = '#'; // It can grow some meters more
+
                             }
                             else{
 
@@ -62,9 +64,14 @@ public abstract class SceneCreator {
 
     public boolean heightFactor(Random r, int factor){
 
+        // This will return a true or false answer for continuing to "grow" the current building in the loop.
+        // The answer is based on some probability associated with the @param factor.
+        // The greater the factor, the greater the probability of answering true
+        // and the greater the probability of creating a taller building, on the previous function.
+
         boolean heightProb = r.nextInt(2) == 0;
 
-        for(int i = 0; i < factor; i++){ // Giving it more chances to create a taller building
+        for(int i = 0; i < factor; i++){ // Giving it <@param factor> more chances to create a taller building
             heightProb = heightProb || r.nextInt(2) == 0;
         }
 

@@ -5,3 +5,11 @@ src/build/
 src/*.iml
 .vscode
 .gradle
+
+src/.settings/
+
+src/bin/
+
+src/.classpath
+
+src/.project
