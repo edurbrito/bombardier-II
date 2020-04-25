@@ -120,6 +120,33 @@ It should be possible to restart the game when it ends.
 
 ## DESIGN
 
+> FACTORY METHOD
+### The Scene should be created differently for different Cities
+
+// TODO: UML DIAGRAM
+
+##### Problem in Context
+As we've had imagined the possibility to play in different scenes, which, here, represent different cities with their own buildings, monsters, and some other features, we needed to ensure their custom creation every time a new scene was returned. In order to accomplish this, in respect to SRP - in terms of relating the specific purpose of creating a new custom scene to a module only-, we decided to add some SceneCreators. There is, now, a base class, providing us with the necessary abstraction to also ensure the OCP, and its subclasses, each one creating its own detailed/featured city. [See here more of the details on the evolution of this problem and its solution.](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/creator)
+
+##### The Pattern
+We have applied the *Factory Method* pattern, which allowed us to represent different SceneCreators, each one returning a different scene, with their own features. Now, we may have tons of different scenes, different cities, random ones, etc.  
+
+##### Implementation
+Mapping the pattern's roles to our classes, we have:
+* Creator = [SceneCreator](../src/src/main/java/com/lpoo/g72/creator/SceneCreator.java), an abstract class with some methods:
+  * AnOperation() = `protected char[][] generateBuildings(int width, int height, Random r, int heightFactor)`
+  * FactoryMethod() = `public abstract Scene createScene(int width, int height)`
+* ConcreteCreator = [LisbonScene](../src/src/main/java/com/lpoo/g72/creator/LisbonScene.java), [OportoScene](../src/src/main/java/com/lpoo/g72/creator/OportoScene.java), [RandomScene](../src/src/main/java/com/lpoo/g72/creator/RandomScene.java), etc...
+  * These, in fact, implement the FactoryMethod from their base class, returning a brand new featured scene.
+* Product = [Scene](../src/src/main/java/com/lpoo/g72/scene/Scene.java), as the concrete product built and returned.
+
+##### Consequences
+Some benefits of this pattern:
+* Firstly, it allowed the SRPrinciple, as the creation of a scene is now the task of only this module. Then, LSP, ISP and specially OCPrinciple followed. The last one is accomplished notoriously because of the simplicity that exists on arranging a new featured scene, with its own characteristics. It only takes creating a new subclasse and overriding the `createScene(...)` method.
+* It can be particularly interesting when having a main menu or something similar, where the user may choose the next city to attack, or even a random one, from a list of cities that can be drawn on the screen.
+* As mentioned, the knowledge of creating a scene is delegated to one of the several subclasses. These, indeed, only depend on one thing to create their predefined, or not, sequence of buildings: a random seed, that will generate the exact sequence of random numbers needed in the `generateBuildings(...)` method. This is the algorithm that "lifts" the cities and fills the array of characters for the scene. That approach reduced the extensive amount of code and allowed a lot of pseudo creativity when creating new scenarios for the game. 
+
+
 ## KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
 
 ## SELF-EVALUATION
