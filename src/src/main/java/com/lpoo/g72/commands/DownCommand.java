@@ -1,6 +1,6 @@
 package com.lpoo.g72.commands;
 
-import com.lpoo.g72.scene.Element;
+import com.lpoo.g72.scene.element.Element;
 import com.lpoo.g72.scene.Position;
 
 public class DownCommand implements Command{

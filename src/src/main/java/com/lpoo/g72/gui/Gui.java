@@ -8,8 +8,10 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.lpoo.g72.scene.*;
+import com.lpoo.g72.scene.visualElement.VisualElement;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Gui {
 
@@ -69,18 +71,18 @@ public class Gui {
         }
     }
 
-    public void drawHelicopter(TextGraphics graphics, VisualHelicopter visualHelicopter) {
+    public void drawElement(TextGraphics graphics, VisualElement visualElement) {
 
         graphics.enableModifiers(SGR.BOLD);
         graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
 
-        for (int i = 0; i < visualHelicopter.getForm().length; i++) {
-            graphics.setForegroundColor(TextColor.Factory.fromString(visualHelicopter.getColorPallet()[i]));
-            graphics.setCharacter(visualHelicopter.getHelicopterX() + i, visualHelicopter.getHelicopterY(), visualHelicopter.getForm()[i]);
+        for (int i = 0; i < visualElement.getForm().length; i++) {
+            graphics.setForegroundColor(TextColor.Factory.fromString(visualElement.getColorPallet()[i]));
+            graphics.setCharacter(visualElement.getElementX() + i, visualElement.getElementY(), visualElement.getForm()[i]);
         }
     }
 
-    public void drawScene(Scene scene, VisualHelicopter visualHelicopter) {
+    public void drawScene(Scene scene, List<VisualElement> visualElements) {
         this.screen.clear();
 
         TextGraphics graphics = this.screen.newTextGraphics();
@@ -95,7 +97,8 @@ public class Gui {
 
         this.drawSceneBuildings(graphics, scene);
 
-        this.drawHelicopter(graphics, visualHelicopter);
+        for( VisualElement visualElement : visualElements)
+            this.drawElement(graphics, visualElement);
     }
 
     public void refreshScreen() throws IOException {

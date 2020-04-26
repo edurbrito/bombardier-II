@@ -1,6 +1,5 @@
 package com.lpoo.g72.states;
-import com.lpoo.g72.gui.Gui;
-import com.lpoo.g72.gui.VisualHelicopter;
+import com.lpoo.g72.scene.visualElement.VisualHelicopter;
 
 public abstract class BombDropState {
     protected VisualHelicopter visualHelicopter;

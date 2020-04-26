@@ -1,4 +1,6 @@
-package com.lpoo.g72.scene;
+package com.lpoo.g72.scene.element;
+
+import com.lpoo.g72.scene.Position;
 
 public abstract class Element{
     private Position position;
