@@ -3,29 +3,43 @@ package com.lpoo.g72.controller;
 import com.lpoo.g72.commands.*;
 import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
-import com.lpoo.g72.gui.VisualHelicopter;
+import com.lpoo.g72.scene.visualElement.VisualElement;
 import com.lpoo.g72.scene.Scene;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SceneController {
 
     private final Gui gui;
-    private VisualHelicopter visualHelicopter;
     private Scene scene;
 
     private HelicopterController helicopterController;
+    private List<MonsterController> monsterControllers;
+    private List<VisualElement> visualElements;
 
     public SceneController(Gui gui) {
         this.gui = gui;
         // The scene should be set in the menu then when the user chooses the city
         this.scene = new LisbonSceneCreator().createScene(gui.getWidth(), gui.getHeight());
-        this.visualHelicopter = new VisualHelicopter(this.scene.getHelicopter());
-        this.helicopterController = new HelicopterController(this.scene, this.visualHelicopter);
+
+        this.visualElements = new ArrayList<>();
+        this.monsterControllers = new ArrayList<>();
+
+        this.helicopterController = new HelicopterController(this.scene, this.scene.getHelicopter());
+        this.visualElements.add(this.helicopterController.getVisualElement());
+
+        for(int i = 0; i < this.scene.getMonsters().size(); i++){
+            this.monsterControllers.add(new MonsterController(this.scene, this.scene.getMonsters().get(i)));
+            this.helicopterController.addObserver(this.monsterControllers.get(i));
+
+            this.visualElements.add(this.monsterControllers.get(i).getVisualElement());
+        }
     }
 
     public void start() throws IOException {
-        this.gui.drawScene(this.scene, this.visualHelicopter);
+        this.gui.drawScene(this.scene, this.visualElements);
         this.run();
     }
 
@@ -43,10 +57,10 @@ public class SceneController {
 
             this.helicopterController.executeCommand(key);
 
-            // TODO: Instead of passing a visualHelicopter, an array of visualElements (abstract class) could be created for the scene
-            // To be able to also draw monsters, using a drawElement instead of a drawHelicopter, @see gui.drawHelicopter
-            // Every visualElement subclass could have a form (array of chars) and a colorPallet (array of colors for each char)
-            this.gui.drawScene(this.scene, this.visualHelicopter);
+            for(MonsterController monsterController : monsterControllers)
+                monsterController.move();
+
+            this.gui.drawScene(this.scene, this.visualElements);
             this.gui.refreshScreen();
         }
     }

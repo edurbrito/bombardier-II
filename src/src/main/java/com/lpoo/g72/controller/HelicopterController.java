@@ -1,60 +1,48 @@
 package com.lpoo.g72.controller;
 import com.lpoo.g72.commands.*;
-import com.lpoo.g72.gui.VisualHelicopter;
-import com.lpoo.g72.scene.Helicopter;
+import com.lpoo.g72.scene.visualElement.VisualHelicopter;
 import com.lpoo.g72.scene.Position;
 import com.lpoo.g72.scene.Scene;
-import com.lpoo.g72.states.BombDropStart;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.lpoo.g72.gui.Gui.*;
 
-public class HelicopterController {
+public class HelicopterController extends ElementController implements Observable{
 
-    private VisualHelicopter visualHelicopter;
-    private Helicopter helicopter;
-
-    private int maxWidth;
-    private int altitude;
-    private double velocity;
-    private Instant lastForwardMove;
+    private List<Observer> observerList;
 
     public HelicopterController(Scene scene, VisualHelicopter visualHelicopter){
-        this.visualHelicopter = visualHelicopter;
-        this.helicopter = scene.getHelicopter();
+        super(visualHelicopter);
 
         this.maxWidth = scene.getWidth() - 1;
-        this.altitude = getHelicopterY();
+        this.altitude = this.getElementY();
 
         this.lastForwardMove = Instant.now();
         this.velocity = 0.2 * Math.pow(10,9);
 
-        visualHelicopter.setStartBombDropProperties(0.5 * Math.pow(10,9),1);
+        this.observerList = new ArrayList<>();
+
     }
 
     public void executeCommand(Key key){
-        this.moveForward();
-
-        visualHelicopter.bombDropAction();
-
-        if(key == Key.SPACE && visualHelicopter.canDropBomb()){
-            visualHelicopter.setBombDropState(new BombDropStart(visualHelicopter));
-        }
+        this.move();
 
         Command cmd;
         if(key == Key.DOWN && isWithinDownLimit()){
-            cmd = new DownCommand(this.helicopter);
+            cmd = new DownCommand(this.element);
             cmd.execute();
         }
         else if(key == Key.UP && isWithinUpLimit()){
-            cmd = new UpCommand(this.helicopter);
+            cmd = new UpCommand(this.element);
             cmd.execute();
         }
     }
 
-    private void moveForward(){
+    protected void move(){
 
         Instant current = Instant.now();
         Duration timePassed = Duration.between(this.lastForwardMove , current);
@@ -64,36 +52,45 @@ public class HelicopterController {
             if(this.newRound())
                 this.decreaseAltitude();
 
-            Command right = new RightCommand(this.helicopter);
+            Command right = new RightCommand(this.element);
             right.execute();
 
-            this.visualHelicopter.wingRotation();
+            this.visualElement.animation();
 
             this.lastForwardMove = current;
         }
     }
 
-    private boolean newRound(){
-        return getHelicopterX() == this.maxWidth;
+    private void decreaseAltitude(){
+        this.element.setPosition(new Position(0, ++this.altitude));
+        this.notifyObservers();
     }
 
-    private void decreaseAltitude(){
-        this.helicopter.setPosition(new Position(0, ++this.altitude));
+    private boolean newRound(){
+        return this.getElementX() == this.maxWidth;
     }
 
     private boolean isWithinUpLimit(){
-        return this.getHelicopterY() > this.altitude - 1 && this.getHelicopterY() > 0;
+        return this.getElementY() > this.altitude - 1 && this.getElementY() > 0;
     }
 
     private boolean isWithinDownLimit(){
-        return this.getHelicopterY() < this.altitude + 1;
+        return this.getElementY() < this.altitude + 1;
     }
 
-    private int getHelicopterX() {
-        return this.helicopter.getPosition().getX();
+    @Override
+    public void addObserver(Observer observer) {
+        this.observerList.add(observer);
     }
 
-    private int getHelicopterY() {
-        return this.helicopter.getPosition().getY();
+    @Override
+    public void removeObserver(Observer observer) {
+        this.observerList.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer observer: this.observerList)
+            observer.update(this.altitude);
     }
 }
