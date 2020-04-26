@@ -1,5 +1,7 @@
 package com.lpoo.g72.scene;
 
+import com.lpoo.g72.scene.element.Element;
+import com.lpoo.g72.scene.element.Helicopter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
