@@ -150,6 +150,10 @@ public class Gui {
         screen.refresh();
     }
 
+    public void closeScreen() throws IOException {
+        this.screen.close();
+    }
+
     public TerminalScreen getScreen() {
         return this.screen;
     }

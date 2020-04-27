@@ -1,6 +1,5 @@
 package com.lpoo.g72.controller;
 
-import com.lpoo.g72.commands.Command;
 import com.lpoo.g72.commands.directional.LeftCommand;
 import com.lpoo.g72.scene.visualElement.VisualElement;
 import com.lpoo.g72.scene.Position;
@@ -32,8 +31,7 @@ public class MonsterController extends ElementController implements Observer{
             if(this.getElementX() == 0)
                 this.element.setPosition(new Position(this.maxWidth + new Random().nextInt(30),this.altitude));
 
-            Command left = new LeftCommand(this.element);
-            left.execute();
+            commandInvoker.addCommand(new LeftCommand(this.element));
 
             this.visualElement.animation();
 
