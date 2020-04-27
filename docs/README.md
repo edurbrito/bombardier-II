@@ -161,15 +161,18 @@ The **Command** pattern was applied. This pattern lets you parameterize objects 
 
 ##### Implementation
 
+
 <img src="../images/commandPattern.svg">
 
-He implemented the **Command Pattern** with some variations because, in our case, we want the Sender - Scene Controller; to create the Commands himself rather than receiving them from the User Interface - GUI;. Otherwise, we would be assigning the responsibility to create the Command to the View which, which must not own this ability.  
+He implemented the **Command Pattern** with some variations because, in our case, we want the Invoker - Scene Controller; to create the Commands himself rather than receiving them from a Client. Otherwise, we would be assigning the responsibility to create the Command to the View, which must not own this ability.  
 
 Considering this variation, we can map the pattern's roles to our classes:
 
-##### Senders: 
+##### Invokers (and also Clients in this case): 
+Any [controller](../src/src/main/java/com/lpoo/g72/controller) can create and invoke Commands. Some of the controllers that invoke Commands:
 * [SceneController](../src/src/main/java/com/lpoo/g72/controller/SceneController.java), using `public void run ()`
 * [HelicopterController](../src/src/main/java/com/lpoo/g72/controller/HelicopterController.java), using `public void executeCommand(Key key)`
+* [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java), using `public void move()`
 Which build and invoke the commands based on:
 - the key received from the keyboard;
 - the game rules - which determine if the requested operation is doable;
@@ -179,7 +182,8 @@ Which build and invoke the commands based on:
 * [Command](../src/src/main/java/com/lpoo/g72/commands/Command.java), an interface that contains:
   * execute() = `public void execute()`
 
-##### Concrete Commands:  
+##### Concrete Commands:
+*All commands can be found on [commands package](../src/src/main/java/com/lpoo/g72/commands)*
 * [DirectionalCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DirectionalCommand.java), an abstract class for commands related to directional movements of the elements. It implements **Command** interface and also contains:
   * receiver = [Element](../src/src/main/java/com/lpoo/g72/scene/element/Element.java)
 
@@ -188,6 +192,8 @@ Directional Commands that extend the **DirectionalCommand** abstract class and d
 * [LeftCommand](../src/src/main/java/com/lpoo/g72/commands/directional/LeftCommand.java)
 * [RightCommand](../src/src/main/java/com/lpoo/g72/commands/directional/RightCommand.java)
 * [UpCommand](../src/src/main/java/com/lpoo/g72/commands/directional/UpCommand.java)
+
+*All directional command can be found on [directional package](../src/src/main/java/com/lpoo/g72/commands/directional)*
 
 * [NullCommand](../src/src/main/java/com/lpoo/g72/commands/NullCommand.java), which implements **Command** interface
 * [QuitCommand](../src/src/main/java/com/lpoo/g72/commands/QuitCommand.java), which implements **Command** interface and also contains:
@@ -198,6 +204,7 @@ Advantages of using **Command** pattern:
 
 - We could decouple classes that invoke operations such as movements and game actions (Controllers) from classes that perform these operations (Commands), which follows the Single Responsibility Principle;
 - The controller can interpret the requests and intersect between the request and its execution, depending on the game rules;
+- It is now easier to identify the actions and movements performed at any given circunstances because the names of the Commands easily translate what they do.
 
 Disadvantages of using **Command** pattern:
 
