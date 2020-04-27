@@ -1,24 +1,29 @@
 package com.lpoo.g72.command;
 
-import com.googlecode.lanterna.screen.TerminalScreen;
 import com.lpoo.g72.commands.Command;
-import com.lpoo.g72.commands.NullCommand;
-import com.lpoo.g72.commands.QuitCommand;
+import com.lpoo.g72.commands.CommandInvoker;
 import com.lpoo.g72.commands.directional.DownCommand;
 import com.lpoo.g72.commands.directional.LeftCommand;
 import com.lpoo.g72.commands.directional.RightCommand;
 import com.lpoo.g72.commands.directional.UpCommand;
+import com.lpoo.g72.creator.SceneCreator;
 import com.lpoo.g72.scene.ElementStub;
 import com.lpoo.g72.scene.Position;
+import com.lpoo.g72.scene.Scene;
+import com.lpoo.g72.scene.element.Helicopter;
+import com.lpoo.g72.scene.visualElement.VisualHelicopter;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class CommandTest {
 
@@ -66,6 +71,28 @@ public class CommandTest {
     }
 
     @Test
+    public void testCommandInvoker(){
+
+        class StubCommand implements Command {
+            @Override
+            public void execute() {
+                System.out.println("Executing Stub Command.");
+            }
+        }
+
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        CommandInvoker invoker1 = CommandInvoker.getInstance();
+        assertNotNull(invoker1);
+
+        invoker1.addCommand(new StubCommand());
+        invoker1.executeCommands();
+
+        assertEquals("Executing Stub Command.\n",outContent.toString());
+    }
+
+   /* @Test
     public void testNonDirection() throws IOException {
         TerminalScreen screen = Mockito.mock(TerminalScreen.class);
 
@@ -80,6 +107,6 @@ public class CommandTest {
         NullCommand nullCommand = Mockito.spy(new NullCommand());
         nullCommand.execute();
         Mockito.verify(nullCommand, Mockito.times(1)).execute();
-    }
+    }*/
 
 }
