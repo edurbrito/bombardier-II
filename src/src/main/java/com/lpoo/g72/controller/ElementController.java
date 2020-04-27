@@ -1,14 +1,15 @@
 package com.lpoo.g72.controller;
 
+import com.lpoo.g72.commands.CommandInvoker;
 import com.lpoo.g72.scene.visualElement.VisualElement;
 import com.lpoo.g72.scene.element.Element;
 
 import java.time.Instant;
 
 public abstract class ElementController {
-
     protected VisualElement visualElement;
     protected Element element;
+    protected CommandInvoker commandInvoker;
 
     protected double velocity;
     protected Instant lastForwardMove;
@@ -19,6 +20,7 @@ public abstract class ElementController {
     public ElementController(VisualElement visualElement) {
         this.visualElement = visualElement;
         this.element = this.visualElement.getElement();
+        this.commandInvoker = CommandInvoker.getInstance();
     }
 
     public VisualElement getVisualElement() {

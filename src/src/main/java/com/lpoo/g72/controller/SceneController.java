@@ -18,6 +18,7 @@ public class SceneController {
     private HelicopterController helicopterController;
     private List<MonsterController> monsterControllers;
     private List<VisualElement> visualElements;
+    protected CommandInvoker commandInvoker;
 
     public SceneController(Gui gui) {
         this.gui = gui;
@@ -36,6 +37,8 @@ public class SceneController {
 
             this.visualElements.add(this.monsterControllers.get(i).getVisualElement());
         }
+
+        this.commandInvoker = CommandInvoker.getInstance();
     }
 
     public void start() throws IOException {
@@ -44,24 +47,28 @@ public class SceneController {
     }
 
     public void run() throws IOException {
+        Gui.Key key;
 
-        while (true) {
+        while ((key = this.gui.getKey()) != Gui.Key.QUIT) {
 
-            Gui.Key key = this.gui.getKey();
-
-            if (key == Gui.Key.QUIT) {
-                Command cmd = new QuitCommand(this.gui.getScreen());
-                cmd.execute();
-                break;
-            }
-
-            this.helicopterController.executeCommand(key);
+            this.helicopterController.run(key);
 
             for(MonsterController monsterController : monsterControllers)
                 monsterController.move();
 
+            commandInvoker.executeCommands();
+
             this.gui.drawScene(this.scene, this.visualElements);
             this.gui.refreshScreen();
         }
+
+        quit();
+
+    }
+
+    void quit() {
+        try {
+            this.gui.closeScreen();
+        } catch (IOException e) {}
     }
 }

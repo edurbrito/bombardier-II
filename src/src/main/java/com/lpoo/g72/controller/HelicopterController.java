@@ -1,5 +1,4 @@
 package com.lpoo.g72.controller;
-import com.lpoo.g72.commands.*;
 import com.lpoo.g72.commands.directional.DownCommand;
 import com.lpoo.g72.commands.directional.RightCommand;
 import com.lpoo.g72.commands.directional.UpCommand;
@@ -28,21 +27,17 @@ public class HelicopterController extends ElementController implements Observabl
         this.velocity = 0.2 * Math.pow(10,9);
 
         this.observerList = new ArrayList<>();
-
     }
 
-    public void executeCommand(Key key){
+    public void run(Key key){
 
         this.move();
 
-        Command cmd;
         if(key == Key.DOWN && isWithinDownLimit()){
-            cmd = new DownCommand(this.element);
-            cmd.execute();
+            commandInvoker.addCommand(new DownCommand(element));
         }
         else if(key == Key.UP && isWithinUpLimit()){
-            cmd = new UpCommand(this.element);
-            cmd.execute();
+            commandInvoker.addCommand(new UpCommand(element));
         }
     }
 
@@ -56,12 +51,12 @@ public class HelicopterController extends ElementController implements Observabl
             if(this.newRound())
                 this.decreaseAltitude();
 
-            Command right = new RightCommand(this.element);
-            right.execute();
+            commandInvoker.addCommand(new RightCommand(element));
 
             this.visualElement.animation();
 
             this.lastForwardMove = current;
+
         }
     }
 
