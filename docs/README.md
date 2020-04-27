@@ -194,6 +194,14 @@ Directional Commands that extend the **DirectionalCommand** abstract class and d
   * receiver = TerminalScreen screen
 
 ##### Consequences
+Advantages of using **Command** pattern:
+
+- We could decouple classes that invoke operations such as movements and game actions (Controllers) from classes that perform these operations (Commands), which follows the Single Responsibility Principle;
+- The controller can interpret the requests and intersect between the request and its execution, depending on the game rules;
+
+Disadvantages of using **Command** pattern:
+
+- Since the controllers must sometimes translate a Key into a Command, in order to execute one Command it first needs to create it. This implies that, if a new action is introduced in the Game, we need to create a new Command to perform that action and include another if statement in the respective Controller function that creates/invokes the new Command depending on the game event. However, having attentively examined all aspects, we consider that, for now at least, this solution fits our problems.
 
 
 ## KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
