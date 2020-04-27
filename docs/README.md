@@ -149,22 +149,22 @@ Some benefits of this pattern:
 ### User's keystrokes and elapsed time generate different game actions
 
 ##### Problem in Context
-Considering the Model View Controller architectural pattern, the Scene Controller should be able to request user's input, obtained by the User Interface, and transform the request into a game action, particularly into a helicopter movement. 
-If the requested movement violates the rules of the game, the Scene Controller should be able to reject a request to move into a specific direction.
+Considering the Model View Controller architectural pattern, the controllers should be able to request user's input, obtained by the User Interface, and transform the request into a game action, particularly into a helicopter movement. 
+If the requested movement violates the rules of the game, the controllers should be able to reject a request to move into a specific direction.
 
 Also, some game elements, such as the monsters and the helicopter, should move in a specific direction at a fixed time rate.
 
-Therefore, we concluded that the operations themselves of moving a game element, for example, should be invoked by the Scene Controller after a keystroke or when some time passes, because he is the one that decides what happens in the scene according to the game rules, however he doesn't need to perform them, delegating the operations to the Commands themselves.
+Therefore, we concluded that the operations of moving a game element or ending the game, for example, should be invoked by the controllers after a keystroke or when some time passes, because they are the one that decide what happens to the scene and to its elements according to the game rules. However, they don't need to perform the actions themselves, delegating them to the Commands.
 
 ##### The Pattern
-The **Command** pattern was applied. This pattern lets you parameterize objects with different actions and support undoable operations, by using an interface with a single execution method that is implemented by multiple classes, each performing a specific operation on an Object (receiver) which they must contain the reference to.
+The **Command** pattern was applied. This pattern allowed us to parameterize objects with different actions and support undoable operations, by using an interface with a single execution method that is implemented by multiple classes, each performing a specific operation on an Object (receiver) which they must contain the reference to.
 
 ##### Implementation
 
 
 <img src="../images/commandPattern.svg">
 
-He implemented the **Command Pattern** with some variations because, in our case, we want the Invoker - Scene Controller; to create the Commands himself rather than receiving them from a Client. Otherwise, we would be assigning the responsibility to create the Command to the View, which must not own this ability.  
+We implemented the **Command Pattern** with some variations because, in our case, we wanted the Invokers - controllers; to create the Commands themselves rather than to receive them from a Client. Otherwise, we would be assigning the responsibility to create the Command to the View, which must not own this ability.  
 
 Considering this variation, we can map the pattern's roles to our classes:
 
@@ -193,7 +193,7 @@ Directional Commands that extend the **DirectionalCommand** abstract class and d
 * [RightCommand](../src/src/main/java/com/lpoo/g72/commands/directional/RightCommand.java)
 * [UpCommand](../src/src/main/java/com/lpoo/g72/commands/directional/UpCommand.java)
 
-*All directional command can be found on [directional package](../src/src/main/java/com/lpoo/g72/commands/directional)*
+*All directional commands can be found on [directional package](../src/src/main/java/com/lpoo/g72/commands/directional)*
 
 * [NullCommand](../src/src/main/java/com/lpoo/g72/commands/NullCommand.java), which implements **Command** interface
 * [QuitCommand](../src/src/main/java/com/lpoo/g72/commands/QuitCommand.java), which implements **Command** interface and also contains:
