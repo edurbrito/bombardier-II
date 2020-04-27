@@ -1,5 +1,8 @@
 package com.lpoo.g72.controller;
 import com.lpoo.g72.commands.*;
+import com.lpoo.g72.commands.directional.DownCommand;
+import com.lpoo.g72.commands.directional.RightCommand;
+import com.lpoo.g72.commands.directional.UpCommand;
 import com.lpoo.g72.scene.visualElement.VisualHelicopter;
 import com.lpoo.g72.scene.Position;
 import com.lpoo.g72.scene.Scene;
@@ -29,6 +32,7 @@ public class HelicopterController extends ElementController implements Observabl
     }
 
     public void executeCommand(Key key){
+
         this.move();
 
         Command cmd;

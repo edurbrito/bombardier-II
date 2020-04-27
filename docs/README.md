@@ -146,6 +146,55 @@ Some benefits of this pattern:
 * It can be particularly interesting when having a main menu or something similar, where the user may choose the next city to attack, or even a random one, from a list of cities that can be drawn on the screen.
 * As mentioned, the knowledge of creating a scene is delegated to one of the several subclasses. These, indeed, only depend on one thing to create their predefined, or not, sequence of buildings: a random seed, that will generate the exact sequence of random numbers needed in the `generateBuildings(...)` method. This is the algorithm that "lifts" the cities and fills the array of characters for the scene. That approach reduced the extensive amount of code and allowed a lot of pseudo creativity when creating new scenarios for the game. 
 
+### User's keystrokes and elapsed time generate different game actions
+
+##### Problem in Context
+Considering the Model View Controller architectural pattern, the Scene Controller should be able to request user's input, obtained by the User Interface, and transform the request into a game action, particularly into a helicopter movement. 
+If the requested movement violates the rules of the game, the Scene Controller should be able to reject a request to move into a specific direction.
+
+Also, some game elements, such as the monsters and the helicopter, should move in a specific direction at a fixed time rate.
+
+Therefore, we concluded that the operations themselves of moving a game element, for example, should be invoked by the Scene Controller after a keystroke or when some time passes, because he is the one that decides what happens in the scene according to the game rules, however he doesn't need to perform them, delegating the operations to the Commands themselves.
+
+##### The Pattern
+The **Command** pattern was applied. This pattern lets you parameterize objects with different actions and support undoable operations, by using an interface with a single execution method that is implemented by multiple classes, each performing a specific operation on an Object (receiver) which they must contain the reference to.
+
+##### Implementation
+
+<img src="../images/commandPattern.svg">
+
+He implemented the **Command Pattern** with some variations because, in our case, we want the Sender - Scene Controller; to create the Commands himself rather than receiving them from the User Interface - GUI;. Otherwise, we would be assigning the responsibility to create the Command to the View which, which must not own this ability.  
+
+Considering this variation, we can map the pattern's roles to our classes:
+
+##### Senders: 
+* [SceneController](../src/src/main/java/com/lpoo/g72/controller/SceneController.java), using `public void run ()`
+* [HelicopterController](../src/src/main/java/com/lpoo/g72/controller/HelicopterController.java), using `public void executeCommand(Key key)`
+Which build and invoke the commands based on:
+- the key received from the keyboard;
+- the game rules - which determine if the requested operation is doable;
+- a time factor - only performing the command at a fixed time rate.
+
+##### Command: 
+* [Command](../src/src/main/java/com/lpoo/g72/commands/Command.java), an interface that contains:
+  * execute() = `public void execute()`
+
+##### Concrete Commands:  
+* [DirectionalCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DirectionalCommand.java), an abstract class for commands related to directional movements of the elements. It implements **Command** interface and also contains:
+  * receiver = [Element](../src/src/main/java/com/lpoo/g72/scene/element/Element.java)
+
+Directional Commands that extend the **DirectionalCommand** abstract class and define `public void execute()` from **Command** interface:
+* [DownCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DownCommand.java)
+* [LeftCommand](../src/src/main/java/com/lpoo/g72/commands/directional/LeftCommand.java)
+* [RightCommand](../src/src/main/java/com/lpoo/g72/commands/directional/RightCommand.java)
+* [UpCommand](../src/src/main/java/com/lpoo/g72/commands/directional/UpCommand.java)
+
+* [NullCommand](../src/src/main/java/com/lpoo/g72/commands/NullCommand.java), which implements **Command** interface
+* [QuitCommand](../src/src/main/java/com/lpoo/g72/commands/QuitCommand.java), which implements **Command** interface and also contains:
+  * receiver = TerminalScreen screen
+
+##### Consequences
+
 
 ## KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
 

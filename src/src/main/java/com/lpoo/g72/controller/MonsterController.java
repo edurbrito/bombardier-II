@@ -1,7 +1,7 @@
 package com.lpoo.g72.controller;
 
 import com.lpoo.g72.commands.Command;
-import com.lpoo.g72.commands.LeftCommand;
+import com.lpoo.g72.commands.directional.LeftCommand;
 import com.lpoo.g72.scene.visualElement.VisualElement;
 import com.lpoo.g72.scene.Position;
 import com.lpoo.g72.scene.Scene;
