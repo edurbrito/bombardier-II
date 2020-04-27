@@ -1,15 +1,13 @@
 package com.lpoo.g72;
+
 import com.lpoo.g72.controller.SceneController;
-import com.lpoo.g72.creator.LisbonScene;
-import com.lpoo.g72.creator.RandomScene;
 import com.lpoo.g72.gui.Gui;
-import com.lpoo.g72.scene.Scene;
 
 import java.io.IOException;
 
 public class Game {
+
     private Gui gui;
-    private Scene scene;
     private SceneController controller;
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -17,17 +15,25 @@ public class Game {
     }
 
     public void start() throws IOException, InterruptedException {
-        scene = new LisbonScene().createScene(100,50);
-        gui = new Gui(scene.getWidth(), scene.getHeight());
-        controller = new SceneController(gui,scene);
-        controller.execute();
+        this.gui = new Gui(100, 50);
+
+        this.controller = new SceneController(this.gui);
+        this.controller.start();
     }
 
     public Gui getGui() {
-        return gui;
+        return this.gui;
     }
 
     public void setGui(Gui gui) {
         this.gui = gui;
+    }
+
+    public SceneController getController() {
+        return this.controller;
+    }
+
+    public void setController(SceneController controller) {
+        this.controller = controller;
     }
 }

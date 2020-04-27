@@ -1,5 +1,9 @@
 package com.lpoo.g72.scene;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 
 public class PositionTest {
@@ -90,8 +94,13 @@ public class PositionTest {
 
     @Test
     public void equalPosition(){
+        Map<Position, Integer> positions = new HashMap<>();
         Position pos1 = new Position(20,34);
         Position pos2 = new Position(20,34);
+
+        positions.put(pos1,1);
+        positions.put(pos2,2);
+        assertEquals(true, positions.containsKey(pos1));
 
         assertEquals(true, pos1.equals(pos2));
     }

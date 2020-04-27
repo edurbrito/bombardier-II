@@ -120,6 +120,97 @@ It should be possible to restart the game when it ends.
 
 ## DESIGN
 
+### The Scene should be created differently for different Cities
+
+##### Problem in Context
+As we've had imagined the possibility to play in different scenes, which, here, represent different cities with their own buildings, monsters, and some other features, we needed to ensure their custom creation every time a new scene was returned. In order to accomplish this, in respect to SRP - in terms of relating the specific purpose of creating a new custom scene to a module only-, we decided to add some SceneCreators. There is, now, a base class, providing us with the necessary abstraction to also ensure the OCP, and its subclasses, each one creating its own detailed/featured city. [See here more of the details on the evolution of this problem and its solution.](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/creator)
+
+##### The Pattern
+We have applied the **Factory Method** pattern, which allowed us to represent different SceneCreators, each one returning a different scene, with their own features. Now, we may have tons of different scenes, different cities, random ones, etc.  
+
+##### Implementation
+
+<img src="../images/factoryPattern.svg">
+
+Mapping the pattern's roles to our classes, we have:
+* Creator = [SceneCreator](../src/src/main/java/com/lpoo/g72/creator/SceneCreator.java), an abstract class with some methods:
+  * AnOperation() = `protected char[][] generateBuildings(int width, int height, Random r, int heightFactor)`
+  * FactoryMethod() = `public abstract Scene createScene(int width, int height)`
+* ConcreteCreator = [LisbonSceneCreator](../src/src/main/java/com/lpoo/g72/creator/LisbonSceneCreator.java), [OportoSceneCreator](../src/src/main/java/com/lpoo/g72/creator/OportoSceneCreator.java), [RandomSceneCreator](../src/src/main/java/com/lpoo/g72/creator/RandomSceneCreator.java), etc...
+  * These, in fact, implement the FactoryMethod from their base class, returning a brand new featured scene.
+* Product = [Scene](../src/src/main/java/com/lpoo/g72/scene/Scene.java), as the concrete product built and returned.
+
+##### Consequences
+Some benefits of this pattern:
+* Firstly, it allowed the SRPrinciple, as the creation of a scene is now the task of only this module. Then, LSP, ISP and specially OCPrinciple followed. The last one is accomplished notoriously because of the simplicity that exists on arranging a new featured scene, with its own characteristics. It only takes creating a new subclasse and overriding the `createScene(...)` method.
+* It can be particularly interesting when having a main menu or something similar, where the user may choose the next city to attack, or even a random one, from a list of cities that can be drawn on the screen.
+* As mentioned, the knowledge of creating a scene is delegated to one of the several subclasses. These, indeed, only depend on one thing to create their predefined, or not, sequence of buildings: a random seed, that will generate the exact sequence of random numbers needed in the `generateBuildings(...)` method. This is the algorithm that "lifts" the cities and fills the array of characters for the scene. That approach reduced the extensive amount of code and allowed a lot of pseudo creativity when creating new scenarios for the game. 
+
+### User's keystrokes and elapsed time generate different game actions
+
+##### Problem in Context
+Considering the Model View Controller architectural pattern, the controllers should be able to request user's input, obtained by the User Interface, and transform the request into a game action, particularly into a helicopter movement. 
+If the requested movement violates the rules of the game, the controllers should be able to reject a request to move into a specific direction.
+
+Also, some game elements, such as the monsters and the helicopter, should move in a specific direction at a fixed time rate.
+
+Therefore, we concluded that the operations of moving a game element or ending the game, for example, should be invoked by the controllers after a keystroke or when some time passes, because they are the one that decide what happens to the scene and to its elements according to the game rules. However, they don't need to perform the actions themselves, delegating them to the Commands.
+
+##### The Pattern
+The **Command** pattern was applied. This pattern allowed us to parameterize objects with different actions and support undoable operations, by using an interface with a single execution method that is implemented by multiple classes, each performing a specific operation on an Object (receiver) which they must contain the reference to.
+
+##### Implementation
+
+
+<img src="../images/commandPattern.svg">
+
+We implemented the **Command Pattern** with some variations because, in our case, we wanted the Invokers - controllers; to create the Commands themselves rather than to receive them from a Client. Otherwise, we would be assigning the responsibility to create the Command to the View, which must not own this ability.  
+
+Considering this variation, we can map the pattern's roles to our classes:
+
+##### Invokers (and also Clients in this case): 
+Any [controller](../src/src/main/java/com/lpoo/g72/controller) can create and invoke Commands. Some of the controllers that invoke Commands:
+* [SceneController](../src/src/main/java/com/lpoo/g72/controller/SceneController.java), using `public void run ()`
+* [HelicopterController](../src/src/main/java/com/lpoo/g72/controller/HelicopterController.java), using `public void executeCommand(Key key)`
+* [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java), using `public void move()`
+Which build and invoke the commands based on:
+- the key received from the keyboard;
+- the game rules - which determine if the requested operation is doable;
+- a time factor - only performing the command at a fixed time rate.
+
+##### Command: 
+* [Command](../src/src/main/java/com/lpoo/g72/commands/Command.java), an interface that contains:
+  * execute() = `public void execute()`
+
+##### Concrete Commands:
+*All commands can be found on [commands package](../src/src/main/java/com/lpoo/g72/commands)*
+* [DirectionalCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DirectionalCommand.java), an abstract class for commands related to directional movements of the elements. It implements **Command** interface and also contains:
+  * receiver = [Element](../src/src/main/java/com/lpoo/g72/scene/element/Element.java)
+
+Directional Commands that extend the **DirectionalCommand** abstract class and define `public void execute()` from **Command** interface:
+* [DownCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DownCommand.java)
+* [LeftCommand](../src/src/main/java/com/lpoo/g72/commands/directional/LeftCommand.java)
+* [RightCommand](../src/src/main/java/com/lpoo/g72/commands/directional/RightCommand.java)
+* [UpCommand](../src/src/main/java/com/lpoo/g72/commands/directional/UpCommand.java)
+
+*All directional commands can be found on [directional package](../src/src/main/java/com/lpoo/g72/commands/directional)*
+
+* [NullCommand](../src/src/main/java/com/lpoo/g72/commands/NullCommand.java), which implements **Command** interface
+* [QuitCommand](../src/src/main/java/com/lpoo/g72/commands/QuitCommand.java), which implements **Command** interface and also contains:
+  * receiver = TerminalScreen screen
+
+##### Consequences
+Advantages of using **Command** pattern:
+
+- We could decouple classes that invoke operations such as movements and game actions (Controllers) from classes that perform these operations (Commands), which follows the Single Responsibility Principle;
+- The controller can interpret the requests and intersect between the request and its execution, depending on the game rules;
+- It is now easier to identify the actions and movements performed at any given circunstances because the names of the Commands easily translate what they do.
+
+Disadvantages of using **Command** pattern:
+
+- Since the controllers must sometimes translate a Key into a Command, in order to execute one Command it first needs to create it. This implies that, if a new action is introduced in the Game, we need to create a new Command to perform that action and include another if statement in the respective Controller function that creates/invokes the new Command depending on the game event. However, having attentively examined all aspects, we consider that, for now at least, this solution fits our problems.
+
+
 ## KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
 
 ## SELF-EVALUATION
