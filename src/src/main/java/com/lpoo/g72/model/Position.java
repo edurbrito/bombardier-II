@@ -1,4 +1,4 @@
-package com.lpoo.g72.scene;
+package com.lpoo.g72.model;
 
 import java.util.Objects;
 

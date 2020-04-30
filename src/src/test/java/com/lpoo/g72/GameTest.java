@@ -1,7 +1,7 @@
 package com.lpoo.g72;
 import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
-import com.lpoo.g72.scene.Scene;
+import com.lpoo.g72.gui.Scene;
 import org.junit.Test;
 import org.mockito.Mockito;
 

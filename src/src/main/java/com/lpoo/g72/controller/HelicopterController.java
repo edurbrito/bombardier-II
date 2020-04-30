@@ -2,9 +2,10 @@ package com.lpoo.g72.controller;
 import com.lpoo.g72.commands.directional.DownCommand;
 import com.lpoo.g72.commands.directional.RightCommand;
 import com.lpoo.g72.commands.directional.UpCommand;
-import com.lpoo.g72.scene.visualElement.VisualHelicopter;
-import com.lpoo.g72.scene.Position;
-import com.lpoo.g72.scene.Scene;
+import com.lpoo.g72.gui.visualElement.VisualHelicopter;
+import com.lpoo.g72.model.Position;
+import com.lpoo.g72.gui.Scene;
+import com.lpoo.g72.model.element.Helicopter;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -17,10 +18,10 @@ public class HelicopterController extends ElementController implements Observabl
 
     private List<Observer> observerList;
 
-    public HelicopterController(Scene scene, VisualHelicopter visualHelicopter){
-        super(visualHelicopter);
+    public HelicopterController(VisualHelicopter visualHelicopter, Helicopter helicopter, int maxWidth){
+        super(visualHelicopter, helicopter);
 
-        this.maxWidth = scene.getWidth() - 1;
+        this.maxWidth = maxWidth;
         this.altitude = this.getElementY();
 
         this.lastForwardMove = Instant.now();
@@ -56,7 +57,6 @@ public class HelicopterController extends ElementController implements Observabl
             this.visualElement.animation();
 
             this.lastForwardMove = current;
-
         }
     }
 

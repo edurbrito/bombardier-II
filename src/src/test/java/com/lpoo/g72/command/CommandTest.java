@@ -6,15 +6,11 @@ import com.lpoo.g72.commands.directional.DownCommand;
 import com.lpoo.g72.commands.directional.LeftCommand;
 import com.lpoo.g72.commands.directional.RightCommand;
 import com.lpoo.g72.commands.directional.UpCommand;
-import com.lpoo.g72.creator.SceneCreator;
-import com.lpoo.g72.scene.ElementStub;
-import com.lpoo.g72.scene.Position;
-import com.lpoo.g72.scene.Scene;
-import com.lpoo.g72.scene.element.Helicopter;
-import com.lpoo.g72.scene.visualElement.VisualHelicopter;
+import com.lpoo.g72.model.ElementStub;
+import com.lpoo.g72.model.Position;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
@@ -23,7 +19,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class CommandTest {
 
@@ -72,41 +67,20 @@ public class CommandTest {
 
     @Test
     public void testCommandInvoker(){
+        CommandInvoker commandInvoker = Mockito.spy(CommandInvoker.getInstance());
 
-        class StubCommand implements Command {
-            @Override
-            public void execute() {
-                System.out.println("Executing Stub Command.");
-            }
+        assertNotNull(commandInvoker);
+
+        for(Command command : commandList){
+            commandInvoker.addCommand(command);
         }
 
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+        commandInvoker.executeCommands();
 
-        CommandInvoker invoker1 = CommandInvoker.getInstance();
-        assertNotNull(invoker1);
+        for(Command command : commandList){
+            Mockito.verify(command,Mockito.times(1)).execute();
+        }
 
-        invoker1.addCommand(new StubCommand());
-        invoker1.executeCommands();
-
-        assertEquals("Executing Stub Command.\n",outContent.toString());
     }
-
-   /* @Test
-    public void testNonDirection() throws IOException {
-        TerminalScreen screen = Mockito.mock(TerminalScreen.class);
-
-        Mockito.doNothing().when(screen).close();
-
-        QuitCommand quitCommand = Mockito.spy(new QuitCommand(screen));
-        quitCommand.execute();
-
-        Mockito.verify(quitCommand, Mockito.times(1)).execute();
-        Mockito.verify(screen,Mockito.times(1)).close();
-
-        NullCommand nullCommand = Mockito.spy(new NullCommand());
-        nullCommand.execute();
-        Mockito.verify(nullCommand, Mockito.times(1)).execute();
-    }*/
 
 }

@@ -7,8 +7,9 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.lpoo.g72.scene.*;
-import com.lpoo.g72.scene.visualElement.VisualElement;
+import com.lpoo.g72.gui.visualElement.VisualHelicopter;
+import com.lpoo.g72.model.element.Helicopter;
+import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +17,9 @@ import java.util.List;
 public class Gui {
 
     private final TerminalScreen screen;
+    private final VisualHelicopter visualHelicopter;
+    private Scene scene;
+
     private final int width;
     private final int height;
 
@@ -25,6 +29,7 @@ public class Gui {
         this.width = width;
         this.height = height;
 
+        this.visualHelicopter = new VisualHelicopter();
         this.screen = createTerminalScreen();
         this.setScreenProperties();
     }
@@ -56,49 +61,22 @@ public class Gui {
         graphics.putString(scene.getWidth() - 20, scene.getHeight() - 4, "Lives: ");
     }
 
-    public void drawSceneBuildings(TextGraphics graphics, Scene scene) {
-        graphics.enableModifiers(SGR.BOLD);
-        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
-
-        int height = scene.getHeight();
-        int width = scene.getWidth();
-        char[][] buildings = scene.getBuildings();
-
-        for (int h = 0; h < height; ++h) {
-            for (int w = 0; w < width; ++w) {
-                graphics.putString(width - w - 1, height - h - 5, String.valueOf(buildings[h][w]));
-            }
-        }
-    }
-
-    public void drawElement(TextGraphics graphics, VisualElement visualElement) {
-
-        graphics.enableModifiers(SGR.BOLD);
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
-
-        for (int i = 0; i < visualElement.getForm().length; i++) {
-            graphics.setForegroundColor(TextColor.Factory.fromString(visualElement.getColorPallet()[i]));
-            graphics.setCharacter(visualElement.getElementX() + i, visualElement.getElementY(), visualElement.getForm()[i]);
-        }
-    }
-
-    public void drawScene(Scene scene, List<VisualElement> visualElements) {
+    public void draw(Helicopter helicopter, List<Monster> monsters) {
         this.screen.clear();
 
         TextGraphics graphics = this.screen.newTextGraphics();
         graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
         graphics.fillRectangle(
                 new TerminalPosition(0, 0),
-                new TerminalSize(scene.getWidth(), scene.getHeight()),
+                new TerminalSize(width, height),
                 ' '
         );
 
         this.drawScoreBar(graphics, scene);
 
-        this.drawSceneBuildings(graphics, scene);
+        this.scene.draw(graphics, monsters);
 
-        for( VisualElement visualElement : visualElements)
-            this.drawElement(graphics, visualElement);
+        this.visualHelicopter.draw(graphics,helicopter);
     }
 
     public void refreshScreen() throws IOException {
@@ -166,4 +144,15 @@ public class Gui {
         return this.height;
     }
 
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public VisualHelicopter getVisualHelicopter() {
+        return visualHelicopter;
+    }
 }

@@ -1,6 +1,6 @@
-package com.lpoo.g72.scene;
+package com.lpoo.g72.model;
 
-import com.lpoo.g72.scene.element.Element;
+import com.lpoo.g72.model.element.Element;
 
 public class ElementStub extends Element {
 

@@ -6,17 +6,17 @@ import java.util.PriorityQueue;
 
 public class CommandInvoker {
     private List<Command> commands;
+    private static CommandInvoker instance;
 
     private CommandInvoker() {
         commands = new ArrayList<>();
     }
 
-    private static class CommandInvokerHolder{
-        private static final CommandInvoker INSTANCE = new CommandInvoker();
-    }
-
     public static CommandInvoker getInstance() {
-        return CommandInvokerHolder.INSTANCE;
+        if (instance == null) {
+            instance = new CommandInvoker();
+        }
+        return instance;
     }
 
     public void executeCommands(){

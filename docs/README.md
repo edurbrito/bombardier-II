@@ -118,7 +118,28 @@ The game ends for three reasons:
 ### Restarting
 It should be possible to restart the game when it ends.
 
+
+
 ## DESIGN
+
+### Bombardier II game components must perform distinct functions 
+
+#### Problem in Context
+We felt that it would be crucial from the beggining of our project to delineate the visual, atomic and logical components of our game to assure that we not only followed the Single Responsibility Principle by defining clear responsibilities for each part of our Application, but also that any future change in our game would be easier to implement.
+In particular, as our game is still in development, we must be able to add new models (Monsters for example) without changing the View, to add new aways of drawing the elements without changing the Elements themselves and to incrementally implement the rules we defined by only changing the Controller - following the Open/Closed Principle. 
+
+#### The Pattern
+To divide our Application in parts that perform different tasks we implemented the Model-View-Controller architectural pattern , **MVC Pattern**. This way, we have *Models* that represent the data, the 'atomic' elements of the game such as the Helicopter and the Monsters. Then, we have the *Views* that have the responsability to draw the elements and interact with the user (User/Graphical Interface). Finally we use multiple Controllers to connect the Views and the Models, making sure the game events occur in the desired sequence, determining what happens next with their respective Models and Views.
+
+#### Implementation
+
+Mapping the pattern's roles to our classes, we have:
+* Model = [Element](../src/src/main/java/com/lpoo/g72/scene/element/Element.java), and all the classes that extend it, such as:
+  * [Helicopter](../src/src/main/java/com/lpoo/g72/scene/element/Helicopter.java)
+  * [Monster](../src/src/main/java/com/lpoo/g72/scene/element/Monster.java)
+
+* Views = 
+
 
 ### The Scene should be created differently for different Cities
 
@@ -146,6 +167,8 @@ Some benefits of this pattern:
 * It can be particularly interesting when having a main menu or something similar, where the user may choose the next city to attack, or even a random one, from a list of cities that can be drawn on the screen.
 * As mentioned, the knowledge of creating a scene is delegated to one of the several subclasses. These, indeed, only depend on one thing to create their predefined, or not, sequence of buildings: a random seed, that will generate the exact sequence of random numbers needed in the `generateBuildings(...)` method. This is the algorithm that "lifts" the cities and fills the array of characters for the scene. That approach reduced the extensive amount of code and allowed a lot of pseudo creativity when creating new scenarios for the game. 
 
+***
+
 ### User's keystrokes and elapsed time generate different game actions
 
 ##### Problem in Context
@@ -161,14 +184,13 @@ The **Command** pattern was applied. This pattern allowed us to parameterize obj
 
 ##### Implementation
 
-
 <img src="../images/commandPattern.svg">
 
 We implemented the **Command Pattern** with some variations because, in our case, we wanted the Invokers - controllers; to create the Commands themselves rather than to receive them from a Client. Otherwise, we would be assigning the responsibility to create the Command to the View, which must not own this ability.  
 
 Considering this variation, we can map the pattern's roles to our classes:
 
-##### Invokers (and also Clients in this case): 
+###### Invokers (and also Clients in this case): 
 Any [controller](../src/src/main/java/com/lpoo/g72/controller) can create and invoke Commands. Some of the controllers that invoke Commands:
 * [SceneController](../src/src/main/java/com/lpoo/g72/controller/SceneController.java), using `public void run ()`
 * [HelicopterController](../src/src/main/java/com/lpoo/g72/controller/HelicopterController.java), using `public void executeCommand(Key key)`
@@ -178,12 +200,13 @@ Which build and invoke the commands based on:
 - the game rules - which determine if the requested operation is doable;
 - a time factor - only performing the command at a fixed time rate.
 
-##### Command: 
+###### Command: 
 * [Command](../src/src/main/java/com/lpoo/g72/commands/Command.java), an interface that contains:
   * execute() = `public void execute()`
 
-##### Concrete Commands:
+###### Concrete Commands:
 *All commands can be found on [commands package](../src/src/main/java/com/lpoo/g72/commands)*
+
 * [DirectionalCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DirectionalCommand.java), an abstract class for commands related to directional movements of the elements. It implements **Command** interface and also contains:
   * receiver = [Element](../src/src/main/java/com/lpoo/g72/scene/element/Element.java)
 
@@ -193,11 +216,6 @@ Directional Commands that extend the **DirectionalCommand** abstract class and d
 * [RightCommand](../src/src/main/java/com/lpoo/g72/commands/directional/RightCommand.java)
 * [UpCommand](../src/src/main/java/com/lpoo/g72/commands/directional/UpCommand.java)
 
-*All directional commands can be found on [directional package](../src/src/main/java/com/lpoo/g72/commands/directional)*
-
-* [NullCommand](../src/src/main/java/com/lpoo/g72/commands/NullCommand.java), which implements **Command** interface
-* [QuitCommand](../src/src/main/java/com/lpoo/g72/commands/QuitCommand.java), which implements **Command** interface and also contains:
-  * receiver = TerminalScreen screen
 
 ##### Consequences
 Advantages of using **Command** pattern:
@@ -209,6 +227,18 @@ Advantages of using **Command** pattern:
 Disadvantages of using **Command** pattern:
 
 - Since the controllers must sometimes translate a Key into a Command, in order to execute one Command it first needs to create it. This implies that, if a new action is introduced in the Game, we need to create a new Command to perform that action and include another if statement in the respective Controller function that creates/invokes the new Command depending on the game event. However, having attentively examined all aspects, we consider that, for now at least, this solution fits our problems.
+
+***
+
+### Monsters should follow the Helicopter
+
+##### Problem in Context
+
+##### The Pattern
+
+##### Implementation
+
+##### Consequences
 
 
 ## KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS

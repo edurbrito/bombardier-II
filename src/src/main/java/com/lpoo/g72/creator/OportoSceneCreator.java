@@ -1,10 +1,11 @@
 package com.lpoo.g72.creator;
 
-import com.lpoo.g72.scene.visualElement.VisualHelicopter;
-import com.lpoo.g72.scene.element.Helicopter;
-import com.lpoo.g72.scene.Position;
-import com.lpoo.g72.scene.Scene;
+import com.lpoo.g72.gui.visualElement.VisualHelicopter;
+import com.lpoo.g72.gui.Scene;
+import com.lpoo.g72.gui.visualElement.VisualMonster;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class OportoSceneCreator extends SceneCreator {
@@ -12,13 +13,11 @@ public class OportoSceneCreator extends SceneCreator {
     @Override
     public Scene createScene(int width, int height) {
 
-        this.scene = new Scene(width,height);
-
-        this.scene.setHelicopter(new VisualHelicopter(new Helicopter(new Position(0,1))));
+        //this.scene = new Scene(width, height, new VisualMonster());
 
         // TODO: Create some elements like buildings, monsters, etc
 
-        this.scene.setBuildings(this.generateBuildings(scene.getWidth(),scene.getHeight(), new Random(1),1));
+        this.scene.setBuildings(this.generateBuildings(width,height, new Random(1),1));
 
         return this.scene;
     }

@@ -1,7 +1,7 @@
 package com.lpoo.g72.commands.directional;
 
-import com.lpoo.g72.scene.element.Element;
-import com.lpoo.g72.scene.Position;
+import com.lpoo.g72.model.element.Element;
+import com.lpoo.g72.model.Position;
 
 public class UpCommand extends DirectionalCommand {
 

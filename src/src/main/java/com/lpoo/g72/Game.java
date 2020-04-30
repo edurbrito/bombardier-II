@@ -1,14 +1,16 @@
 package com.lpoo.g72;
 
-import com.lpoo.g72.controller.SceneController;
+import com.lpoo.g72.controller.Controller;
 import com.lpoo.g72.gui.Gui;
+import com.lpoo.g72.model.Model;
 
 import java.io.IOException;
 
 public class Game {
 
     private Gui gui;
-    private SceneController controller;
+    private Model model;
+    private Controller controller;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         new Game().start();
@@ -16,8 +18,8 @@ public class Game {
 
     public void start() throws IOException, InterruptedException {
         this.gui = new Gui(100, 50);
-
-        this.controller = new SceneController(this.gui);
+        this.model = new Model();
+        this.controller = new Controller(this.gui, this.model);
         this.controller.start();
     }
 
@@ -27,13 +29,5 @@ public class Game {
 
     public void setGui(Gui gui) {
         this.gui = gui;
-    }
-
-    public SceneController getController() {
-        return this.controller;
-    }
-
-    public void setController(SceneController controller) {
-        this.controller = controller;
     }
 }

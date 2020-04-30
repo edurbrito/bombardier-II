@@ -1,10 +1,9 @@
-package com.lpoo.g72.scene.visualElement;
+package com.lpoo.g72.gui.visualElement;
 
-import com.lpoo.g72.scene.ElementStub;
-import com.lpoo.g72.scene.Position;
-import com.lpoo.g72.scene.element.Element;
-import com.lpoo.g72.scene.element.Helicopter;
-import com.lpoo.g72.scene.element.Monster;
+import com.lpoo.g72.model.ElementStub;
+import com.lpoo.g72.model.Position;
+import com.lpoo.g72.model.element.Helicopter;
+import com.lpoo.g72.model.element.Monster;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,10 +11,10 @@ import static org.junit.Assert.*;
 
 public class VisualElementTest {
 
-    protected class VisualElementStub extends VisualElement{
+   /* protected class VisualElementStub extends VisualElement{
 
-        public VisualElementStub(ElementStub element, char[] form, String[] colorPallet) {
-            super(element, form, colorPallet);
+        public VisualElementStub(char[] form, String[] colorPallet) {
+            super(form, colorPallet);
         }
 
         @Override
@@ -287,5 +286,5 @@ public class VisualElementTest {
         assertEquals('/', visualElement.getForm()[2]);
         assertEquals('-', visualElement.getForm()[3]);
         assertEquals('{', visualElement.getForm()[4]);
-    }
+    }*/
 }

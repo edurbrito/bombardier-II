@@ -1,9 +1,15 @@
 package com.lpoo.g72.creator;
-import com.lpoo.g72.scene.Scene;
+import com.lpoo.g72.gui.Scene;
+import com.lpoo.g72.gui.visualElement.VisualHelicopter;
+import com.lpoo.g72.gui.visualElement.VisualMonster;
+
+import java.util.List;
 import java.util.Random;
 
 public abstract class SceneCreator {
     protected Scene scene;
+    protected List<VisualMonster> monsters;
+    protected List<VisualHelicopter> helicopter;
 
     public abstract Scene createScene(int width, int height);
 

@@ -1,11 +1,9 @@
-package com.lpoo.g72.scene.visualElement;
-
-import com.lpoo.g72.scene.element.Monster;
+package com.lpoo.g72.gui.visualElement;
 
 public class VisualMonster extends VisualElement {
 
-    public VisualMonster(Monster monster) {
-        super(monster, new char[]{'<','-','/','-','{'}, new String[]{"#2f4a28", "#28910d", "#2f4a28","#28910d","#2f4a28"});
+    public VisualMonster() {
+        super(new char[]{'<','-','/','-','{'}, new String[]{"#2f4a28", "#28910d", "#2f4a28","#28910d","#2f4a28"});
     }
 
     @Override
