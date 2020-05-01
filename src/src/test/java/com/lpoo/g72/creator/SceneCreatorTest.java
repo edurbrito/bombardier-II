@@ -1,10 +1,6 @@
 package com.lpoo.g72.creator;
 
-import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.gui.visualElement.VisualMonster;
-import com.lpoo.g72.model.element.Helicopter;
-import com.lpoo.g72.model.element.Monster;
-import com.lpoo.g72.model.Position;
 import com.lpoo.g72.gui.Scene;
 import org.junit.Test;
 
@@ -33,13 +29,18 @@ public class SceneCreatorTest {
         assertEquals(89,sc2.createScene(89,303).getWidth());
 
     }
-/*
+
     class SceneCreatorStub extends SceneCreator{
 
         @Override
         public Scene createScene(int width, int height) {
+            List<VisualMonster> monsters = new ArrayList<>();
+            Random r = new Random();
+            for(int i = 0; i < 5; i++){
+                monsters.add(new VisualMonster());
+            }
 
-            this.scene = new Scene(width, height,//monstros);
+            this.scene = new Scene(width, height, monsters);
             this.scene.setBuildings(this.generateBuildings(width,height,new Random(),4));
 
             return this.scene;
@@ -69,8 +70,6 @@ public class SceneCreatorTest {
         assertEquals(20, scene.getWidth());
         assertEquals(80, scene.getHeight());
 
-        assertEquals(0, scene.getMonsters().size());
-
         assertEquals(scene.getHeight(), scene.getBuildings().length);
         for(int h = 0; h < scene.getHeight(); h++){
             assertEquals(scene.getWidth(), scene.getBuildings()[h].length);
@@ -79,14 +78,7 @@ public class SceneCreatorTest {
             }
         }
 
-        List<VisualMonster> monsters = new ArrayList<>();
-        Random r = new Random();
-        for(int i = 0; i < 5; i++){
-            monsters.add(new VisualMonster(new Monster(new Position(r.nextInt(100),r.nextInt(200)))));
-        }
-        scene.setMonsters(monsters);
-
-        assertEquals(5, scene.getMonsters().size());
+        assertEquals(5, scene.getVisualMonsters().size());
 
         assertTrue(stub.heightFactor(new Random(19),3));
         assertTrue(stub.heightFactor(new Random(22),3));
@@ -119,9 +111,7 @@ public class SceneCreatorTest {
         assertEquals(50, scene.getWidth());
         assertEquals(100, scene.getHeight());
 
-        assertNotNull(scene.getHelicopter());
-
-        assertEquals(0, scene.getMonsters().size());
+        assertEquals(2, scene.getVisualMonsters().size());
 
         assertEquals(scene.getHeight(), scene.getBuildings().length);
 
@@ -136,7 +126,7 @@ public class SceneCreatorTest {
         assertEquals(30, scene.getWidth());
         assertEquals(70, scene.getHeight());
 
-        assertEquals(3, scene.getMonsters().size());
+        assertEquals(3, scene.getVisualMonsters().size());
 
         assertEquals(176,buildingCounter(scene));
     }
@@ -149,7 +139,6 @@ public class SceneCreatorTest {
         assertEquals(41, scene.getWidth());
         assertEquals(90, scene.getHeight());
 
-        assertEquals(0, scene.getMonsters().size());
+        assertEquals(4, scene.getVisualMonsters().size());
     }
-*/
 }
