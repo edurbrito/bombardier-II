@@ -53,7 +53,16 @@ This project was developed by Diana Freitas ([up201806230@fe.up.pt](mailto:up201
 ### Initial Scene
 
 #### Objects
-At this moment, there is a helicopter placed in the top left corner of the screen and some random generated buildings. Monsters are yet to come.
+At this moment, there is a helicopter placed in the top left corner of the screen, some random generated buildings and monsters.
+
+#### Vertical Movement
+The vertical movement of the helicopter is controlled not only by the player, but also by a time factor.
+- The player can move the helicopter up or down a little bit, using the arrow keys, to escape the monsters that are flying towards him from the right side.
+- The altitude of the helicopter decreases by one unit each time it enters the scene from the left side.
+- The monsters randomly change their vertical position by one or two units, as they fly towards the helicopter.
+
+#### Horizontal Movement
+- The flying monsters are moving horizontally towards the helicopter, possibly with different moving techniques and speeds.
 
 ### Info Bar
 This bar is already set on the screen. It will always be below the buildings' bottom line and will contain the following info, when a new game starts.
@@ -118,7 +127,7 @@ The game ends for three reasons:
 ### Restarting
 It should be possible to restart the game when it ends.
 
-
+---
 
 ## DESIGN
 
@@ -129,7 +138,7 @@ We felt that it would be crucial from the beginning of our project to delineate 
 
 In particular, as our game is still in development, we must be able to add new models (Monsters for example) without changing the View, to add new ways of drawing the elements without changing the Elements themselves and to incrementally implement the rules we defined by only changing the Controller - following the Open/Closed Principle. 
 
-Everything considered we refactored our code until we were able to clearly distinguish the role of each class. *See here the stages that translate the evolution of this problem and its solution:*
+With everything considered, we refactored our code until we were able to clearly distinguish the role of each class. *See here the stages that translate the evolution of this problem and its solution:*
 
 [1. Elements still had visual properties](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/abcc2a2d1ea733350dedff83da87bca924d5e067/src/src/main/java/com/lpoo/g72)
 
@@ -140,7 +149,7 @@ Everything considered we refactored our code until we were able to clearly disti
 [4. Controllers, Views and Models defined](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/86339fee7ecb47b7ddbd6e9778a89eeda95353a7/src/src/test/java/com/lpoo/g72)
 
 #### The Pattern
-To divide our Application in parts that perform different tasks we implemented the Model-View-Controller architectural pattern , **MVC Pattern**. This way, we have *Models* that represent the data, the 'atomic' elements of the game such as the Helicopter and the Monsters. Then, we have the *Views* that have the responsibility to draw the elements and interact with the user (Graphical User Interface). Finally we use multiple Controllers to connect the Views and the Models, making sure the game events occur in the desired sequence, determining what should change in their Models and Views.
+To divide our Application in parts that perform different tasks we implemented the Model-View-Controller architectural pattern , **MVC Pattern**. This way, we have *Models* that represent the data, the 'atomic' elements of the game such as the Helicopter and the Monsters. Then, we have the *Views* that have the responsibility to draw the elements and interact with the user (Graphical User Interface). Finally, we use multiple *Controllers* to connect the Views and the Models, making sure the game events occur in the desired sequence, determining what should change.
 
 #### Implementation
 
@@ -153,9 +162,9 @@ Mapping the pattern's roles to our classes, we have:
   * [VisualHelicopter](../src/src/main/java/com/lpoo/g72/gui/visualElement/VisualHelicopter.java), which is responsible for storing visual information about the Helicopter, such as the color and the form, and to draw it on the screen;
   * [Scene](../src/src/main/java/com/lpoo/g72/gui/Scene.java), which has the ability to draw its buildings in the right way. This also contains a List of Views for the Monsters, [VisualMonsters](../src/src/main/java/com/lpoo/g72/gui/visualElement/VisualMonster.java), because each Scene may have different ways of drawing them.
 
-* Controller = [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java) is the main controller of the game, which connects the main View, [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java), and the main [Model](../src/src/main/java/com/lpoo/g72/model/Model.java). It gets the input from the user by calling Gui's `getKey()` function in `run()` and redirects it to subcontrollers, the [ElementControllers](../src/src/main/java/com/lpoo/g72/controller/ElementController.java), each resonsible for controlling the behaviour of a game *Element* and its correspondent View, [VisualElement](../src/src/main/java/com/lpoo/g72/controller/VisualElement.java):
+* Controller = [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java) is the main controller of the game, which connects the main View, [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java), and the main [Model](../src/src/main/java/com/lpoo/g72/model/Model.java). It gets the input from the user by calling Gui's `getKey()` function in `run()` and redirects it to subcontrollers, the [ElementControllers](../src/src/main/java/com/lpoo/g72/controller/ElementController.java), each one responsible for controlling the behavior of a game *Element* and its correspondent View, [VisualElement](../src/src/main/java/com/lpoo/g72/controller/VisualElement.java):
   * [HelicopterController](../src/src/main/java/com/lpoo/g72/controller/HelicopterController.java), which decides the next movement of the Helicopter based on the key pressed by the user and also considering a time factor.
-  * [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java), which controlls the movement of a monster.
+  * [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java), which controles the movement of a monster.
 When all controllers finish, the main controller orders the invoker to execute all the actions that were determined by each controller and orders the [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java) to draw itself, redirecting the information about the Models to the View so it can draw them in the right position.
   
 ##### Consequences
@@ -164,6 +173,8 @@ By using the **MVC** architectural Pattern we  came across these advantages:
 - We can have multiple Views for our Models, which will be particularly useful when we want Monsters to look differently while keeping their atomic features. This also means Views can reuse Models, providing reusability of code;
 - Any extension we wanted to add to a game class became easier to make because the dependency between classes decreased - *OCP*.
 - Testing became easier because, following the *SRP*, smaller classes with one responsibility need fewer tests.
+
+---
 
 ### The Scene should be created differently for different Cities
 
@@ -177,7 +188,7 @@ We have applied the **Factory Method** pattern, which allowed us to represent di
 
 <img src="../images/factoryPattern.svg">
 
-*For simplification purposes details about the classes that take the Client's role in our game - Controllers; are not included in our diagram.*
+*For simplification purposes, details about the classes that take the Client's role in our game - Controllers; are not included in our diagram.*
 
 Mapping the pattern's roles to our classes, we have:
 * Creator = [SceneCreator](../src/src/main/java/com/lpoo/g72/creator/SceneCreator.java), an abstract class with some methods:
@@ -193,7 +204,7 @@ Some benefits of this pattern:
 * It can be particularly interesting when having a main menu or something similar, where the user may choose the next city to attack, or even a random one, from a list of cities that can be drawn on the screen.
 * As mentioned, the knowledge of creating a scene is delegated to one of the several subclasses. These, indeed, only depend on one thing to create their predefined, or not, sequence of buildings: a random seed, that will generate the exact sequence of random numbers needed in the `generateBuildings(...)` method. This is the algorithm that "lifts" the cities and fills the array of characters for the scene. That approach reduced the extensive amount of code and allowed a lot of pseudo creativity when creating new scenarios for the game. 
 
-***
+---
 
 ### User's keystrokes and elapsed time generate different game actions
 
@@ -207,10 +218,10 @@ Therefore, we concluded that the operations of moving the game elements should b
 
 ##### The Patterns
 To solve this problem we applied both the **Command** and the **Singleton** patterns. 
-The **Command** pattern allowed us to parameterize Elements with different actions, by using an interface, [Command](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/Command.java), with a single execution method, 'execute()' that is be implemented by multiple classes(Concrete Commands), each performing a specific operation on its *Element* (Receiver), specifically on its *Position*.
+The **Command** pattern allowed us to parameterize Elements with different actions, by using an interface, [Command](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/Command.java), with a single execution method, `execute()` that is be implemented by multiple classes (Concrete Commands), each performing a specific operation on its *Element* (Receiver), specifically on its *Position*.
 Furthermore, to follow the *SRP*, we felt the need to split the responsibility of creating and executing the Commands, which led us to the implementation of a [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java).
-At this point, implementing the **Singleton** design pattern became a new possibility, because we only needed one CommandInvoker - which works such like a TV remote; to execute all the Commands on each iteration of the game main loop, which meant we only wanted an instance of the [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java) to be used in all classes.
-Combining these two design patterns, on each iteration the *ElementControllers* order actions on their respective Elements - by creating Commands and adding them to the Invokers' Command List, 'commandInvoker.addCommand(command:Command)'; and then the main Controller, on its 'run()' function, asks the [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java) to execute all the Commands on its Command List, 'commandInvoker.executeCommands()'. 
+At this point, implementing the **Singleton** design pattern became a new possibility, because we only needed one CommandInvoker - which works such like a TV remote; to execute all the Commands on each iteration of the game main loop, meaning that we only wanted an instance of the [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java) to be used in all classes.
+Combining these two design patterns, on each iteration the *ElementControllers* order actions on their respective Elements - by creating Commands and adding them to the Invokers' Command List, `commandInvoker.addCommand(command:Command)`; and then the main Controller, in its `run()` function, asks the [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java) to execute all the Commands on its Command List, `commandInvoker.executeCommands()`. 
 
 
 ##### Implementation
@@ -225,7 +236,7 @@ Combining these two design patterns, on each iteration the *ElementControllers* 
 * Command = [Command](../src/src/main/java/com/lpoo/g72/commands/Command.java), an interface that contains:
   * execute() = `public void execute()`
 
-* ConcreteCommand = [DirectionalCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DirectionalCommand.java), an abstract class for commands related to directional movements of the elements, which will allow us to create other type of Commands that don't act on Elements for example. It implements **Command** interface and also contains:
+* ConcreteCommand = [DirectionalCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DirectionalCommand.java), an abstract class for commands related to directional movements of the elements, which will allows us to create other type of Commands that don't act on Elements for example. It implements **Command** interface and also contains:
   * Receiver = [Element](../src/src/main/java/com/lpoo/g72/scene/element/Element.java)
 
 Concrete Commands that extend the **DirectionalCommand** abstract class and define `public void execute()` from **Command** interface:
@@ -253,12 +264,12 @@ Advantages of using **Command** pattern:
 Advantages of using **Singleton** pattern:
 - Ensuring that a single instance of the CommandInvoker is shared by every Controller allows us to add new Commands to its Command List and only ask for the execution of the Commands in the leading Controller.
 
-***
+---
 
 ### Monsters should follow the Helicopter
 
 ##### Problem in Context
-As described before, in Bombardier II, the Helicopter's altitude decreases each new round (every time it enters the screen from the left side). A few moments later, the monsters will move towards the Helicopter from the right side which implies that their altitude and entrance time should also vary  in conformity with the Helicopter's movement. We could easily do this by defining both movements (the one from the Helicopter and the one from the Monsters), one on each Controller. However, that would imply that if we decided that the Helicopter's altitude would decrease more/less on each round we would need to modify both Controllers. We wanted both movements to be synchronized in a way that the Monsters would update their *Positions* based on the modifications that occurred with the Helicopter's *Position*.
+As described before, in Bombardier II, the Helicopter's altitude decreases each new round (every time it enters the screen from the left side). A few moments later, the monsters will move towards the Helicopter from the right side which implies that their altitude and entrance time should also vary in conformity with the Helicopter's movement. We could easily do this by defining both movements (the one from the Helicopter and the one from the Monsters), one on each Controller. However, that would imply that if we decided that the Helicopter's altitude would decrease more/less on each round we would need to modify both Controllers. We wanted both movements to be synchronized in a way that the Monsters would update their *Positions* based on the modifications that occurred with the Helicopter's *Position*.
 
 ##### The Pattern
 Applying the **Observer** pattern allowed us to obtain the expected outcome, because, by defining the Monsters' Controllers as Observers of the Helicopter Controller (Observable), we can notify them when the altitude decreases and automatically update the Monsters *Position* based on that information.
@@ -283,6 +294,11 @@ public void notifyObservers() {
 > *TODO*  UML Diagram goes here 
 
 ##### Consequences
+Some advantages of this pattern:
+* We obey the OCP by the fact that we can introduce new subscriber classes without having to change the publisher’s code (and vice versa if there’s a publisher interface). In our case, new types of monsters may also be observers of the helicopter, at any time, with almost no effort.
+* The relations are established at runtime, not influencing the initial or final state of the game.
+* The dependency defined is a one-to-many, so the observers are automatically notified and updated at the same time, whenever needed.
+* Loosely coupled objects are flexible with changing requirements, because the interacting objects have less information about each other. The monsters only need to know the helicopter altitude to move towards him.
 
 
 ## KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
