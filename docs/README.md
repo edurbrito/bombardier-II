@@ -133,7 +133,7 @@ Everything considered we refactored our code until we were able to clearly disti
 
 [1. Elements still had visual properties](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/abcc2a2d1ea733350dedff83da87bca924d5e067/src/src/main/java/com/lpoo/g72)
 
-[2. First Visual Element and sub-Controller - scene was not a View nor a Model yet](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/e24baea0719a3f6ba6b344fbb7f288ffe6532210/src/src/main/java/com/lpoo/g72)
+[2. First Visual Element and subcontroller - scene was not a View nor a Model yet](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/e24baea0719a3f6ba6b344fbb7f288ffe6532210/src/src/main/java/com/lpoo/g72)
 
 [3. Views had references to the Models](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/0b27b7c0f997f7f7ec8078d17a86c61aacb35d51/src/src/main/java/com/lpoo/g72)
 
@@ -153,15 +153,14 @@ Mapping the pattern's roles to our classes, we have:
   * [VisualHelicopter](../src/src/main/java/com/lpoo/g72/gui/visualElement/VisualHelicopter.java), which is responsible for storing visual information about the Helicopter, such as the color and the form, and to draw it on the screen;
   * [Scene](../src/src/main/java/com/lpoo/g72/gui/Scene.java), which has the ability to draw its buildings in the right way. This also contains a List of Views for the Monsters, [VisualMonsters](../src/src/main/java/com/lpoo/g72/gui/visualElement/VisualMonster.java), because each Scene may have different ways of drawing them.
 
-* Controller = [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java) is the main controller of the game, which connects the main View, [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java), and the main [Model](../src/src/main/java/com/lpoo/g72/model/Model.java). It gets the input from the user by calling Gui's `getKey()` function in `run()` and redirects it to sub-controllers, the [ElementControllers](../src/src/main/java/com/lpoo/g72/controller/ElementController.java), each resonsible for controlling the behaviour of a game *Element* and its correspondent View, [VisualElement](../src/src/main/java/com/lpoo/g72/controller/VisualElement.java):
+* Controller = [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java) is the main controller of the game, which connects the main View, [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java), and the main [Model](../src/src/main/java/com/lpoo/g72/model/Model.java). It gets the input from the user by calling Gui's `getKey()` function in `run()` and redirects it to subcontrollers, the [ElementControllers](../src/src/main/java/com/lpoo/g72/controller/ElementController.java), each resonsible for controlling the behaviour of a game *Element* and its correspondent View, [VisualElement](../src/src/main/java/com/lpoo/g72/controller/VisualElement.java):
   * [HelicopterController](../src/src/main/java/com/lpoo/g72/controller/HelicopterController.java), which decides the next movement of the Helicopter based on the key pressed by the user and also considering a time factor.
   * [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java), which controlls the movement of a monster.
 When all controllers finish, the main controller orders the invoker to execute all the actions that were determined by each controller and orders the [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java) to draw itself, redirecting the information about the Models to the View so it can draw them in the right position.
   
 ##### Consequences
 
-By using the **MVC** architectural Pattern we  came across these advantages:
-- 
+By using the **MVC** architectural Pattern we  came across these advantages: 
 - We can have multiple Views for our Models, which will be particularly useful when we want Monsters to look differently while keeping their atomic features. This also means Views can reuse Models, providing reusability of code;
 - Any extension we wanted to add to a game class became easier to make because the dependency between classes decreased - *OCP*.
 - Testing became easier because, following the *SRP*, smaller classes with one responsibility need fewer tests.
