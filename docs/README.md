@@ -125,7 +125,7 @@ It should be possible to restart the game when it ends.
 ### Bombardier II game components must perform distinct functions 
 
 #### Problem in Context
-We felt that it would be crucial from the beggining of our project to delineate the visual, atomic and logical components of our game to assure that we not only followed the Single Responsibility Principle by defining clear responsibilities for each part of our Application, but also that any future change in our game would be easier to implement.
+We felt that it would be crucial from the beginning of our project to delineate the visual, atomic and logical components of our game to assure that we not only followed the Single Responsibility Principle by defining clear responsibilities for each part of our Application, but also that any future change in our game would be easier to implement.
 
 In particular, as our game is still in development, we must be able to add new models (Monsters for example) without changing the View, to add new ways of drawing the elements without changing the Elements themselves and to incrementally implement the rules we defined by only changing the Controller - following the Open/Closed Principle. 
 
@@ -140,11 +140,11 @@ Everything considered we refactored our code until we were able to clearly disti
 [4. Controllers, Views and Models defined](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/86339fee7ecb47b7ddbd6e9778a89eeda95353a7/src/src/test/java/com/lpoo/g72)
 
 #### The Pattern
-To divide our Application in parts that perform different tasks we implemented the Model-View-Controller architectural pattern , **MVC Pattern**. This way, we have *Models* that represent the data, the 'atomic' elements of the game such as the Helicopter and the Monsters. Then, we have the *Views* that have the responsibility to draw the elements and interact with the user (User/Graphical Interface). Finally we use multiple Controllers to connect the Views and the Models, making sure the game events occur in the desired sequence, determining what shoudl change in their Models and Views.
+To divide our Application in parts that perform different tasks we implemented the Model-View-Controller architectural pattern , **MVC Pattern**. This way, we have *Models* that represent the data, the 'atomic' elements of the game such as the Helicopter and the Monsters. Then, we have the *Views* that have the responsibility to draw the elements and interact with the user (Graphical User Interface). Finally we use multiple Controllers to connect the Views and the Models, making sure the game events occur in the desired sequence, determining what should change in their Models and Views.
 
 #### Implementation
 
-  > UML Diagram goes here 
+  > *TODO*  UML Diagram goes here 
 
 Mapping the pattern's roles to our classes, we have:
 * Model = [Model](../src/src/main/java/com/lpoo/g72/model/Model.java), containing all the game atomic [Elements](../src/src/main/java/com/lpoo/g72/model/element/Element.java), such as the [Helicopter](../src/src/main/java/com/lpoo/g72/model/element/Helicopter.java) and the [Monsters](../src/src/main/java/com/lpoo/g72/model/element/Monster.java), which also represent Models themselves, only containing their *Position*.
@@ -158,7 +158,13 @@ Mapping the pattern's roles to our classes, we have:
   * [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java), which controlls the movement of a monster.
 When all controllers finish, the main controller orders the invoker to execute all the actions that were determined by each controller and orders the [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java) to draw itself, redirecting the information about the Models to the View so it can draw them in the right position.
   
+##### Consequences
 
+By using the **MVC** architectural Pattern we  came across these advantages:
+- 
+- We can have multiple Views for our Models, which will be particularly useful when we want Monsters to look differently while keeping their atomic features. This also means Views can reuse Models, providing reusability of code;
+- Any extension we wanted to add to a game class became easier to make because the dependency between classes decreased - *OCP*.
+- Testing became easier because, following the *SRP*, smaller classes with one responsibility need fewer tests.
 
 ### The Scene should be created differently for different Cities
 
@@ -172,6 +178,8 @@ We have applied the **Factory Method** pattern, which allowed us to represent di
 
 <img src="../images/factoryPattern.svg">
 
+*For simplification purposes details about the classes that take the Client's role in our game - Controllers; are not included in our diagram.*
+
 Mapping the pattern's roles to our classes, we have:
 * Creator = [SceneCreator](../src/src/main/java/com/lpoo/g72/creator/SceneCreator.java), an abstract class with some methods:
   * AnOperation() = `protected char[][] generateBuildings(int width, int height, Random r, int heightFactor)`
@@ -182,7 +190,7 @@ Mapping the pattern's roles to our classes, we have:
 
 ##### Consequences
 Some benefits of this pattern:
-* Firstly, it allowed the SRPrinciple, as the creation of a scene is now the task of only this module. Then, LSP, ISP and specially OCPrinciple followed. The last one is accomplished notoriously because of the simplicity that exists on arranging a new featured scene, with its own characteristics. It only takes creating a new subclasse and overriding the `createScene(...)` method.
+* Firstly, it allowed the SRPrinciple, as the creation of a scene is now the task of only this module. Then, LSP, ISP and specially OCPrinciple followed. The last one is accomplished notoriously because of the simplicity that exists on arranging a new featured scene, with its own characteristics. It only takes creating a new subclass and overriding the `createScene(...)` method.
 * It can be particularly interesting when having a main menu or something similar, where the user may choose the next city to attack, or even a random one, from a list of cities that can be drawn on the screen.
 * As mentioned, the knowledge of creating a scene is delegated to one of the several subclasses. These, indeed, only depend on one thing to create their predefined, or not, sequence of buildings: a random seed, that will generate the exact sequence of random numbers needed in the `generateBuildings(...)` method. This is the algorithm that "lifts" the cities and fills the array of characters for the scene. That approach reduced the extensive amount of code and allowed a lot of pseudo creativity when creating new scenarios for the game. 
 
@@ -191,61 +199,60 @@ Some benefits of this pattern:
 ### User's keystrokes and elapsed time generate different game actions
 
 ##### Problem in Context
-Considering the Model View Controller architectural pattern, the controllers should be able to request user's input, obtained by the User Interface, and transform the request into a game action, particularly into a helicopter movement. 
+Considering the *Model View Controller* architectural pattern, the controllers should be able to request user's input, obtained by the Graphical User Interface, and transform the request into a game action, particularly into the movement of the game elements. 
 If the requested movement violates the rules of the game, the controllers should be able to reject a request to move into a specific direction.
 
 Also, some game elements, such as the monsters and the helicopter, should move in a specific direction at a fixed time rate.
 
-Therefore, we concluded that the operations of moving a game element or ending the game, for example, should be invoked by the controllers after a keystroke or when some time passes, because they are the one that decide what happens to the scene and to its elements according to the game rules. However, they don't need to perform the actions themselves, delegating them to the Commands.
+Therefore, we concluded that the operations of moving the game elements should be ordered by the controllers after a keystroke or when some time passes, because they are the ones that decide what happens to the gui and to the models according to the game rules. However, controllers can delegate that multiple game Elements should move on each iteration of the game main loop, which means multiple actions on different game Elements will need to be ordered by the Controllers and then executed.
 
-##### The Pattern
-The **Command** pattern was applied. This pattern allowed us to parameterize objects with different actions and support undoable operations, by using an interface with a single execution method that is implemented by multiple classes, each performing a specific operation on an Object (receiver) which they must contain the reference to.
+##### The Patterns
+To solve this problem we applied both the **Command** and the **Singleton** patterns. 
+The **Command** pattern allowed us to parameterize Elements with different actions, by using an interface, [Command](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/Command.java), with a single execution method, 'execute()' that is be implemented by multiple classes(Concrete Commands), each performing a specific operation on its *Element* (Receiver), specifically on its *Position*.
+Furthermore, to follow the *SRP*, we felt the need to split the responsibility of creating and executing the Commands, which led us to the implementation of a [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java).
+At this point, implementing the **Singleton** design pattern became a new possibility, because we only needed one CommandInvoker - which works such like a TV remote; to execute all the Commands on each iteration of the game main loop, which meant we only wanted an instance of the [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java) to be used in all classes.
+Combining these two design patterns, on each iteration the *ElementControllers* order actions on their respective Elements - by creating Commands and adding them to the Invokers' Command List, 'commandInvoker.addCommand(command:Command)'; and then the main Controller, on its 'run()' function, asks the [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java) to execute all the Commands on its Command List, 'commandInvoker.executeCommands()'. 
+
 
 ##### Implementation
 
 <img src="../images/commandPattern.svg">
 
-We implemented the **Command Pattern** with some variations because, in our case, we wanted the Invokers - controllers; to create the Commands themselves rather than to receive them from a Client. Otherwise, we would be assigning the responsibility to create the Command to the View, which must not own this ability.  
+**Command Pattern** roles can be mapped to the application classes as follows:
 
-Considering this variation, we can map the pattern's roles to our classes:
-
-###### Invokers (and also Clients in this case): 
-Any [controller](../src/src/main/java/com/lpoo/g72/controller) can create and invoke Commands. Some of the controllers that invoke Commands:
-* [SceneController](../src/src/main/java/com/lpoo/g72/controller/SceneController.java), using `public void run ()`
-* [HelicopterController](../src/src/main/java/com/lpoo/g72/controller/HelicopterController.java), using `public void executeCommand(Key key)`
-* [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java), using `public void move()`
-Which build and invoke the commands based on:
-- the key received from the keyboard;
-- the game rules - which determine if the requested operation is doable;
-- a time factor - only performing the command at a fixed time rate.
-
-###### Command: 
-* [Command](../src/src/main/java/com/lpoo/g72/commands/Command.java), an interface that contains:
+* Invoker = [CommandInvoker](../src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java)
+  * setCommand(Command command) = `public void addCommand(Command command)`;
+  * executeCommand() = `public void executeCommands()`;
+* Command = [Command](../src/src/main/java/com/lpoo/g72/commands/Command.java), an interface that contains:
   * execute() = `public void execute()`
 
-###### Concrete Commands:
-*All commands can be found on [commands package](../src/src/main/java/com/lpoo/g72/commands)*
+* ConcreteCommand = [DirectionalCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DirectionalCommand.java), an abstract class for commands related to directional movements of the elements, which will allow us to create other type of Commands that don't act on Elements for example. It implements **Command** interface and also contains:
+  * Receiver = [Element](../src/src/main/java/com/lpoo/g72/scene/element/Element.java)
 
-* [DirectionalCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DirectionalCommand.java), an abstract class for commands related to directional movements of the elements. It implements **Command** interface and also contains:
-  * receiver = [Element](../src/src/main/java/com/lpoo/g72/scene/element/Element.java)
-
-Directional Commands that extend the **DirectionalCommand** abstract class and define `public void execute()` from **Command** interface:
+Concrete Commands that extend the **DirectionalCommand** abstract class and define `public void execute()` from **Command** interface:
 * [DownCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DownCommand.java)
 * [LeftCommand](../src/src/main/java/com/lpoo/g72/commands/directional/LeftCommand.java)
 * [RightCommand](../src/src/main/java/com/lpoo/g72/commands/directional/RightCommand.java)
 * [UpCommand](../src/src/main/java/com/lpoo/g72/commands/directional/UpCommand.java)
 
+*All commands can be found on [commands package](../src/src/main/java/com/lpoo/g72/commands)*
+
+**Singleton Pattern** roles can be mapped to the application classes as follows:
+
+* Singleton = [CommandInvoker](../src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java)
+  * Singleton() = `private void addCommand(Command command)`, a private constructor;
+  * getInstance() = `public static CommandInvoker getInstance()`, a public static creation method for getting the singleton instance;
+* Clients = [controllers package](../src/src/main/java/com/lpoo/g72/controller), because all controllers are clients.
 
 ##### Consequences
 Advantages of using **Command** pattern:
 
-- We could decouple classes that invoke operations such as movements and game actions (Controllers) from classes that perform these operations (Commands), which follows the Single Responsibility Principle;
+- We could decouple classes that order operations, such as Elements movements, based on user's input and on a time factor - Controllers; from classes that order the execution of the actions - Invoker; from the operations themselves- Commands; and finally from the Element that is transformed - Receiver; which follows the Single Responsibility Principle;
 - The controller can interpret the requests and intersect between the request and its execution, depending on the game rules;
-- It is now easier to identify the actions and movements performed at any given circunstances because the names of the Commands easily translate what they do.
+- It is now easier to identify the actions and movements performed at any given circumstances because the names of the Commands easily translate what they do.
 
-Disadvantages of using **Command** pattern:
-
-- Since the controllers must sometimes translate a Key into a Command, in order to execute one Command it first needs to create it. This implies that, if a new action is introduced in the Game, we need to create a new Command to perform that action and include another if statement in the respective Controller function that creates/invokes the new Command depending on the game event. However, having attentively examined all aspects, we consider that, for now at least, this solution fits our problems.
+Advantages of using **Singleton** pattern:
+- Ensuring that a single instance of the CommandInvoker is shared by every Controller allows us to add new Commands to its Command List and only ask for the execution of the Commands in the leading Controller.
 
 ***
 
@@ -254,6 +261,7 @@ Disadvantages of using **Command** pattern:
 ##### Problem in Context
 
 ##### The Pattern
+We have applied the **Observer** pattern
 
 ##### Implementation
 
