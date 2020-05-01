@@ -3,12 +3,9 @@ package com.lpoo.g72.gui;
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.lpoo.g72.gui.visualElement.VisualElement;
-import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.gui.visualElement.VisualMonster;
 import com.lpoo.g72.model.element.Monster;
 
-import java.util.Collection;
 import java.util.List;
 
 public class Scene {
@@ -32,28 +29,28 @@ public class Scene {
     }
 
     public List<VisualMonster> getVisualMonsters() {
-        return visualMonsters;
+        return this.visualMonsters;
     }
 
     public void draw(TextGraphics graphics, List<Monster> monsters){
-        drawSceneBuildings(graphics);
-        drawVisualMonsters(graphics, monsters);
+        this.drawSceneBuildings(graphics);
+        this.drawVisualMonsters(graphics, monsters);
     }
 
     public void drawSceneBuildings(TextGraphics graphics) {
         graphics.enableModifiers(SGR.BOLD);
         graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
 
-        for (int h = 0; h < height; ++h) {
-            for (int w = 0; w < width; ++w) {
-                graphics.putString(width - w - 1, height - h - 5, String.valueOf(buildings[h][w]));
+        for (int h = 0; h < this.height; ++h) {
+            for (int w = 0; w < this.width; ++w) {
+                graphics.putString(this.width - w - 1, this.height - h - 5, String.valueOf(this.buildings[h][w]));
             }
         }
     }
 
     public void drawVisualMonsters(TextGraphics graphics, List<Monster> monsters){
-        for(int i = 0; i< visualMonsters.size(); i++){
-            visualMonsters.get(i).draw(graphics,monsters.get(i));
+        for(int i = 0; i< this.visualMonsters.size(); i++){
+            this.visualMonsters.get(i).draw(graphics,monsters.get(i));
         }
     }
 

@@ -28,12 +28,12 @@ public class MonsterController extends ElementController implements Observer{
         Instant current = Instant.now();
         Duration timePassed = Duration.between(this.lastForwardMove , current);
 
-        if(timePassed.getNano() >= velocity){
+        if(timePassed.getNano() >= this.velocity){
 
             if(this.getElementX() == 0)
                 this.element.setPosition(new Position(this.maxWidth + new Random().nextInt(30),this.altitude));
 
-            commandInvoker.addCommand(new LeftCommand(this.element));
+            this.commandInvoker.addCommand(new LeftCommand(this.element));
 
             this.visualElement.animation();
 

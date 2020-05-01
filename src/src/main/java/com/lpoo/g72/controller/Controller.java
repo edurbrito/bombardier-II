@@ -25,6 +25,7 @@ public class Controller {
     public Controller(Gui gui, Model model) {
         this.gui = gui;
         this.model = model;
+
         // The scene should be set in the menu then when the user chooses the city
         this.initScene();
 
@@ -64,16 +65,16 @@ public class Controller {
 
             this.helicopterController.run(key);
 
-            for(MonsterController monsterController : monsterControllers)
+            for(MonsterController monsterController : this.monsterControllers)
                 monsterController.move();
 
-            commandInvoker.executeCommands();
+            this.commandInvoker.executeCommands();
 
             this.gui.draw(this.model.getHelicopter(), this.model.getMonsters());
             this.gui.refreshScreen();
         }
 
-        quit();
+        this.quit();
 
     }
 

@@ -4,7 +4,6 @@ import com.lpoo.g72.commands.directional.RightCommand;
 import com.lpoo.g72.commands.directional.UpCommand;
 import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.model.Position;
-import com.lpoo.g72.gui.Scene;
 import com.lpoo.g72.model.element.Helicopter;
 
 import java.time.Duration;
@@ -35,10 +34,10 @@ public class HelicopterController extends ElementController implements Observabl
         this.move();
 
         if(key == Key.DOWN && isWithinDownLimit()){
-            commandInvoker.addCommand(new DownCommand(element));
+            this.commandInvoker.addCommand(new DownCommand(element));
         }
         else if(key == Key.UP && isWithinUpLimit()){
-            commandInvoker.addCommand(new UpCommand(element));
+            this.commandInvoker.addCommand(new UpCommand(element));
         }
     }
 
@@ -47,12 +46,12 @@ public class HelicopterController extends ElementController implements Observabl
         Instant current = Instant.now();
         Duration timePassed = Duration.between(this.lastForwardMove , current);
 
-        if(timePassed.getNano() >= velocity){
+        if(timePassed.getNano() >= this.velocity){
 
             if(this.newRound())
                 this.decreaseAltitude();
 
-            commandInvoker.addCommand(new RightCommand(element));
+            this.commandInvoker.addCommand(new RightCommand(this.element));
 
             this.visualElement.animation();
 

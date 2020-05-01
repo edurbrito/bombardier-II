@@ -1,6 +1,5 @@
 package com.lpoo.g72.creator;
 
-import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.gui.visualElement.VisualMonster;
 import com.lpoo.g72.gui.Scene;
 

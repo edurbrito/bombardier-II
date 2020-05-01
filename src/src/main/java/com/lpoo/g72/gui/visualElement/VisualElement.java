@@ -37,9 +37,9 @@ public abstract class VisualElement {
         graphics.enableModifiers(SGR.BOLD);
         graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
 
-        for (int i = 0; i < form.length; i++) {
-            graphics.setForegroundColor(TextColor.Factory.fromString(colorPallet[i]));
-            graphics.setCharacter(element.getPosition().getX() + i,element.getPosition().getY() , form[i]);
+        for (int i = 0; i < this.form.length; i++) {
+            graphics.setForegroundColor(TextColor.Factory.fromString(this.colorPallet[i]));
+            graphics.setCharacter(element.getPosition().getX() + i,element.getPosition().getY() , this.form[i]);
         }
     }
 }
