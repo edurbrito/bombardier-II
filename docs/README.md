@@ -259,11 +259,29 @@ Advantages of using **Singleton** pattern:
 ### Monsters should follow the Helicopter
 
 ##### Problem in Context
+As described before, in Bombardier II, the Helicopter's altitude decreases each new round (every time it enters the screen from the left side). A few moments later, the monsters will move towards the Helicopter from the right side which implies that their altitude and entrance time should also vary  in conformity with the Helicopter's movement. We could easily do this by defining both movements (the one from the Helicopter and the one from the Monsters), one on each Controller. However, that would imply that if we decided that the Helicopter's altitude would decrease more/less on each round we would need to modify both Controllers. We wanted both movements to be synchronized in a way that the Monsters would update their *Positions* based on the modifications that occurred with the Helicopter's *Position*.
 
 ##### The Pattern
-We have applied the **Observer** pattern
+Applying the **Observer** pattern allowed us to obtain the expected outcome, because, by defining the Monsters' Controllers as Observers of the Helicopter Controller (Observable), we can notify them when the altitude decreases and automatically update the Monsters *Position* based on that information.
+*The Helicopter's Controller method that calls the method that notifies the Observers*
+```java
+private void decreaseAltitude(){
+  this.element.setPosition(new Position(0, ++this.altitude));
+  this.notifyObservers();
+}
+```
+
+*The Helicopter's Controller method that calls the Monsters' Controllers update method*
+```java
+public void notifyObservers() {
+  for(Observer observer: this.observerList)
+      observer.update(this.altitude);
+}
+```
 
 ##### Implementation
+
+> *TODO*  UML Diagram goes here 
 
 ##### Consequences
 
