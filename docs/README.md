@@ -153,7 +153,9 @@ To divide our Application in parts that perform different tasks we implemented t
 
 #### Implementation
 
-  > *TODO*  UML Diagram goes here 
+<img src="../images/mvcPattern.svg">
+
+*For simplification purposes, not all the details about the classes were included in the diagram.*
 
 Mapping the pattern's roles to our classes, we have:
 * Model = [Model](../src/src/main/java/com/lpoo/g72/model/Model.java), containing all the game atomic [Elements](../src/src/main/java/com/lpoo/g72/model/element/Element.java), such as the [Helicopter](../src/src/main/java/com/lpoo/g72/model/element/Helicopter.java) and the [Monsters](../src/src/main/java/com/lpoo/g72/model/element/Monster.java), which also represent Models themselves, only containing their *Position*.
