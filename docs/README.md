@@ -321,6 +321,12 @@ Some advantages of this pattern:
 
 ## KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
 
+## TESTING
+
+![](../images/unitest.png)
+
+![](../images/pitest.png)
+
 ## SELF-EVALUATION
 
 <!-- MORE INFO AT https://web.fe.up.pt/~arestivo/page/courses/2020/lpoo/template/ -->
