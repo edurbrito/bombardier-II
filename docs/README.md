@@ -321,6 +321,15 @@ Some advantages of this pattern:
 
 ## KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
 
+### Speculative Generality
+
+At the moment there is an unused method in our *Gui* class, `public void drawMenu()` which anticipates an asset that we intend to implement in our game, the Menu. We are aware of this code smell and we do not intend to keep it in our final code. However, as this is still an intermediate developing stage, we decided to keep it. Its code can be useful later, when implementing the game Menu, probably as a new class with its draw method. Adding a Menu to our game will also eliminate a **comment** - another code smell; in the Controller constructor, because the Scene will be defined by the User in the game Menu.
+
+### Data Class
+
+The models of the game, in particular the game elements - *Monster* and *Helicopter*; come across as **data classes** which only contain fields - *Position*; and accessors. 
+However, considering the *MVC* architectural pattern, we don't feel this code smell represents a problem in our code because Models must not know how to draw themselves nor how to behave. 
+
 ## TESTING
 
 ![](../images/unitest.png)
