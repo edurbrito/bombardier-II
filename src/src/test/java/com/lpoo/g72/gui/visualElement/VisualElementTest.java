@@ -1,12 +1,9 @@
 package com.lpoo.g72.gui.visualElement;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.screen.TerminalScreen;
 import com.lpoo.g72.model.ElementStub;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Element;
-import com.lpoo.g72.model.element.Helicopter;
-import com.lpoo.g72.model.element.Monster;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -14,31 +11,6 @@ import org.mockito.Mockito;
 import static org.junit.Assert.*;
 
 public class VisualElementTest {
-
-   protected class VisualElementStub extends VisualElement{
-
-        public VisualElementStub(char[] form, String[] colorPallet) {
-            super(form, colorPallet);
-        }
-
-        @Override
-        public void animation() {
-            char[] temp = new char[this.form.length];
-            for(int i = 0; i < this.form.length; i++){
-                temp[i] = this.form[(i + 1) % this.form.length];
-            }
-
-            this.form = temp;
-        }
-
-        @Override
-        public void draw(TextGraphics graphics, Element element){
-            for(int i = 0; i < this.form.length; i++){
-                element.getPosition().getX();
-                element.getPosition().getY();
-            }
-        }
-    }
 
     private VisualElement visualElement;
 
