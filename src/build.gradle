@@ -24,5 +24,5 @@ dependencies {
 }
 
 pitest {
-    excludedTestClasses = ['com.lpoo.g72.gui.GuiTest']
+    excludedTestClasses = ['com.lpoo.g72.gui.GuiTest', 'com.lpoo.g72.GameTest']
 }
