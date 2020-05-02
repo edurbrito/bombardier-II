@@ -188,8 +188,6 @@ We have applied the **Factory Method** pattern, which allowed us to represent di
 
 <img src="../images/factoryPattern.svg">
 
-*For simplification purposes, details about the classes that take the Client's role in our game - Controllers; are not included in our diagram.*
-
 Mapping the pattern's roles to our classes, we have:
 * Creator = [SceneCreator](../src/src/main/java/com/lpoo/g72/creator/SceneCreator.java), an abstract class with some methods:
   * AnOperation() = `protected char[][] generateBuildings(int width, int height, Random r, int heightFactor)`
@@ -227,6 +225,8 @@ Combining these two design patterns, on each iteration the *ElementControllers* 
 ##### Implementation
 
 <img src="../images/commandPattern.svg">
+
+*For simplification purposes, details about the classes that take the Client's role in our game - Controllers; are not included in our diagram.*
 
 **Command Pattern** roles can be mapped to the application classes as follows:
 
@@ -291,7 +291,23 @@ public void notifyObservers() {
 
 ##### Implementation
 
-> *TODO*  UML Diagram goes here 
+<img src="../images/observerPattern.svg"> 
+
+* Subject = [Observable](../src/src/main/java/com/lpoo/g72/controller/Observable.java), an interface with the following methods:
+  * attach(Observer) = `public void addObserver(Observer observer)`;
+  * detach(Observer) = `public void removeObserver(Observer observer)`;
+  * notify() = `public void notifyObservers()`.
+
+* ConcreteSubject = [HelicopterController](), which implements the previous interface and defines its methods:
+  * attach(Observer) = `public void addObserver(Observer observer)`, in which the new Observer is added to a list of Observers;
+  * detach(Observer) = `public void removeObserver(Observer observer)`, to remove an Observer from the list;
+  * notify() = `public void notifyObservers()`, which is used to indicate an altitude change, by calling the update function of all its Observers.
+
+* Observer = [Observer](../src/src/main/java/com/lpoo/g72/controller/Observer.java), an interface with the following methods:
+  * update() = `public void update(int info)`.
+
+* ConcreteObserver = [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java), which implements the previous interface and defines its methods:
+  * update() = `public void update(int info)`, in which the altitude of the Monster is calculated based on `info`
 
 ##### Consequences
 Some advantages of this pattern:
