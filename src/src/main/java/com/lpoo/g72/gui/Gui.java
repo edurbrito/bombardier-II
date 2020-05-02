@@ -85,7 +85,7 @@ public class Gui {
 
     public Key getKey() throws IOException {
         try {
-            KeyStroke input = screen.pollInput();
+            KeyStroke input = this.screen.pollInput();
 
             if (input.getKeyType() == KeyType.ArrowDown)
                 return Key.DOWN;
@@ -149,10 +149,10 @@ public class Gui {
     }
 
     public Scene getScene() {
-        return scene;
+        return this.scene;
     }
 
     public VisualHelicopter getVisualHelicopter() {
-        return visualHelicopter;
+        return this.visualHelicopter;
     }
 }

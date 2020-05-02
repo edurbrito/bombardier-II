@@ -1,7 +1,6 @@
 package com.lpoo.g72.controller;
 
 import com.lpoo.g72.commands.directional.LeftCommand;
-import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.gui.visualElement.VisualMonster;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.gui.Scene;
@@ -13,10 +12,10 @@ import java.util.Random;
 
 public class MonsterController extends ElementController implements Observer{
 
-    public MonsterController(Scene scene, VisualMonster visualMonster, Monster monster) {
+    public MonsterController(VisualMonster visualMonster, Monster monster, int maxWidth) {
         super(visualMonster, monster);
 
-        this.maxWidth = scene.getWidth() -1;
+        this.maxWidth = maxWidth;
         this.altitude = this.getElementY();
 
         this.lastForwardMove = Instant.now();

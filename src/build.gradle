@@ -22,3 +22,7 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.25.0'
     compile group: 'com.googlecode.lanterna', name: 'lanterna', version: '3.0.1'
 }
+
+pitest {
+    excludedTestClasses = ['com.lpoo.g72.gui.GuiTest', 'com.lpoo.g72.GameTest']
+}

@@ -48,7 +48,7 @@ public class Controller {
         this.monsterControllers = new ArrayList<>();
 
         for(int i = 0; i < this.model.getMonsters().size(); i++){
-            this.monsterControllers.add(new MonsterController(this.gui.getScene(), this.gui.getScene().getVisualMonsters().get(i), this.model.getMonsters().get(i)));
+            this.monsterControllers.add(new MonsterController(this.gui.getScene().getVisualMonsters().get(i), this.model.getMonsters().get(i), this.gui.getScene().getWidth()-1));
             this.helicopterController.addObserver(this.monsterControllers.get(i));
         }
     }
