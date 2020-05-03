@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.lpoo.g72.gui.SceneTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-05-02T19:38:59" hostname="diana-GL553VW" time="0.332">
-  <properties/>
-  <testcase name="testDraw" classname="com.lpoo.g72.gui.SceneTest" time="0.33"/>
-  <testcase name="testSceneDimensions" classname="com.lpoo.g72.gui.SceneTest" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
