@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.lpoo.g72.GameTest" tests="2" skipped="1" failures="0" errors="0" timestamp="2020-05-02T19:38:58" hostname="diana-GL553VW" time="0.624">
+  <properties/>
+  <testcase name="testGame" classname="com.lpoo.g72.GameTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="testGameStub" classname="com.lpoo.g72.GameTest" time="0.624"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

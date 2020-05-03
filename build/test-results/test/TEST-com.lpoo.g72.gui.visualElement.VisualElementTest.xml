@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.lpoo.g72.gui.visualElement.VisualElementTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2020-05-02T19:38:58" hostname="diana-GL553VW" time="0.19">
+  <properties/>
+  <testcase name="testConcreteAnimationsVH" classname="com.lpoo.g72.gui.visualElement.VisualElementTest" time="0.0"/>
+  <testcase name="testConcreteAnimationsVM" classname="com.lpoo.g72.gui.visualElement.VisualElementTest" time="0.0"/>
+  <testcase name="testDraw" classname="com.lpoo.g72.gui.visualElement.VisualElementTest" time="0.186"/>
+  <testcase name="testInit" classname="com.lpoo.g72.gui.visualElement.VisualElementTest" time="0.0"/>
+  <testcase name="testVisualMonster" classname="com.lpoo.g72.gui.visualElement.VisualElementTest" time="0.0"/>
+  <testcase name="testVisualHelicopter" classname="com.lpoo.g72.gui.visualElement.VisualElementTest" time="0.0"/>
+  <testcase name="testSetters" classname="com.lpoo.g72.gui.visualElement.VisualElementTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
