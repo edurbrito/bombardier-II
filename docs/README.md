@@ -323,12 +323,20 @@ Some advantages of this pattern:
 
 ### Speculative Generality
 
-At the moment there is an unused method in our *Gui* class, `public void drawMenu()` which anticipates an asset that we intend to implement in our game, the Menu. We are aware of this code smell and we do not intend to keep it in our final code. However, as this is still an intermediate developing stage, we decided to keep it. Its code can be useful later, when implementing the game Menu, probably as a new class with its draw method. Adding a Menu to our game will also eliminate a **comment** - another code smell; in the Controller constructor, because the Scene will be defined by the User in the game Menu.
+At the moment there is an unused method in our *Gui* class, `public void drawMenu()` which anticipates an asset that we intend to implement in our game, the Menu. We are aware of this code smell and we do not intend to keep it in our final code. However, as this is still an intermediate developing stage, we decided to leave it there. Its code can be useful later, when implementing the game Menu, probably as a new class with its draw method. Adding a Menu to our game will also eliminate some **comments** (another code smell) in the Controller constructor, because the Scene will be chosen by the User in the game Menu.
 
 ### Data Class
 
-The models of the game, in particular the game elements - *Monster* and *Helicopter*; come across as **data classes** which only contain fields - *Position*; and accessors. 
-However, considering the *MVC* architectural pattern, we don't feel this code smell represents a problem in our code because Models must not know how to draw themselves nor how to behave. 
+The models of the game, in particular the game elements - *Monster* and *Helicopter*, come across as **data classes** which only contain their fields - *Position*, and its accessors. However, considering the *MVC* architectural pattern, we don't feel that this code smell represents a problem in our code because Models must not know how to draw themselves nor how to behave. 
+
+### Middle Man
+
+Following the previous problem, the *Element* hierarchy performs, in fact, only one (set of) action(s), delegating work to another class, the *Position*. This is also intentional, because, as the game grows, its elements will start to acquire more inner characteristics (lives, energy, etc... ), as planned.
+
+### Duplicate Code
+
+There is, indeed, some identical code found, for example, in two subclasses of the same level, the *HelicopterController* and the *MonsterController*. At this point, part of this duplication can be purposeful, by the fact that it may be more obvious to leave them as they are now, if, in the future, we need to give them different behavior. If this does not prevail, then *Pull Up Constructor Body*, *Extract Method*, or *Form Template Method* will be used for refactoring this problem. The same happens with the *SceneCreator* hierarchy, where there are also methods filled with explanatory **comments**, due mostly to the necessity of explaining the algorithm for generating the buildings (when all other methods for simplifying the algorithm have been tried and came up short).
+
 
 ## TESTING
 
