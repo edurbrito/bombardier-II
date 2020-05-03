@@ -346,4 +346,8 @@ There is, indeed, some identical code found, for example, in two subclasses of t
 
 ## SELF-EVALUATION
 
+- Diana Freitas: 50%
+
+- Eduardo Brito: 50%
+
 <!-- MORE INFO AT https://web.fe.up.pt/~arestivo/page/courses/2020/lpoo/template/ -->
