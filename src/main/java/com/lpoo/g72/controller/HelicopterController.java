@@ -4,9 +4,11 @@ import com.lpoo.g72.commands.directional.DownCommand;
 import com.lpoo.g72.commands.directional.RightCommand;
 import com.lpoo.g72.commands.ShootMissile;
 import com.lpoo.g72.commands.directional.UpCommand;
+import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Helicopter;
+import com.lpoo.g72.model.element.Missile;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -28,7 +30,7 @@ public class HelicopterController extends ElementController implements Observabl
 
         this.lastForwardMove = Instant.now();
         this.movingTime = 0.2 * Math.pow(10,9);
-        this.horizontalMissileTime= this.movingTime/1.2;
+        this.horizontalMissileTime= 0.18 * Math.pow(10,9);
 
         this.observerList = new ArrayList<>();
     }
@@ -69,7 +71,7 @@ public class HelicopterController extends ElementController implements Observabl
 
             this.visualElement.animation();
 
-            moveVerticalMissiles();
+            this.moveVerticalMissiles();
 
             this.lastForwardMove = current;
         }
@@ -91,8 +93,10 @@ public class HelicopterController extends ElementController implements Observabl
             Helicopter helicopter = (Helicopter)this.element;
 
             for(int i = 0; i < helicopter.getHorizontalMissiles().size(); i++){
-                if(helicopter.getHorizontalMissiles().get(i).isActive())
+                if(helicopter.getHorizontalMissiles().get(i).isActive()){
                     this.commandInvoker.addCommand(new RightCommand(helicopter.getHorizontalMissiles().get(i)));
+                    this.visualElement.animation();
+                }
             }
         }
     }

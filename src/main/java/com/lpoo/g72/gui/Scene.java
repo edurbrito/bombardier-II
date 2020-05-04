@@ -17,14 +17,11 @@ public class Scene {
     int height;
     private char[][] buildings;
     private List<VisualMonster> visualMonsters;
-    private VisualElement[] visualMissiles;
 
     public Scene(int width, int height, List<VisualMonster> visualMonsters){
         this.width = width;
         this.height = height;
         this.visualMonsters = visualMonsters;
-
-        this.visualMissiles = new VisualElement[]{new VisualVerticalMissile(), new VisualHorizontalMissile()};
     }
 
     public void setBuildings(char[][] buildings) {
@@ -39,10 +36,9 @@ public class Scene {
         return this.visualMonsters;
     }
 
-    public void draw(TextGraphics graphics, List<Monster> monsters, List<Missile> horizontalMissiles, List<Missile> verticalMissiles ){
+    public void draw(TextGraphics graphics, List<Monster> monsters){
         this.drawSceneBuildings(graphics);
         this.drawVisualMonsters(graphics, monsters);
-        this.drawVisualMissiles(graphics,horizontalMissiles, verticalMissiles);
     }
 
     public void drawSceneBuildings(TextGraphics graphics) {
@@ -62,22 +58,19 @@ public class Scene {
         }
     }
 
-    public void drawVisualMissiles(TextGraphics graphics, List<Missile> verticalMissiles, List<Missile> horizontalMissiles){
-
-        for(int i = 0; i < verticalMissiles.size(); i++){
-            this.visualMissiles[0].draw(graphics, verticalMissiles.get(i));
-        }
-
-        for(int i = 0; i < horizontalMissiles.size(); i++){
-            this.visualMissiles[1].draw(graphics, horizontalMissiles.get(i));
-        }
-    }
-
     public int getWidth() {
         return this.width;
     }
 
     public int getHeight() {
         return this.height;
+    }
+
+    public boolean removedBuilding(int x, int y) {
+        if(buildings[this.height - y - 5][ this.width - x - 1] != ' '){
+            buildings[this.height - y - 5][ this.width - x - 1] = ' ';
+            return true;
+        }
+        return false;
     }
 }

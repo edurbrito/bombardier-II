@@ -5,6 +5,7 @@ import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
+import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class Controller {
     }
 
     private void initElementControllers() {
-        this.helicopterController = new HelicopterController(this.gui.getVisualHelicopter(), this.model.getHelicopter(),this.gui.getScene().getWidth() - 1);
+        this.helicopterController = new HelicopterController(this.gui.getVisualHelicopter(), this.model.getHelicopter(), this.gui.getScene().getWidth() - 1);
 
         this.monsterControllers = new ArrayList<>();
 
@@ -70,12 +71,30 @@ public class Controller {
 
             this.commandInvoker.executeCommands();
 
+            this.verticalMissileCollisions();
+
             this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.model.getVerticalMissiles(), this.model.getHorizontalMissiles());
             this.gui.refreshScreen();
         }
 
         this.quit();
 
+    }
+
+    public void verticalMissileCollisions(){
+        List<Missile> verticalMissiles = this.model.getHelicopter().getVerticalMissiles();
+        char[][] buildings = this.gui.getScene().getBuildings();
+
+        for(int i = 0; i < verticalMissiles.size(); i++){
+            if(verticalMissiles.get(i).isActive()){
+                int y = verticalMissiles.get(i).getPosition().getY() + this.gui.verticalMissileSize() - 1;
+                int x = verticalMissiles.get(i).getPosition().getX();
+
+                if(this.gui.removedBuilding(x,y)){
+                    verticalMissiles.get(i).deactivate();
+                }
+            }
+        }
     }
 
     void quit() {

@@ -3,11 +3,18 @@ package com.lpoo.g72.gui.visualElement;
 public class VisualHorizontalMissile extends VisualElement{
 
     public VisualHorizontalMissile() {
-        super(new char[]{'3', '>', '-', '-', '>'}, new String[]{"#0080ee", "#034278", "#0080ee", "#0080ee", "#034278"});
+        super(new char[]{'»', '»', '-', '-', '►'}, new String[]{"#0e539a", "#0e539a", "#233F5C", "#233F5C", "#0e539a"});
     }
 
     @Override
     public void animation() {
-
+        if (this.form[1] == '»'){
+            this.form[1] = '>';
+            this.form[0] = '>';
+        }
+        else{
+            this.form[0] = '»';
+            this.form[1] = '»';
+        }
     }
 }
