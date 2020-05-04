@@ -10,18 +10,37 @@ import com.lpoo.g72.gui.visualElement.VisualMonster;
 import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Scene {
-    int width;
-    int height;
+    private final int width;
+    private final int height;
     private char[][] buildings;
+    private List<VisualMonster> visualMonsterTypes;
     private List<VisualMonster> visualMonsters;
+    private int numMonsters;
 
-    public Scene(int width, int height, List<VisualMonster> visualMonsters){
+    public Scene(int width, int height, List<VisualMonster> visualMonsterTypes, int numMonsters){
         this.width = width;
         this.height = height;
-        this.visualMonsters = visualMonsters;
+        this.visualMonsters = new ArrayList<>();
+        this.visualMonsterTypes = visualMonsterTypes;
+        this.numMonsters = numMonsters;
+
+        this.setVisualMonsters();
+    }
+
+    public void setVisualMonsters() {
+        int pos;
+        Random r = new Random();
+        this.visualMonsters.clear();
+
+        for(int i = 0; i< this.numMonsters; i++){
+            pos = r.nextInt(this.visualMonsterTypes.size());
+            this.visualMonsters.add(this.visualMonsterTypes.get(pos));
+        }
     }
 
     public void setBuildings(char[][] buildings) {
@@ -37,6 +56,7 @@ public class Scene {
     }
 
     public void draw(TextGraphics graphics, List<Monster> monsters){
+        this.drawScoreBar(graphics);
         this.drawSceneBuildings(graphics);
         this.drawVisualMonsters(graphics, monsters);
     }
@@ -53,9 +73,24 @@ public class Scene {
     }
 
     public void drawVisualMonsters(TextGraphics graphics, List<Monster> monsters){
-        for(int i = 0; i< this.visualMonsters.size(); i++){
-            this.visualMonsters.get(i).draw(graphics,monsters.get(i));
+        for(int i = 0; i< monsters.size(); i++){
+            if(monsters.get(i).isAlive()){
+                this.visualMonsters.get(i).draw(graphics,monsters.get(i));
+            }
         }
+    }
+
+    private void drawScoreBar(TextGraphics graphics) {
+        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
+        graphics.drawLine(0, this.height - 4, 8, this.height - 4, '=');
+
+        graphics.drawLine(this.width - 9, this.height - 4, this.width, this.height - 4, '=');
+
+        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
+        graphics.putString(10, this.height - 4, "Blocks: ");
+        graphics.putString(30, this.height - 4, "City: ");
+        graphics.putString(this.width - 45, this.height - 4, "Score: ");
+        graphics.putString(this.width - 20, this.height - 4, "Lives: ");
     }
 
     public int getWidth() {
@@ -67,8 +102,8 @@ public class Scene {
     }
 
     public boolean removedBuilding(int x, int y) {
-        if(buildings[this.height - y - 5][ this.width - x - 1] != ' '){
-            buildings[this.height - y - 5][ this.width - x - 1] = ' ';
+        if(this.buildings[this.height - y - 5][ this.width - x - 1] != ' '){
+            this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
             return true;
         }
         return false;

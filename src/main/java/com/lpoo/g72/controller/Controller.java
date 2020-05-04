@@ -5,6 +5,7 @@ import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
+import com.lpoo.g72.model.element.Element;
 import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
@@ -72,6 +73,7 @@ public class Controller {
             this.commandInvoker.executeCommands();
 
             this.verticalMissileCollisions();
+            this.horizontalMissileCollisions();
 
             this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.model.getVerticalMissiles(), this.model.getHorizontalMissiles());
             this.gui.refreshScreen();
@@ -81,20 +83,46 @@ public class Controller {
 
     }
 
-    public void verticalMissileCollisions(){
+    private void verticalMissileCollisions(){
         List<Missile> verticalMissiles = this.model.getHelicopter().getVerticalMissiles();
-        char[][] buildings = this.gui.getScene().getBuildings();
+
+        int x, y;
 
         for(int i = 0; i < verticalMissiles.size(); i++){
             if(verticalMissiles.get(i).isActive()){
-                int y = verticalMissiles.get(i).getPosition().getY() + this.gui.verticalMissileSize() - 1;
-                int x = verticalMissiles.get(i).getPosition().getX();
+                y = verticalMissiles.get(i).getPosition().getY() + this.gui.verticalMissileSize() - 1;
+                x = verticalMissiles.get(i).getPosition().getX();
 
                 if(this.gui.removedBuilding(x,y)){
                     verticalMissiles.get(i).deactivate();
                 }
             }
         }
+    }
+
+    private void horizontalMissileCollisions(){
+        List<Missile> horizontalMissiles = this.model.getHelicopter().getHorizontalMissiles();
+        List<Monster> monsters = this.model.getMonsters();
+
+        Position missilePos;
+
+        for(int i = 0; i < horizontalMissiles.size(); i++){
+            if(horizontalMissiles.get(i).isActive()){
+                missilePos = new Position(horizontalMissiles.get(i).getPosition().getX() + this.gui.horizontalMissileSize() - 1,
+                        horizontalMissiles.get(i).getPosition().getY());
+
+                for(int j = 0; j < monsters.size(); j++){
+                    if(this.horizontalCollision(missilePos, monsters.get(j).getPosition())){
+                        this.model.removeMonster(j);
+                        horizontalMissiles.get(i).deactivate();
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean horizontalCollision(Position pos1, Position pos2){
+        return pos1.equals(pos2) || pos1.equals(pos2.right()) || pos1.equals(pos2.left());
     }
 
     void quit() {

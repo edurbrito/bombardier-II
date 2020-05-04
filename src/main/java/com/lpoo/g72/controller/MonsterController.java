@@ -4,6 +4,7 @@ import com.lpoo.g72.commands.directional.LeftCommand;
 import com.lpoo.g72.gui.visualElement.VisualMonster;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.gui.Scene;
+import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
 import java.time.Duration;
@@ -44,5 +45,8 @@ public class MonsterController extends ElementController implements Observer{
     public void update(int info) {
         this.altitude = info + new Random().nextInt(6) - 2;
         this.element.setPosition(new Position(this.maxWidth + new Random().nextInt(30),this.altitude));
+
+        Monster monster = (Monster) this.element;
+        monster.revive();
     }
 }

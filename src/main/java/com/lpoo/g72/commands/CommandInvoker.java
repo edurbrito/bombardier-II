@@ -20,9 +20,9 @@ public class CommandInvoker {
     }
 
     public void executeCommands(){
-        for(Command command: commands)
+        for(Command command: this.commands)
             command.execute();
-        commands.clear();
+        this.commands.clear();
     }
 
     public void addCommand(Command command){

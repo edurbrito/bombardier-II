@@ -56,19 +56,6 @@ public class Gui {
         this.screen.doResizeIfNecessary();
     }
 
-    private void drawScoreBar(TextGraphics graphics, Scene scene) {
-        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
-        graphics.drawLine(0, scene.getHeight() - 4, 8, scene.getHeight() - 4, '=');
-
-        graphics.drawLine(scene.getWidth() - 9, scene.getHeight() - 4, scene.getWidth(), scene.getHeight() - 4, '=');
-
-        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
-        graphics.putString(10, scene.getHeight() - 4, "Blocks: ");
-        graphics.putString(30, scene.getHeight() - 4, "City: ");
-        graphics.putString(scene.getWidth() - 45, scene.getHeight() - 4, "Score: ");
-        graphics.putString(scene.getWidth() - 20, scene.getHeight() - 4, "Lives: ");
-    }
-
     public void draw(Helicopter helicopter, List<Monster> monsters, List<Missile> verticalMissiles, List<Missile> horizontalMissiles) {
         this.screen.clear();
 
@@ -79,8 +66,6 @@ public class Gui {
                 new TerminalSize(width, height),
                 ' '
         );
-
-        this.drawScoreBar(graphics, scene);
 
         this.scene.draw(graphics, monsters);
 
@@ -98,11 +83,14 @@ public class Gui {
         for(int i = 0; i < horizontalMissiles.size(); i++){
             this.visualMissiles[1].draw(graphics, horizontalMissiles.get(i));
         }
-
     }
 
     public int verticalMissileSize() {
-        return visualMissiles[0].getForm().length;
+        return this.visualMissiles[0].getForm().length;
+    }
+
+    public int horizontalMissileSize() {
+        return this.visualMissiles[1].getForm().length;
     }
 
     public void refreshScreen() throws IOException {

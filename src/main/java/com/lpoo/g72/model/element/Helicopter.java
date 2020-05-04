@@ -10,8 +10,8 @@ public class Helicopter extends Element{
     private List<Missile> horizontalMissiles;
     private List<Missile> verticalMissiles;
 
-    int availableMissiles[];
-    int maxMissiles[];
+    private int availableMissiles[];
+    private int maxMissiles[];
 
     public Helicopter(Position position, int verticalMissiles, int horizontalMissiles) {
         super(position);

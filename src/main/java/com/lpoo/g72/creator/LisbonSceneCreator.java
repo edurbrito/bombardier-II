@@ -14,11 +14,9 @@ public class LisbonSceneCreator extends SceneCreator {
 
         List<VisualMonster> visualMonsters = new ArrayList<>();
 
-        for(int i = 0; i < 3; i++){
-            visualMonsters.add(new VisualMonster());
-        }
+        visualMonsters.add(new VisualMonster());
 
-        this.scene = new Scene(width, height, visualMonsters);
+        this.scene = new Scene(width, height, visualMonsters,3);
 
         // TODO: Create some elements like buildings, monsters, etc
 

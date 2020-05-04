@@ -20,7 +20,7 @@ import static com.lpoo.g72.gui.Gui.*;
 public class HelicopterController extends ElementController implements Observable{
 
     private List<Observer> observerList;
-    double horizontalMissileTime;
+    private double horizontalMissileTime;
 
     public HelicopterController(VisualHelicopter visualHelicopter, Helicopter helicopter, int maxWidth){
         super(visualHelicopter, helicopter);

@@ -33,4 +33,8 @@ public class Model {
     public List<Missile> getVerticalMissiles() {
         return this.helicopter.getVerticalMissiles();
     }
+
+    public void removeMonster(int pos){
+        this.monsters.get(pos).kill();
+    }
 }
