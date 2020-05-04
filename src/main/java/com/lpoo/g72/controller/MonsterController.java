@@ -19,7 +19,7 @@ public class MonsterController extends ElementController implements Observer{
         this.altitude = this.getElementY();
 
         this.lastForwardMove = Instant.now();
-        this.velocity = 0.2 * Math.pow(10,9);
+        this.movingTime = 0.2 * Math.pow(10,9);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class MonsterController extends ElementController implements Observer{
         Instant current = Instant.now();
         Duration timePassed = Duration.between(this.lastForwardMove , current);
 
-        if(timePassed.getNano() >= this.velocity){
+        if(timePassed.getNano() >= this.movingTime){
 
             if(this.getElementX() == 0)
                 this.element.setPosition(new Position(this.maxWidth + new Random().nextInt(30),this.altitude));

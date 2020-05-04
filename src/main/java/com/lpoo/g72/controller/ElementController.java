@@ -11,7 +11,7 @@ public abstract class ElementController {
     protected Element element;
     protected CommandInvoker commandInvoker;
 
-    protected double velocity;
+    protected double movingTime;
     protected Instant lastForwardMove;
 
     protected int maxWidth;

@@ -3,7 +3,7 @@ package com.lpoo.g72.gui.visualElement;
 public class VisualHelicopter extends VisualElement {
 
     public VisualHelicopter() {
-        super(new char[]{'/', '-', 'Õ'}, new String[]{"#2a2a2a", "#e60000", "#2a2a2a"});
+        super(new char[]{'/', '-', 'Õ'}, new String[]{"#212121", "#cd0000", "#212121"});
     }
 
     public void animation() {

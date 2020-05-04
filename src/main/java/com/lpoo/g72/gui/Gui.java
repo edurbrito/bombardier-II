@@ -9,6 +9,7 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.model.element.Helicopter;
+import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class Gui {
     private final int width;
     private final int height;
 
-    public enum Key {UP, DOWN, SPACE, QUIT, NULL}
+    public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, NULL};
 
     public Gui(int width, int height) throws IOException {
         this.width = width;
@@ -61,7 +62,7 @@ public class Gui {
         graphics.putString(scene.getWidth() - 20, scene.getHeight() - 4, "Lives: ");
     }
 
-    public void draw(Helicopter helicopter, List<Monster> monsters) {
+    public void draw(Helicopter helicopter, List<Monster> monsters, List<Missile> verticalMissiles, List<Missile> horizontalMissiles) {
         this.screen.clear();
 
         TextGraphics graphics = this.screen.newTextGraphics();
@@ -74,7 +75,7 @@ public class Gui {
 
         this.drawScoreBar(graphics, scene);
 
-        this.scene.draw(graphics, monsters);
+        this.scene.draw(graphics, monsters, verticalMissiles, horizontalMissiles);
 
         this.visualHelicopter.draw(graphics,helicopter);
     }
@@ -91,6 +92,8 @@ public class Gui {
                 return Key.DOWN;
             if (input.getKeyType() == KeyType.ArrowUp)
                 return Key.UP;
+            if (input.getKeyType() == KeyType.ArrowRight)
+                return Key.RIGHT;
             if ((input.getKeyType() == KeyType.Character && input.getCharacter() == ' '))
                 return Key.SPACE;
             if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))

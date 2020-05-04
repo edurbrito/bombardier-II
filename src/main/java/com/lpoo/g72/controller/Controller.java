@@ -54,7 +54,7 @@ public class Controller {
     }
 
     public void start() throws IOException {
-        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters());
+        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.model.getVerticalMissiles(), this.model.getHorizontalMissiles());
         this.run();
     }
 
@@ -70,7 +70,7 @@ public class Controller {
 
             this.commandInvoker.executeCommands();
 
-            this.gui.draw(this.model.getHelicopter(), this.model.getMonsters());
+            this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.model.getVerticalMissiles(), this.model.getHorizontalMissiles());
             this.gui.refreshScreen();
         }
 
