@@ -122,8 +122,8 @@ public class Gui {
         return Key.NULL;
     }
 
-    public Scene.BLOCK removedNormalBlocks(int x, int y) {
-        return this.scene.removedNormalBlocks(x, y);
+    public boolean removedAllBuilding(int x, int y) {
+        return this.scene.removedAllBuilding(x, y);
     }
 
     public void drawMenu() throws IOException {

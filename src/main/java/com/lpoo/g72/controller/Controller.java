@@ -95,7 +95,7 @@ public class Controller implements Observer{
                 y = verticalMissiles.get(i).getPosition().getY() + this.gui.verticalMissileSize() - 1;
                 x = verticalMissiles.get(i).getPosition().getX();
 
-                if(this.gui.removedNormalBlocks(x,y) == Scene.BLOCK.POWER || this.gui.removedNormalBlocks(x,y) == Scene.BLOCK.END){
+                if(this.gui.removedAllBuilding(x,y)){
                     verticalMissiles.get(i).deactivate();
                 }
             }

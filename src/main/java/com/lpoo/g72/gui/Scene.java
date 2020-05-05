@@ -108,17 +108,13 @@ public class Scene {
         return this.height;
     }
 
-    public BLOCK removedNormalBlocks(int x, int y) {
-        if(this.height-y-5 < 0) return BLOCK.END;
+    public boolean removedAllBuilding(int x, int y) {
+        if(this.height-y-5 < 0) return true;
 
         if(this.buildings[this.height - y - 5][ this.width - x - 1] != ' '){
-            if(this.buildings[this.height - y - 5][ this.width - x - 1] != '#'){
-                this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
-                return BLOCK.POWER;
-            }
             this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
-            return BLOCK.NORMAL;
+            return false;
         }
-        return BLOCK.NULL;
+        return false;
     }
 }
