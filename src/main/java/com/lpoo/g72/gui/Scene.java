@@ -20,6 +20,11 @@ public class Scene {
     private char[][] buildings;
     private List<VisualMonster> visualMonsterTypes;
     private List<VisualMonster> visualMonsters;
+
+    public int getNumMonsters() {
+        return numMonsters;
+    }
+
     private int numMonsters;
 
     public Scene(int width, int height, List<VisualMonster> visualMonsterTypes, int numMonsters){

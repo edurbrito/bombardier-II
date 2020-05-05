@@ -16,6 +16,7 @@ import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 
 public class Gui {
@@ -75,11 +76,12 @@ public class Gui {
     }
 
     public void drawVisualMissiles(TextGraphics graphics, List<Missile> verticalMissiles, List<Missile> horizontalMissiles){
-
+        this.visualMissiles[0].animation();
         for(int i = 0; i < verticalMissiles.size(); i++){
             this.visualMissiles[0].draw(graphics, verticalMissiles.get(i));
         }
 
+        this.visualMissiles[1].animation();
         for(int i = 0; i < horizontalMissiles.size(); i++){
             this.visualMissiles[1].draw(graphics, horizontalMissiles.get(i));
         }
@@ -174,6 +176,10 @@ public class Gui {
 
     public VisualHelicopter getVisualHelicopter() {
         return this.visualHelicopter;
+    }
+
+    public void refreshVisualMonsters() {
+        this.scene.setVisualMonsters();
     }
 
 }

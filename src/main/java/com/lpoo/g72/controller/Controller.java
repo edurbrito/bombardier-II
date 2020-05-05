@@ -3,6 +3,7 @@ package com.lpoo.g72.controller;
 import com.lpoo.g72.commands.*;
 import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
+import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Element;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Controller {
+public class Controller implements Observer{
 
     private final Gui gui;
     private Model model;
@@ -39,7 +40,7 @@ public class Controller {
     private void initScene() {
         this.gui.setScene(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
 
-        for(int i = 0; i< this.gui.getScene().getVisualMonsters().size(); i++){
+        for(int i = 0; i< this.gui.getScene().getNumMonsters(); i++){
             this.model.addMonster(new Monster(new Position(this.gui.getScene().getWidth() + new Random().nextInt(20),i*2)));
         }
     }
@@ -112,9 +113,10 @@ public class Controller {
                         horizontalMissiles.get(i).getPosition().getY());
 
                 for(int j = 0; j < monsters.size(); j++){
-                    if(this.horizontalCollision(missilePos, monsters.get(j).getPosition())){
+                    if(this.horizontalCollision(missilePos, monsters.get(j).getPosition()) && this.model.getMonsters().get(j).isAlive()){
                         this.model.removeMonster(j);
                         horizontalMissiles.get(i).deactivate();
+                        break;
                     }
                 }
             }
@@ -129,5 +131,10 @@ public class Controller {
         try {
             this.gui.closeScreen();
         } catch (IOException e) {}
+    }
+
+    @Override
+    public void update(int info) {
+        this.gui.refreshVisualMonsters();
     }
 }

@@ -71,7 +71,7 @@ public class HelicopterController extends ElementController implements Observabl
 
             this.visualElement.animation();
 
-            this.moveVerticalMissiles();
+            this.moveVerticalMissiles(timePassed);
 
             this.lastForwardMove = current;
         }
@@ -79,12 +79,13 @@ public class HelicopterController extends ElementController implements Observabl
         moveHorizontalMissiles(timePassed);
     }
 
-    private void moveVerticalMissiles() {
+    private void moveVerticalMissiles(Duration timePassed) {
         Helicopter helicopter = (Helicopter)this.element;
 
         for(int i = 0; i < helicopter.getVerticalMissiles().size(); i++){
-            if(helicopter.getVerticalMissiles().get(i).isActive())
+            if(helicopter.getVerticalMissiles().get(i).isActive()){
                 this.commandInvoker.addCommand(new DownCommand(helicopter.getVerticalMissiles().get(i)));
+            }
         }
     }
 
@@ -95,7 +96,6 @@ public class HelicopterController extends ElementController implements Observabl
             for(int i = 0; i < helicopter.getHorizontalMissiles().size(); i++){
                 if(helicopter.getHorizontalMissiles().get(i).isActive()){
                     this.commandInvoker.addCommand(new RightCommand(helicopter.getHorizontalMissiles().get(i)));
-                    this.visualElement.animation();
                 }
             }
         }
