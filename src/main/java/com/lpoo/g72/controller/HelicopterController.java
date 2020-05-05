@@ -29,8 +29,8 @@ public class HelicopterController extends ElementController implements Observabl
         this.altitude = this.getElementY();
 
         this.lastForwardMove = Instant.now();
-        this.movingTime = 0.2 * Math.pow(10,9);
-        this.horizontalMissileTime= 0.18 * Math.pow(10,9);
+        this.movingTime = 0.1 * Math.pow(10,9);
+        this.horizontalMissileTime= 0.05 * Math.pow(10,9);
 
         this.observerList = new ArrayList<>();
     }

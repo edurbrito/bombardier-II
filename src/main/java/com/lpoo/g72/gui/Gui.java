@@ -78,12 +78,14 @@ public class Gui {
     public void drawVisualMissiles(TextGraphics graphics, List<Missile> verticalMissiles, List<Missile> horizontalMissiles){
         this.visualMissiles[0].animation();
         for(int i = 0; i < verticalMissiles.size(); i++){
-            this.visualMissiles[0].draw(graphics, verticalMissiles.get(i));
+            if(verticalMissiles.get(i).isActive())
+                this.visualMissiles[0].draw(graphics, verticalMissiles.get(i));
         }
 
         this.visualMissiles[1].animation();
         for(int i = 0; i < horizontalMissiles.size(); i++){
-            this.visualMissiles[1].draw(graphics, horizontalMissiles.get(i));
+            if(horizontalMissiles.get(i).isActive())
+                this.visualMissiles[1].draw(graphics, horizontalMissiles.get(i));
         }
     }
 
@@ -120,8 +122,8 @@ public class Gui {
         return Key.NULL;
     }
 
-    public boolean removedBuilding(int x, int y) {
-        return this.scene.removedBuilding(x,y);
+    public Scene.BLOCK removedNormalBlocks(int x, int y) {
+        return this.scene.removedNormalBlocks(x, y);
     }
 
     public void drawMenu() throws IOException {

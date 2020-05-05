@@ -20,7 +20,7 @@ public class MonsterController extends ElementController implements Observer{
         this.altitude = this.getElementY();
 
         this.lastForwardMove = Instant.now();
-        this.movingTime = 0.2 * Math.pow(10,9);
+        this.movingTime = 0.1 * Math.pow(10,9);
     }
 
     @Override

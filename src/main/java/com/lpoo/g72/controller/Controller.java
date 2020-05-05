@@ -3,6 +3,7 @@ package com.lpoo.g72.controller;
 import com.lpoo.g72.commands.*;
 import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
+import com.lpoo.g72.gui.Scene;
 import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
@@ -94,7 +95,7 @@ public class Controller implements Observer{
                 y = verticalMissiles.get(i).getPosition().getY() + this.gui.verticalMissileSize() - 1;
                 x = verticalMissiles.get(i).getPosition().getX();
 
-                if(this.gui.removedBuilding(x,y)){
+                if(this.gui.removedNormalBlocks(x,y) == Scene.BLOCK.POWER || this.gui.removedNormalBlocks(x,y) == Scene.BLOCK.END){
                     verticalMissiles.get(i).deactivate();
                 }
             }

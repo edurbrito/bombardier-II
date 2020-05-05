@@ -20,6 +20,8 @@ public class Scene {
     private char[][] buildings;
     private List<VisualMonster> visualMonsterTypes;
     private List<VisualMonster> visualMonsters;
+    public enum BLOCK {POWER, END, NORMAL, NULL};
+
 
     public int getNumMonsters() {
         return numMonsters;
@@ -106,11 +108,17 @@ public class Scene {
         return this.height;
     }
 
-    public boolean removedBuilding(int x, int y) {
+    public BLOCK removedNormalBlocks(int x, int y) {
+        if(this.height-y-5 < 0) return BLOCK.END;
+
         if(this.buildings[this.height - y - 5][ this.width - x - 1] != ' '){
+            if(this.buildings[this.height - y - 5][ this.width - x - 1] != '#'){
+                this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
+                return BLOCK.POWER;
+            }
             this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
-            return true;
+            return BLOCK.NORMAL;
         }
-        return false;
+        return BLOCK.NULL;
     }
 }
