@@ -6,74 +6,78 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Helicopter extends Element{
-
-    private List<Missile> horizontalMissiles;
     private List<Missile> verticalMissiles;
-
-    private int availableMissiles[];
-    private int maxMissiles[];
+    private List<Missile> horizontalMissiles;
 
     public Helicopter(Position position, int verticalMissiles, int horizontalMissiles) {
         super(position);
-        initMissiles(verticalMissiles, horizontalMissiles);
+        this.initMissiles(verticalMissiles, horizontalMissiles);
     }
 
     private void initMissiles(int verticalMissiles, int horizontalMissiles) {
-        this.availableMissiles =  new int[2];
-        this.maxMissiles =  new int[2];
-        this.horizontalMissiles = new ArrayList<>();
+
         this.verticalMissiles = new ArrayList<>();
+        this.horizontalMissiles = new ArrayList<>();
 
-        this.availableMissiles[0] = verticalMissiles;
-        this.maxMissiles[0] = verticalMissiles;
-        this.availableMissiles[1] = horizontalMissiles;
-        this.maxMissiles[1] = horizontalMissiles;
-    }
-
-    public List<Missile> getHorizontalMissiles() {
-        List<Missile> activeMissiles = new ArrayList<>();
-
-        for(int i = 0; i < horizontalMissiles.size(); i++){
-            if(horizontalMissiles.get(i).isActive()){
-                activeMissiles.add(horizontalMissiles.get(i));
-            }
+        for(int i = 0; i < verticalMissiles; i++){
+            this.verticalMissiles.add(new Missile(this.getPosition()));
         }
 
-        return activeMissiles;
+        for(int i = 0; i < horizontalMissiles; i++){
+            this.horizontalMissiles.add(new Missile(this.getPosition()));
+        }
+    }
+
+    public void resetMissiles(){
+        for(Missile missile : this.verticalMissiles){
+            missile.deactivate();
+        }
+        for(Missile missile : this.horizontalMissiles){
+            missile.deactivate();
+        }
+    }
+
+    public void dropMissile(){
+        for(Missile missile : this.verticalMissiles){
+            if(!missile.isActive()){
+                missile.setPosition(this.getPosition().down());
+                missile.activate();
+                return;
+            }
+        }
+    }
+
+    public void shootMissile(){
+        for(Missile missile : this.horizontalMissiles){
+            if(!missile.isActive()){
+                missile.setPosition(this.getPosition().right().right());
+                missile.activate();
+                return;
+            }
+        }
     }
 
     public List<Missile> getVerticalMissiles() {
         List<Missile> activeMissiles = new ArrayList<>();
 
-        for(int i = 0; i < verticalMissiles.size(); i++){
-            if(verticalMissiles.get(i).isActive()){
-                activeMissiles.add(verticalMissiles.get(i));
+        for(Missile missile : this.verticalMissiles){
+            if(missile.isActive() && !missile.hasExploded()){
+                activeMissiles.add(missile);
             }
         }
 
         return activeMissiles;
     }
 
-    public void resetMissiles(){
-        this.availableMissiles[0] = this.maxMissiles[0];
-        this.availableMissiles[1] = this.maxMissiles[1];
-    }
+    public List<Missile> getHorizontalMissiles() {
+        List<Missile> activeMissiles = new ArrayList<>();
 
-    public boolean hasVerticalMissiles(){
-        return availableMissiles[0] > 0;
-    }
+        for(Missile missile : this.horizontalMissiles){
+            if(missile.isActive() && !missile.hasExploded()){
+                activeMissiles.add(missile);
+            }
+        }
 
-    public boolean hasHorizontalMissiles(){
-        return availableMissiles[1] > 0;
-    }
-
-    public void addVerticalMissile(Missile missile){
-        this.availableMissiles[0] --;
-        this.verticalMissiles.add(missile);
-    }
-
-    public void addHorizontalMissile(Missile missile){
-        this.availableMissiles[1] --;
-        this.horizontalMissiles.add(missile);
+        return activeMissiles;
     }
 }

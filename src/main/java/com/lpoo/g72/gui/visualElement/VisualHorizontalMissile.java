@@ -8,14 +8,13 @@ public class VisualHorizontalMissile extends VisualElement{
 
     @Override
     public void animation() {
-        if (this.form[0] == '»'){
-            this.form[0] = '~';
-            this.colorPallet[0] = "#b84b0f";
+        if (this.form[1] == '»'){
+            this.form[1] = '>';
+            this.form[0] = '>';
         }
         else{
             this.form[0] = '»';
             this.form[1] = '»';
-            this.colorPallet[0] = "#0e539a";
         }
     }
 }
