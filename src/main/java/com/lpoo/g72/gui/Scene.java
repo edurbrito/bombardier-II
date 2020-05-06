@@ -3,11 +3,7 @@ package com.lpoo.g72.gui;
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.lpoo.g72.gui.visualElement.VisualHorizontalMissile;
-import com.lpoo.g72.gui.visualElement.VisualVerticalMissile;
-import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.gui.visualElement.VisualMonster;
-import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
 import java.util.ArrayList;
@@ -20,31 +16,22 @@ public class Scene {
     private char[][] buildings;
     private List<VisualMonster> visualMonsterTypes;
     private List<VisualMonster> visualMonsters;
-    public enum BLOCK {POWER, END, NORMAL, NULL};
-
-
-    public int getNumMonsters() {
-        return numMonsters;
-    }
-
-    private int numMonsters;
 
     public Scene(int width, int height, List<VisualMonster> visualMonsterTypes, int numMonsters){
         this.width = width;
         this.height = height;
         this.visualMonsters = new ArrayList<>();
         this.visualMonsterTypes = visualMonsterTypes;
-        this.numMonsters = numMonsters;
 
-        this.setVisualMonsters();
+        this.setVisualMonsters(numMonsters);
     }
 
-    public void setVisualMonsters() {
+    public void setVisualMonsters(int numMonsters) {
         int pos;
         Random r = new Random();
         this.visualMonsters.clear();
 
-        for(int i = 0; i< this.numMonsters; i++){
+        for(int i = 0; i < numMonsters; i++){
             pos = r.nextInt(this.visualMonsterTypes.size());
             this.visualMonsters.add(this.visualMonsterTypes.get(pos));
         }
@@ -81,9 +68,8 @@ public class Scene {
 
     public void drawVisualMonsters(TextGraphics graphics, List<Monster> monsters){
         for(int i = 0; i< monsters.size(); i++){
-            if(monsters.get(i).isAlive()){
+            if(monsters.get(i).isAlive())
                 this.visualMonsters.get(i).draw(graphics,monsters.get(i));
-            }
         }
     }
 
@@ -108,13 +94,7 @@ public class Scene {
         return this.height;
     }
 
-    public boolean removedAllBuilding(int x, int y) {
-        if(this.height-y-5 < 0) return true;
-
-        if(this.buildings[this.height - y - 5][ this.width - x - 1] != ' '){
-            this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
-            return false;
-        }
-        return false;
+    public void removeBuilding(int x, int y) {
+        this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
     }
 }

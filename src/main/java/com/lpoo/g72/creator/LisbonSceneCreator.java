@@ -20,7 +20,7 @@ public class LisbonSceneCreator extends SceneCreator {
 
         // TODO: Create some elements like buildings, monsters, etc
 
-        this.scene.setBuildings(this.generateBuildings(width,height, new Random(2),3));
+        this.scene.setBuildings(this.generateBuildings(width,height, new Random(2),2));
 
         return this.scene;
     }

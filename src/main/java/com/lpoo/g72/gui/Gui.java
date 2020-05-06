@@ -7,30 +7,23 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.gui.visualElement.VisualHelicopter;
-import com.lpoo.g72.gui.visualElement.VisualHorizontalMissile;
-import com.lpoo.g72.gui.visualElement.VisualVerticalMissile;
 import com.lpoo.g72.model.element.Helicopter;
-import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.List;
 
 public class Gui {
 
     private final TerminalScreen screen;
     private final VisualHelicopter visualHelicopter;
-
-    private VisualElement[] visualMissiles;
     private Scene scene;
 
     private final int width;
     private final int height;
 
-    public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, NULL};
+    public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, NULL}
 
     public Gui(int width, int height) throws IOException {
         this.width = width;
@@ -39,8 +32,6 @@ public class Gui {
         this.visualHelicopter = new VisualHelicopter();
         this.screen = createTerminalScreen();
         this.setScreenProperties();
-
-        this.visualMissiles = new VisualElement[]{new VisualVerticalMissile(), new VisualHorizontalMissile()};
     }
 
     private TerminalScreen createTerminalScreen() throws IOException {
@@ -57,7 +48,7 @@ public class Gui {
         this.screen.doResizeIfNecessary();
     }
 
-    public void draw(Helicopter helicopter, List<Monster> monsters, List<Missile> verticalMissiles, List<Missile> horizontalMissiles) {
+    public void draw(Helicopter helicopter, List<Monster> monsters) {
         this.screen.clear();
 
         TextGraphics graphics = this.screen.newTextGraphics();
@@ -70,31 +61,7 @@ public class Gui {
 
         this.scene.draw(graphics, monsters);
 
-        this.drawVisualMissiles(graphics,verticalMissiles,horizontalMissiles);
-
         this.visualHelicopter.draw(graphics,helicopter);
-    }
-
-    public void drawVisualMissiles(TextGraphics graphics, List<Missile> verticalMissiles, List<Missile> horizontalMissiles){
-        this.visualMissiles[0].animation();
-        for(int i = 0; i < verticalMissiles.size(); i++){
-            if(verticalMissiles.get(i).isActive())
-                this.visualMissiles[0].draw(graphics, verticalMissiles.get(i));
-        }
-
-        this.visualMissiles[1].animation();
-        for(int i = 0; i < horizontalMissiles.size(); i++){
-            if(horizontalMissiles.get(i).isActive())
-                this.visualMissiles[1].draw(graphics, horizontalMissiles.get(i));
-        }
-    }
-
-    public int verticalMissileSize() {
-        return this.visualMissiles[0].getForm().length;
-    }
-
-    public int horizontalMissileSize() {
-        return this.visualMissiles[1].getForm().length;
     }
 
     public void refreshScreen() throws IOException {
@@ -120,10 +87,6 @@ public class Gui {
         }
 
         return Key.NULL;
-    }
-
-    public boolean removedAllBuilding(int x, int y) {
-        return this.scene.removedAllBuilding(x, y);
     }
 
     public void drawMenu() throws IOException {
@@ -179,9 +142,4 @@ public class Gui {
     public VisualHelicopter getVisualHelicopter() {
         return this.visualHelicopter;
     }
-
-    public void refreshVisualMonsters() {
-        this.scene.setVisualMonsters();
-    }
-
 }
