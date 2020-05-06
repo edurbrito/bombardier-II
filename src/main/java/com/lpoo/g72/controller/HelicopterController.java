@@ -1,10 +1,9 @@
 package com.lpoo.g72.controller;
 import com.lpoo.g72.commands.DropMissile;
+import com.lpoo.g72.commands.ShootMissile;
 import com.lpoo.g72.commands.directional.DownCommand;
 import com.lpoo.g72.commands.directional.RightCommand;
-import com.lpoo.g72.commands.ShootMissile;
 import com.lpoo.g72.commands.directional.UpCommand;
-import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Helicopter;
@@ -20,18 +19,17 @@ import static com.lpoo.g72.gui.Gui.*;
 public class HelicopterController extends ElementController implements Observable{
 
     private List<Observer> observerList;
-    private double horizontalMissileTime;
+    private int maxHeight;
 
-    public HelicopterController(VisualHelicopter visualHelicopter, Helicopter helicopter, int maxWidth){
+    public HelicopterController(VisualHelicopter visualHelicopter, Helicopter helicopter, int maxWidth, int maxHeight){
         super(visualHelicopter, helicopter);
 
         this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
         this.altitude = this.getElementY();
 
         this.lastForwardMove = Instant.now();
-        this.movingTime = 0.1 * Math.pow(10,9);
-        this.horizontalMissileTime= 0.05 * Math.pow(10,9);
-
+        this.deltaTime = 0.1 * Math.pow(10,9);
         this.observerList = new ArrayList<>();
     }
 
@@ -39,65 +37,38 @@ public class HelicopterController extends ElementController implements Observabl
 
         this.move();
 
-        if(key == Key.DOWN && this.isWithinDownLimit()){
-            this.commandInvoker.addCommand(new DownCommand(this.element));
+        if(key == Key.DOWN && isWithinDownLimit()){
+            this.commandInvoker.addCommand(new DownCommand(element));
         }
-        else if(key == Key.UP && this.isWithinUpLimit()){
-            this.commandInvoker.addCommand(new UpCommand(this.element));
+        else if(key == Key.UP && isWithinUpLimit()){
+            this.commandInvoker.addCommand(new UpCommand(element));
         }
-        else if(key == Key.SPACE && this.hasVerticalMissiles()){
-            Helicopter helicopter = (Helicopter)this.element;
+        else if(key == Key.SPACE && !newRound()){
+            Helicopter helicopter = (Helicopter) this.element;
             this.commandInvoker.addCommand(new DropMissile(helicopter));
         }
-        else if(key == Key.RIGHT && this.hasHorizontalMissiles()){
-            Helicopter helicopter = (Helicopter)this.element;
+        else if(key == Key.RIGHT && !newRound()){
+            Helicopter helicopter = (Helicopter) this.element;
             this.commandInvoker.addCommand(new ShootMissile(helicopter));
         }
     }
 
     protected void move(){
+
         Instant current = Instant.now();
         Duration timePassed = Duration.between(this.lastForwardMove , current);
 
-        if(timePassed.getNano() >= this.movingTime){
+        if(timePassed.getNano() >= this.deltaTime){
 
-            if(this.newRound()){
+            if(this.newRound() && this.missilesEnded())
                 this.decreaseAltitude();
-                Helicopter helicopter = (Helicopter)this.element;
-                helicopter.resetMissiles();
-            }
 
             this.commandInvoker.addCommand(new RightCommand(this.element));
+            this.moveMissiles();
 
             this.visualElement.animation();
 
-            this.moveVerticalMissiles(timePassed);
-
             this.lastForwardMove = current;
-        }
-
-        moveHorizontalMissiles(timePassed);
-    }
-
-    private void moveVerticalMissiles(Duration timePassed) {
-        Helicopter helicopter = (Helicopter)this.element;
-
-        for(int i = 0; i < helicopter.getVerticalMissiles().size(); i++){
-            if(helicopter.getVerticalMissiles().get(i).isActive()){
-                this.commandInvoker.addCommand(new DownCommand(helicopter.getVerticalMissiles().get(i)));
-            }
-        }
-    }
-
-    private void moveHorizontalMissiles(Duration timePassed){
-        if(timePassed.getNano() >= this.horizontalMissileTime){
-            Helicopter helicopter = (Helicopter)this.element;
-
-            for(int i = 0; i < helicopter.getHorizontalMissiles().size(); i++){
-                if(helicopter.getHorizontalMissiles().get(i).isActive()){
-                    this.commandInvoker.addCommand(new RightCommand(helicopter.getHorizontalMissiles().get(i)));
-                }
-            }
         }
     }
 
@@ -107,7 +78,7 @@ public class HelicopterController extends ElementController implements Observabl
     }
 
     private boolean newRound(){
-        return this.getElementX() == this.maxWidth;
+        return this.getElementX() >= this.maxWidth;
     }
 
     private boolean isWithinUpLimit(){
@@ -118,14 +89,37 @@ public class HelicopterController extends ElementController implements Observabl
         return this.getElementY() < this.altitude + 1;
     }
 
-    private boolean hasVerticalMissiles(){
-        Helicopter helicopter = (Helicopter)this.element;
-        return helicopter.hasVerticalMissiles();
+    private void moveMissiles(){
+        Helicopter helicopter = (Helicopter) this.element;
+        for(Missile missile: helicopter.getHorizontalMissiles()){
+            this.commandInvoker.addCommand(new RightCommand(missile));
+            this.commandInvoker.addCommand(new RightCommand(missile));
+            this.commandInvoker.addCommand(new RightCommand(missile));
+        }
+
+        for(Missile missile: helicopter.getVerticalMissiles()){
+            if(missile.getPosition().getY() >= this.maxHeight - 2){
+                missile.setExploded();
+            }
+            else{
+                this.commandInvoker.addCommand(new DownCommand(missile));
+            }
+        }
     }
 
-    private boolean hasHorizontalMissiles(){
-        Helicopter helicopter = (Helicopter)this.element;
-        return helicopter.hasHorizontalMissiles();
+    private boolean missilesEnded(){
+        Helicopter helicopter = (Helicopter) this.element;
+        boolean missilesEnded = true;
+        for(Missile missile : helicopter.getVerticalMissiles()){
+            if(!missile.hasExploded())
+                missilesEnded = false;
+        }
+
+        if(missilesEnded){
+            helicopter.resetMissiles();
+        }
+
+        return missilesEnded;
     }
 
     @Override

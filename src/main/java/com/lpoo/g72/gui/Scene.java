@@ -96,5 +96,11 @@ public class Scene {
 
     public void removeBuilding(int x, int y) {
         this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
+
+        if(x == 1)
+            this.buildings[this.height - y - 5][ this.width - x] = ' ';
+        else if(x == this.width - 2){
+            this.buildings[this.height - y - 5][0] = ' ';
+        }
     }
 }
