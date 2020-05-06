@@ -4,6 +4,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.lpoo.g72.model.ElementStub;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Element;
+import com.lpoo.g72.model.element.Helicopter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -123,7 +124,7 @@ public class VisualElementTest {
     @Test
     public void testDraw(){
         Position position = Mockito.spy(new Position(1,2));
-        Element element = Mockito.spy(new ElementStub(position));
+        Element element = Mockito.spy(new Helicopter(position,4,5));
         TextGraphics graphics = Mockito.mock(TextGraphics.class);
 
         this.visualElement.draw(graphics, element);

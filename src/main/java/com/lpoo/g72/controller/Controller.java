@@ -1,6 +1,6 @@
 package com.lpoo.g72.controller;
 
-import com.lpoo.g72.commands.*;
+import com.lpoo.g72.commands.CommandInvoker;
 import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.model.Model;
@@ -108,9 +108,9 @@ public class Controller {
                 int x = missile.getPosition().getX();
                 int y = missile.getPosition().getY() % (this.gui.getScene().getBuildings().length - 2);
 
-                this.gui.getScene().removeBuilding( x, y);
-                this.gui.getScene().removeBuilding( x, y+1);
-                this.gui.getScene().removeBuilding( x, y+2);
+                for(int i = 0; i < 3; i++){
+                    this.gui.getScene().removeBuilding( x, y + i);
+                }
             }
         }
     }

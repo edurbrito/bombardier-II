@@ -34,13 +34,11 @@ public class SceneCreatorTest {
 
         @Override
         public Scene createScene(int width, int height) {
-            List<VisualMonster> monsters = new ArrayList<>();
-            Random r = new Random();
-            for(int i = 0; i < 5; i++){
-                monsters.add(new VisualMonster());
-            }
+            List<VisualMonster> visualMonsters = new ArrayList<>();
 
-            this.scene = new Scene(width, height, monsters);
+            visualMonsters.add(new VisualMonster());
+
+            this.scene = new Scene(width, height, visualMonsters,3);
             this.scene.setBuildings(this.generateBuildings(width,height,new Random(),4));
 
             return this.scene;
@@ -78,7 +76,7 @@ public class SceneCreatorTest {
             }
         }
 
-        assertEquals(5, scene.getVisualMonsters().size());
+        assertEquals(3, scene.getVisualMonsters().size());
 
         assertTrue(stub.heightFactor(new Random(19),3));
         assertTrue(stub.heightFactor(new Random(22),3));

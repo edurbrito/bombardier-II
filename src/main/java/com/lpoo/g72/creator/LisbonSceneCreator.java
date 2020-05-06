@@ -1,7 +1,7 @@
 package com.lpoo.g72.creator;
 
-import com.lpoo.g72.gui.visualElement.VisualMonster;
 import com.lpoo.g72.gui.Scene;
+import com.lpoo.g72.gui.visualElement.VisualMonster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,3 +26,4 @@ public class LisbonSceneCreator extends SceneCreator {
     }
 
 }
+

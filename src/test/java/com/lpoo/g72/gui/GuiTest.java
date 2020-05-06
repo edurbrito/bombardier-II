@@ -47,7 +47,7 @@ public class GuiTest {
 
         assertNotNull(this.gui.getScene());
 
-        Helicopter helicopter = new Helicopter(new Position(0,1));
+        Helicopter helicopter = new Helicopter(new Position(0,1),4,5);
 
         List<Monster> monsterList = new ArrayList<>();
         monsterList.add(new Monster(new Position(12,11)));

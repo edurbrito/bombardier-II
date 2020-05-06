@@ -1,5 +1,7 @@
 package com.lpoo.g72.creator;
+
 import com.lpoo.g72.gui.Scene;
+
 import java.util.Random;
 
 public abstract class SceneCreator {

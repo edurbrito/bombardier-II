@@ -1,4 +1,5 @@
 package com.lpoo.g72.controller;
+
 import com.lpoo.g72.commands.DropMissile;
 import com.lpoo.g72.commands.ShootMissile;
 import com.lpoo.g72.commands.directional.DownCommand;
@@ -14,7 +15,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lpoo.g72.gui.Gui.*;
+import static com.lpoo.g72.gui.Gui.Key;
 
 public class HelicopterController extends ElementController implements Observable{
 

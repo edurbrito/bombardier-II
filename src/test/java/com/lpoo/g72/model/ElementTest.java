@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class ElementTest {
     @Test
     public void elementTest(){
-        Element element = new Helicopter(new Position(15,16));
+        Element element = new Helicopter(new Position(15,16),4,5);
 
         assertEquals(true, element.getPosition().equals(new Position(15,16)));
 

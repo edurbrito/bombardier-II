@@ -1,6 +1,5 @@
 package com.lpoo.g72.controller;
 
-import com.lpoo.g72.commands.CommandInvoker;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.gui.visualElement.VisualElementStub;
@@ -13,7 +12,6 @@ import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.time.Instant;
@@ -57,16 +55,16 @@ public class ElementControllerTest {
     @Test
     public void testHelicopterController(){
         VisualHelicopter visualHelicopter = Mockito.spy(new VisualHelicopter());
-        Helicopter helicopter = Mockito.spy(new Helicopter(new Position(0,1)));
+        Helicopter helicopter = Mockito.spy(new Helicopter(new Position(0,1),10,20));
 
-        this.helicopterController = Mockito.spy(new HelicopterController(visualHelicopter,helicopter,10));
+        this.helicopterController = Mockito.spy(new HelicopterController(visualHelicopter,helicopter,10,20));
 
         assertEquals(10,this.helicopterController.maxWidth);
         assertEquals(this.helicopterController.getElementY(),this.helicopterController.altitude);
 
         Instant lastInstant = this.helicopterController.lastForwardMove;
         assertNotNull(this.helicopterController.lastForwardMove);
-        assertEquals(0.2*Math.pow(10,9),this.helicopterController.velocity,10);
+        assertEquals(0.1*Math.pow(10,9),this.helicopterController.deltaTime,10);
 
         this.helicopterController.run(Gui.Key.DOWN);
 
@@ -105,7 +103,7 @@ public class ElementControllerTest {
 
         Instant lastInstant = this.monsterController.lastForwardMove;
         assertNotNull(this.monsterController.lastForwardMove);
-        assertEquals(0.2*Math.pow(10,9),this.monsterController.velocity,10);
+        assertEquals(0.1*Math.pow(10,9),this.monsterController.deltaTime,10);
 
         this.monsterController.move();
 
@@ -119,9 +117,9 @@ public class ElementControllerTest {
         }
 
         VisualHelicopter visualHelicopter = Mockito.spy(new VisualHelicopter());
-        Helicopter helicopter = Mockito.spy(new Helicopter(new Position(0,1)));
+        Helicopter helicopter = Mockito.spy(new Helicopter(new Position(0,1),4,5));
 
-        this.helicopterController = Mockito.spy(new HelicopterController(visualHelicopter,helicopter,10));
+        this.helicopterController = Mockito.spy(new HelicopterController(visualHelicopter,helicopter,10,20));
 
         this.helicopterController.addObserver(this.monsterController);
 
