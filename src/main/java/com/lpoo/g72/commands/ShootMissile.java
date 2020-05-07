@@ -1,6 +1,7 @@
 package com.lpoo.g72.commands;
 
 import com.lpoo.g72.model.element.Helicopter;
+import com.lpoo.g72.model.element.Missile;
 
 public class ShootMissile implements Command {
     Helicopter helicopter;
@@ -11,6 +12,10 @@ public class ShootMissile implements Command {
 
     @Override
     public void execute() {
-        this.helicopter.shootMissile();
+        for(Missile missile : this.helicopter.getInactiveHorizontalMissiles()){
+            missile.setPosition(this.helicopter.getPosition().right().right());
+            missile.activate();
+            return;
+        }
     }
 }
