@@ -12,10 +12,10 @@ public class ShootMissile implements Command {
 
     @Override
     public void execute() {
-        for(Missile missile : this.helicopter.getInactiveHorizontalMissiles()){
+        Missile missile = this.helicopter.getInactiveHorizontalMissile();
+        if(missile != null){
             missile.setPosition(this.helicopter.getPosition().right().right());
             missile.activate();
-            return;
         }
     }
 }
