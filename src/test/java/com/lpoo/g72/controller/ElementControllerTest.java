@@ -32,7 +32,7 @@ public class ElementControllerTest {
         this.visualElement = Mockito.spy(new VisualElementStub(new char[]{'a','b','c'},new String[]{"A","B","C"}));
         this.element = Mockito.spy(new ElementStub(new Position(0,1)));
 
-        this.elementController = new ElementController(visualElement,element) {
+        this.elementController = new ElementController(1,1,1) {
             @Override
             protected void move() {
 
@@ -42,14 +42,11 @@ public class ElementControllerTest {
 
     @Test
     public void testInit(){
-        assertNotNull(this.elementController.getElement());
-        assertNotNull(this.elementController.getVisualElement());
         assertNotNull(this.elementController.commandInvoker);
 
-        assertEquals(0,this.elementController.getElementX());
-        assertEquals(1,this.elementController.getElementY());
-
-        Mockito.verify(this.element,Mockito.times(2)).getPosition();
+        assertEquals(1,this.elementController.getMaxWidth());
+        assertEquals(1,this.elementController.getAltitude());
+        assertEquals(1,this.elementController.getDeltaTime(),1);
     }
 
     @Test
@@ -60,18 +57,19 @@ public class ElementControllerTest {
         this.helicopterController = Mockito.spy(new HelicopterController(visualHelicopter,helicopter,10,20));
 
         assertEquals(10,this.helicopterController.maxWidth);
-        assertEquals(this.helicopterController.getElementY(),this.helicopterController.altitude);
+        assertEquals(helicopter.getY(),this.helicopterController.altitude);
 
         Instant lastInstant = this.helicopterController.lastForwardMove;
         assertNotNull(this.helicopterController.lastForwardMove);
-        assertEquals(0.1*Math.pow(10,9),this.helicopterController.deltaTime,10);
+        assertEquals(0.15 * Math.pow(10,9),this.helicopterController.deltaTime,10);
+        assertEquals(0.14 * Math.pow(10,9),this.helicopterController.getMissileDeltaTime(),10);
 
         this.helicopterController.run(Gui.Key.DOWN);
 
         Mockito.verify(this.helicopterController,Mockito.times(1)).move();
 
         if(lastInstant != this.helicopterController.lastForwardMove){
-            Mockito.verify(this.helicopterController,Mockito.times(1)).getElementX();
+            Mockito.verify(helicopter,Mockito.times(1)).getX();
 
             Mockito.verify(visualHelicopter,Mockito.times(1)).animation();
             assertNotEquals(lastInstant,this.helicopterController.lastForwardMove);
@@ -84,7 +82,7 @@ public class ElementControllerTest {
         Mockito.verify(this.helicopterController,Mockito.times(1)).move();
 
         if(lastInstant != this.helicopterController.lastForwardMove){
-            Mockito.verify(this.helicopterController,Mockito.times(1)).getElementX();
+            Mockito.verify(helicopter,Mockito.times(1)).getX();
 
             Mockito.verify(visualHelicopter,Mockito.times(1)).animation();
             assertNotEquals(lastInstant,this.helicopterController.lastForwardMove);
@@ -99,7 +97,7 @@ public class ElementControllerTest {
         this.monsterController = Mockito.spy(new MonsterController(visualMonster,monster,10));
 
         assertEquals(10,this.monsterController.maxWidth);
-        assertEquals(this.monsterController.getElementY(),this.monsterController.altitude);
+        assertEquals(monster.getY(),this.monsterController.altitude);
 
         Instant lastInstant = this.monsterController.lastForwardMove;
         assertNotNull(this.monsterController.lastForwardMove);
@@ -110,7 +108,7 @@ public class ElementControllerTest {
         Mockito.verify(this.monsterController,Mockito.times(1)).move();
 
         if(lastInstant != this.monsterController.lastForwardMove){
-            Mockito.verify(this.monsterController,Mockito.times(1)).getElementX();
+            Mockito.verify(monster.getY(),Mockito.times(1));
 
             Mockito.verify(visualMonster,Mockito.times(1)).animation();
             assertNotEquals(lastInstant,this.monsterController.lastForwardMove);
