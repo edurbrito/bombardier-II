@@ -20,6 +20,8 @@ public class Controller {
     private Model model;
 
     private int destroyedBlocks;
+    private float pointsPerBlock;
+    private float pointsPerMonster;
 
     private HelicopterController helicopterController;
     private List<MonsterController> monsterControllers;
@@ -33,9 +35,11 @@ public class Controller {
 
         // The scene should be set in the menu then when the user chooses the city
         this.initScene();
-        destroyedBlocks = 0;
-
         this.initElementControllers();
+
+        this.destroyedBlocks = 0;
+        this.pointsPerBlock = 0.2f;
+        this.pointsPerMonster = 0.4f;
 
         this.commandInvoker = CommandInvoker.getInstance();
     }
@@ -60,7 +64,7 @@ public class Controller {
     }
 
     public void start() throws IOException {
-        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), destroyedBlocks);
+        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks);
         this.run();
     }
 
@@ -96,6 +100,7 @@ public class Controller {
                 if(horizontalCollisionChecker(missile.getPosition(),monster.getPosition()) && monster.isAlive()){
                     missile.setExploded();
                     monster.kill();
+                    this.model.increaseScore( this.pointsPerMonster);
                 }
             }
         }
@@ -106,6 +111,8 @@ public class Controller {
     }
 
     private void verticalCollisions(){
+        int blocks = 0;
+
         List<Missile> verticalMissiles = this.model.getHelicopter().getVerticalMissiles();
 
         for(Missile missile : verticalMissiles){
@@ -114,7 +121,11 @@ public class Controller {
                 int y = missile.getY() % (this.gui.getScene().getBuildings().length - 2);
 
                 for(int i = 0; i < 3; i++){
-                    this.destroyedBlocks += this.gui.getScene().removeBuilding( x, y + i);
+                    blocks += this.gui.getScene().removeBuilding( x, y + i);
+
+                    this.model.increaseScore(blocks * this.pointsPerBlock);
+
+                    this.destroyedBlocks += blocks;
                 }
             }
         }

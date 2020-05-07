@@ -6,6 +6,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.lpoo.g72.gui.visualElement.VisualMonster;
 import com.lpoo.g72.model.element.Monster;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -53,8 +54,8 @@ public class Scene {
         return this.visualMonsters;
     }
 
-    public void draw(TextGraphics graphics, List<Monster> monsters, int destroyedBlocks){
-        this.drawScoreBar(graphics, destroyedBlocks);
+    public void draw(TextGraphics graphics, List<Monster> monsters, int destroyedBlocks, float score){
+        this.drawScoreBar(graphics, destroyedBlocks, score);
         this.drawSceneBuildings(graphics);
         this.drawVisualMonsters(graphics, monsters);
     }
@@ -77,7 +78,7 @@ public class Scene {
         }
     }
 
-    private void drawScoreBar(TextGraphics graphics, int destroyedBlocks) {
+    private void drawScoreBar(TextGraphics graphics, int destroyedBlocks, float score) {
         graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
         graphics.drawLine(0, this.height - 4, 8, this.height - 4, '=');
 
@@ -86,8 +87,14 @@ public class Scene {
         graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
         graphics.putString(10, this.height - 4, this.blocksToString(destroyedBlocks));
         graphics.putString(30, this.height - 4, "City: " + name);
-        graphics.putString(this.width - 45, this.height - 4, "Score: ");
+        graphics.putString(this.width - 45, this.height - 4, scoreToString(score));
         graphics.putString(this.width - 20, this.height - 4, "Lives: ");
+    }
+
+    private String scoreToString(float score){
+        DecimalFormat df = new DecimalFormat("#.##");
+        String formatted = "Score: " + df.format(score);
+        return formatted;
     }
 
     private String blocksToString(int destroyedBlocks){

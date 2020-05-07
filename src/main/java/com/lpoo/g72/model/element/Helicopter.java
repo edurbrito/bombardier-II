@@ -8,10 +8,14 @@ import java.util.List;
 public class Helicopter extends Element{
     private List<Missile> verticalMissiles;
     private List<Missile> horizontalMissiles;
+    private float score;
+
 
     public Helicopter(Position position, int verticalMissiles, int horizontalMissiles) {
         super(position);
         this.initMissiles(verticalMissiles, horizontalMissiles);
+        this.score = 0;
+
     }
 
     private void initMissiles(int verticalMissiles, int horizontalMissiles) {
@@ -61,7 +65,7 @@ public class Helicopter extends Element{
         return activeMissiles;
     }
 
-    public Missile getInactiveVerticalMissile() {
+    public Missile drop() {
         for(Missile missile : this.verticalMissiles){
             if(!missile.isActive()){
                 return missile;
@@ -70,12 +74,20 @@ public class Helicopter extends Element{
         return null;
     }
 
-    public Missile getInactiveHorizontalMissile() {
+    public Missile shoot() {
         for(Missile missile : this.horizontalMissiles){
             if(!missile.isActive()){
                 return missile;
             }
         }
         return null;
+    }
+
+    public void increaseScore(float points){
+        this.score += points;
+    }
+
+    public float getScore(){
+        return this.score;
     }
 }
