@@ -21,6 +21,7 @@ public class HelicopterController extends ElementController implements Observabl
 
     private List<Observer> observerList;
     private int maxHeight;
+    private double missileDeltaTime;
 
     public HelicopterController(VisualHelicopter visualHelicopter, Helicopter helicopter, int maxWidth, int maxHeight){
         super(visualHelicopter, helicopter);
@@ -30,7 +31,8 @@ public class HelicopterController extends ElementController implements Observabl
         this.altitude = this.getElementY();
 
         this.lastForwardMove = Instant.now();
-        this.deltaTime = 0.1 * Math.pow(10,9);
+        this.deltaTime = 0.15 * Math.pow(10,9);
+        this.missileDeltaTime = 0.14 * Math.pow(10,9);
         this.observerList = new ArrayList<>();
     }
 
@@ -65,11 +67,14 @@ public class HelicopterController extends ElementController implements Observabl
                 this.decreaseAltitude();
 
             this.commandInvoker.addCommand(new RightCommand(this.element));
-            this.moveMissiles();
 
             this.visualElement.animation();
 
             this.lastForwardMove = current;
+        }
+
+        if(timePassed.getNano() >= this.missileDeltaTime){
+            this.moveMissiles();
         }
     }
 
@@ -93,8 +98,6 @@ public class HelicopterController extends ElementController implements Observabl
     private void moveMissiles(){
         Helicopter helicopter = (Helicopter) this.element;
         for(Missile missile: helicopter.getHorizontalMissiles()){
-            this.commandInvoker.addCommand(new RightCommand(missile));
-            this.commandInvoker.addCommand(new RightCommand(missile));
             this.commandInvoker.addCommand(new RightCommand(missile));
         }
 
