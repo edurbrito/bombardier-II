@@ -3,7 +3,6 @@ package com.lpoo.g72.controller;
 import com.lpoo.g72.commands.directional.LeftCommand;
 import com.lpoo.g72.gui.visualElement.VisualMonster;
 import com.lpoo.g72.model.Position;
-import com.lpoo.g72.gui.Scene;
 import com.lpoo.g72.model.element.Monster;
 
 import java.time.Duration;
@@ -12,6 +11,8 @@ import java.util.Random;
 
 public class MonsterController extends ElementController implements Observer{
 
+    private boolean newRound;
+
     public MonsterController(VisualMonster visualMonster, Monster monster, int maxWidth) {
         super(visualMonster, monster);
 
@@ -19,7 +20,9 @@ public class MonsterController extends ElementController implements Observer{
         this.altitude = this.getElementY();
 
         this.lastForwardMove = Instant.now();
-        this.velocity = 0.2 * Math.pow(10,9);
+        this.deltaTime = 0.1 * Math.pow(10,9);
+
+        this.newRound = false;
     }
 
     @Override
@@ -27,10 +30,12 @@ public class MonsterController extends ElementController implements Observer{
         Instant current = Instant.now();
         Duration timePassed = Duration.between(this.lastForwardMove , current);
 
-        if(timePassed.getNano() >= this.velocity){
+        if(timePassed.getNano() >= this.deltaTime){
 
-            if(this.getElementX() == 0)
+            if(this.newRound){
                 this.element.setPosition(new Position(this.maxWidth + new Random().nextInt(30),this.altitude));
+                this.newRound = false;
+            }
 
             this.commandInvoker.addCommand(new LeftCommand(this.element));
 
@@ -42,7 +47,11 @@ public class MonsterController extends ElementController implements Observer{
 
     @Override
     public void update(int info) {
+        this.newRound = true;
         this.altitude = info + new Random().nextInt(6) - 2;
         this.element.setPosition(new Position(this.maxWidth + new Random().nextInt(30),this.altitude));
+
+        Monster monster = (Monster) this.element;
+        monster.revive();
     }
 }

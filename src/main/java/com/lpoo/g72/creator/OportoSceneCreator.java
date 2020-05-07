@@ -14,11 +14,9 @@ public class OportoSceneCreator extends SceneCreator {
 
         List<VisualMonster> visualMonsters = new ArrayList<>();
 
-        for(int i = 0; i < 2; i++){
-            visualMonsters.add(new VisualMonster());
-        }
+        visualMonsters.add(new VisualMonster());
 
-        this.scene = new Scene(width, height, visualMonsters);
+        this.scene = new Scene(width, height, visualMonsters,2);
 
         // TODO: Create some elements like buildings, monsters, etc
 

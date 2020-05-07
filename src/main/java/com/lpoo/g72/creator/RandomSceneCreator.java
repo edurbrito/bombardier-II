@@ -1,6 +1,5 @@
 package com.lpoo.g72.creator;
 
-import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.gui.Scene;
 import com.lpoo.g72.gui.visualElement.VisualMonster;
 
@@ -15,11 +14,9 @@ public class RandomSceneCreator extends SceneCreator {
 
         List<VisualMonster> visualMonsters = new ArrayList<>();
 
-        for(int i = 0; i < 4; i++){
-            visualMonsters.add(new VisualMonster());
-        }
+        visualMonsters.add(new VisualMonster());
 
-        this.scene = new Scene(width, height, visualMonsters);
+        this.scene = new Scene(width, height, visualMonsters,4);
 
         this.scene.setBuildings(this.generateBuildings(width,height, new Random(),3));
 

@@ -1,10 +1,11 @@
 package com.lpoo.g72.controller;
 
-import com.lpoo.g72.commands.*;
+import com.lpoo.g72.commands.CommandInvoker;
 import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
+import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class Controller {
     }
 
     private void initElementControllers() {
-        this.helicopterController = new HelicopterController(this.gui.getVisualHelicopter(), this.model.getHelicopter(),this.gui.getScene().getWidth() - 1);
+        this.helicopterController = new HelicopterController(this.gui.getVisualHelicopter(), this.model.getHelicopter(),this.gui.getScene().getWidth() - 1, this.gui.getScene().getHeight() - 5);
 
         this.monsterControllers = new ArrayList<>();
 
@@ -70,12 +71,48 @@ public class Controller {
 
             this.commandInvoker.executeCommands();
 
+            this.horizontalCollisions();
+            this.verticalCollisions();
+
             this.gui.draw(this.model.getHelicopter(), this.model.getMonsters());
             this.gui.refreshScreen();
         }
 
         this.quit();
 
+    }
+
+    private void horizontalCollisions(){
+        List<Missile> horizontalMissiles = this.model.getHelicopter().getHorizontalMissiles();
+        List<Monster> monsters = this.model.getMonsters();
+
+        for(Missile missile : horizontalMissiles){
+            for(Monster monster : monsters){
+                if(horizontalCollisionChecker(missile.getPosition(),monster.getPosition()) && monster.isAlive()){
+                    missile.setExploded();
+                    monster.kill();
+                }
+            }
+        }
+    }
+
+    private boolean horizontalCollisionChecker(Position pos1, Position pos2){
+        return pos1.equals(pos2) || pos1.equals(pos2.right()) || pos1.equals(pos2.right().right())|| pos1.equals(pos2.left());
+    }
+
+    private void verticalCollisions(){
+        List<Missile> verticalMissiles = this.model.getHelicopter().getVerticalMissiles();
+
+        for(Missile missile : verticalMissiles){
+            if(!missile.hasExploded()){
+                int x = missile.getPosition().getX();
+                int y = missile.getPosition().getY() % (this.gui.getScene().getBuildings().length - 2);
+
+                for(int i = 0; i < 3; i++){
+                    this.gui.getScene().removeBuilding( x, y + i);
+                }
+            }
+        }
     }
 
     void quit() {

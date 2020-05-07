@@ -40,8 +40,8 @@ public class Position {
         if (this == o) return true;
         if (!(o instanceof Position)) return false;
         Position position = (Position) o;
-        return x == position.x &&
-                y == position.y;
+        return this.x == position.x &&
+                this.y == position.y;
     }
 
     @Override

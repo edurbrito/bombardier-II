@@ -35,13 +35,11 @@ public class SceneTest {
             int w = r.nextInt(300) + 1;
             int h = r.nextInt(300) + 1;
 
-            List<VisualMonster> monsters = new ArrayList<>();
-            int nMonsters = 1 + r.nextInt(10);
-            for(int j = 0; j < nMonsters; j++){
-                monsters.add(new VisualMonster());
-            }
+            int nMonsters = r.nextInt(5);
+            List<VisualMonster> visualMonsters = new ArrayList<>();
+            visualMonsters.add(new VisualMonster());
 
-            Scene scene = new Scene(w, h, monsters);
+            this.scene = new Scene(w, h, visualMonsters,nMonsters);
 
             assertEquals(w, scene.getWidth());
             assertEquals(h, scene.getHeight());
@@ -78,7 +76,7 @@ public class SceneTest {
 
         Mockito.verify(graphics, Mockito.times(1+vmonstersSize)).enableModifiers(Mockito.any());
         Mockito.verify(graphics, Mockito.times(vmonstersSize)).setBackgroundColor(Mockito.any());
-        Mockito.verify(graphics, Mockito.times(1+vmonstersSize*this.scene.getVisualMonsters().get(0).getForm().length)).setForegroundColor(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(3+vmonstersSize*this.scene.getVisualMonsters().get(0).getForm().length)).setForegroundColor(Mockito.any());
 
         Mockito.verify(this.scene,Mockito.times(1)).drawVisualMonsters(Mockito.any(), Mockito.any());
 

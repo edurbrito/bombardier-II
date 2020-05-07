@@ -2,7 +2,6 @@ package com.lpoo.g72.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class CommandInvoker {
     private List<Command> commands;
@@ -20,9 +19,9 @@ public class CommandInvoker {
     }
 
     public void executeCommands(){
-        for(Command command: commands)
+        for(Command command: this.commands)
             command.execute();
-        commands.clear();
+        this.commands.clear();
     }
 
     public void addCommand(Command command){

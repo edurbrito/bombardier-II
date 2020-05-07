@@ -5,3 +5,7 @@ build/
 .vscode/
 .settings/
 bin/
+src/gradlew
+src/gradlew.bat
+src/gradle
+src/.gradle

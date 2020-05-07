@@ -1,6 +1,9 @@
 package com.lpoo.g72.gui;
 
-import com.googlecode.lanterna.*;
+import com.googlecode.lanterna.SGR;
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
@@ -22,8 +25,9 @@ public class Gui {
 
     private final int width;
     private final int height;
+    private TextGraphics graphics;
 
-    public enum Key {UP, DOWN, SPACE, QUIT, NULL}
+    public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, NULL}
 
     public Gui(int width, int height) throws IOException {
         this.width = width;
@@ -46,33 +50,18 @@ public class Gui {
         this.screen.setCursorPosition(null);
         this.screen.startScreen();
         this.screen.doResizeIfNecessary();
-    }
-
-    private void drawScoreBar(TextGraphics graphics, Scene scene) {
-        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
-        graphics.drawLine(0, scene.getHeight() - 4, 8, scene.getHeight() - 4, '=');
-
-        graphics.drawLine(scene.getWidth() - 9, scene.getHeight() - 4, scene.getWidth(), scene.getHeight() - 4, '=');
-
-        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
-        graphics.putString(10, scene.getHeight() - 4, "Blocks: ");
-        graphics.putString(30, scene.getHeight() - 4, "City: ");
-        graphics.putString(scene.getWidth() - 45, scene.getHeight() - 4, "Score: ");
-        graphics.putString(scene.getWidth() - 20, scene.getHeight() - 4, "Lives: ");
+        this.graphics = this.screen.newTextGraphics();
     }
 
     public void draw(Helicopter helicopter, List<Monster> monsters) {
-        this.screen.clear();
 
-        TextGraphics graphics = this.screen.newTextGraphics();
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
-        graphics.fillRectangle(
+        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        this.graphics.setForegroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        this.graphics.fillRectangle(
                 new TerminalPosition(0, 0),
-                new TerminalSize(width, height),
+                new TerminalSize(this.width, this.height),
                 ' '
         );
-
-        this.drawScoreBar(graphics, scene);
 
         this.scene.draw(graphics, monsters);
 
@@ -91,6 +80,8 @@ public class Gui {
                 return Key.DOWN;
             if (input.getKeyType() == KeyType.ArrowUp)
                 return Key.UP;
+            if (input.getKeyType() == KeyType.ArrowRight)
+                return Key.RIGHT;
             if ((input.getKeyType() == KeyType.Character && input.getCharacter() == ' '))
                 return Key.SPACE;
             if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))
