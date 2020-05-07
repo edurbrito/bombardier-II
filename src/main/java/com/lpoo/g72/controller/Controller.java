@@ -105,8 +105,8 @@ public class Controller {
 
         for(Missile missile : verticalMissiles){
             if(!missile.hasExploded()){
-                int x = missile.getPosition().getX();
-                int y = missile.getPosition().getY() % (this.gui.getScene().getBuildings().length - 2);
+                int x = missile.getX();
+                int y = missile.getY() % (this.gui.getScene().getBuildings().length - 2);
 
                 for(int i = 0; i < 3; i++){
                     this.gui.getScene().removeBuilding( x, y + i);

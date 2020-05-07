@@ -1,14 +1,10 @@
 package com.lpoo.g72.controller;
 
 import com.lpoo.g72.commands.CommandInvoker;
-import com.lpoo.g72.gui.visualElement.VisualElement;
-import com.lpoo.g72.model.element.Element;
 
 import java.time.Instant;
 
 public abstract class ElementController {
-    protected VisualElement visualElement;
-    protected Element element;
     protected CommandInvoker commandInvoker;
 
     protected double deltaTime;
@@ -17,26 +13,25 @@ public abstract class ElementController {
     protected int maxWidth;
     protected int altitude;
 
-    public ElementController(VisualElement visualElement, Element element) {
-        this.visualElement = visualElement;
-        this.element = element;
+    public ElementController(int maxWidth, int altitude, double deltaTime) {
+
+        this.maxWidth = maxWidth;
+        this.altitude = altitude;
+        this.deltaTime = deltaTime;
+        this.lastForwardMove = Instant.now();
         this.commandInvoker = CommandInvoker.getInstance();
     }
 
-    public VisualElement getVisualElement() {
-        return this.visualElement;
+    public double getDeltaTime() {
+        return this.deltaTime;
     }
 
-    public Element getElement() {
-        return this.element;
+    public int getMaxWidth() {
+        return this.maxWidth;
     }
 
-    public int getElementX(){
-        return this.element.getPosition().getX();
-    }
-
-    public int getElementY(){
-        return this.element.getPosition().getY();
+    public int getAltitude() {
+        return this.altitude;
     }
 
     protected abstract void move();

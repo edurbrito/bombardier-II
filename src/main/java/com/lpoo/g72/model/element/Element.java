@@ -10,7 +10,15 @@ public abstract class Element{
     }
 
     public Position getPosition() {
-        return position;
+        return this.position;
+    }
+
+    public int getX() {
+        return this.position.getX();
+    }
+
+    public int getY() {
+        return this.position.getY();
     }
 
     public void setPosition(Position position) {
