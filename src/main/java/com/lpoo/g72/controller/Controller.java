@@ -5,6 +5,7 @@ import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
+import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
@@ -18,6 +19,8 @@ public class Controller {
     private final Gui gui;
     private Model model;
 
+    private int destroyedBlocks;
+
     private HelicopterController helicopterController;
     private List<MonsterController> monsterControllers;
 
@@ -26,9 +29,11 @@ public class Controller {
     public Controller(Gui gui, Model model) {
         this.gui = gui;
         this.model = model;
+        this.model.setHelicopter( new Helicopter(new Position(0,1), 50, 3));
 
         // The scene should be set in the menu then when the user chooses the city
         this.initScene();
+        destroyedBlocks = 0;
 
         this.initElementControllers();
 
@@ -55,7 +60,7 @@ public class Controller {
     }
 
     public void start() throws IOException {
-        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters());
+        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), destroyedBlocks);
         this.run();
     }
 
@@ -74,7 +79,7 @@ public class Controller {
             this.horizontalCollisions();
             this.verticalCollisions();
 
-            this.gui.draw(this.model.getHelicopter(), this.model.getMonsters());
+            this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), destroyedBlocks);
             this.gui.refreshScreen();
         }
 
@@ -109,7 +114,7 @@ public class Controller {
                 int y = missile.getY() % (this.gui.getScene().getBuildings().length - 2);
 
                 for(int i = 0; i < 3; i++){
-                    this.gui.getScene().removeBuilding( x, y + i);
+                    this.destroyedBlocks += this.gui.getScene().removeBuilding( x, y + i);
                 }
             }
         }

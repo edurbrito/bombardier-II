@@ -16,7 +16,7 @@ public class LisbonSceneCreator extends SceneCreator {
 
         visualMonsters.add(new VisualMonster());
 
-        this.scene = new Scene(width, height, visualMonsters,3);
+        this.scene = new Scene(width, height, "Lisbon", visualMonsters,3);
 
         // TODO: Create some elements like buildings, monsters, etc
 

@@ -16,7 +16,7 @@ public class OportoSceneCreator extends SceneCreator {
 
         visualMonsters.add(new VisualMonster());
 
-        this.scene = new Scene(width, height, visualMonsters,2);
+        this.scene = new Scene(width, height, "OPorto", visualMonsters,2);
 
         // TODO: Create some elements like buildings, monsters, etc
 

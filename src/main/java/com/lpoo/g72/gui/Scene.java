@@ -14,12 +14,15 @@ public class Scene {
     private final int width;
     private final int height;
     private char[][] buildings;
+    private int sceneBlocks;
+    private String name;
     private List<VisualMonster> visualMonsterTypes;
     private List<VisualMonster> visualMonsters;
 
-    public Scene(int width, int height, List<VisualMonster> visualMonsterTypes, int numMonsters){
+    public Scene(int width, int height, String name, List<VisualMonster> visualMonsterTypes, int numMonsters){
         this.width = width;
         this.height = height;
+        this.name = name;
         this.visualMonsters = new ArrayList<>();
         this.visualMonsterTypes = visualMonsterTypes;
 
@@ -39,6 +42,7 @@ public class Scene {
 
     public void setBuildings(char[][] buildings) {
         this.buildings = buildings;
+        this.setSceneBlocks();
     }
 
     public char[][] getBuildings() {
@@ -49,8 +53,8 @@ public class Scene {
         return this.visualMonsters;
     }
 
-    public void draw(TextGraphics graphics, List<Monster> monsters){
-        this.drawScoreBar(graphics);
+    public void draw(TextGraphics graphics, List<Monster> monsters, int destroyedBlocks){
+        this.drawScoreBar(graphics, destroyedBlocks);
         this.drawSceneBuildings(graphics);
         this.drawVisualMonsters(graphics, monsters);
     }
@@ -73,17 +77,31 @@ public class Scene {
         }
     }
 
-    private void drawScoreBar(TextGraphics graphics) {
+    private void drawScoreBar(TextGraphics graphics, int destroyedBlocks) {
         graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
         graphics.drawLine(0, this.height - 4, 8, this.height - 4, '=');
 
         graphics.drawLine(this.width - 9, this.height - 4, this.width, this.height - 4, '=');
 
         graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
-        graphics.putString(10, this.height - 4, "Blocks: ");
-        graphics.putString(30, this.height - 4, "City: ");
+        graphics.putString(10, this.height - 4, this.blocksToString(destroyedBlocks));
+        graphics.putString(30, this.height - 4, "City: " + name);
         graphics.putString(this.width - 45, this.height - 4, "Score: ");
         graphics.putString(this.width - 20, this.height - 4, "Lives: ");
+    }
+
+    private String blocksToString(int destroyedBlocks){
+        return "Blocks: " + destroyedBlocks + "/" + this.sceneBlocks;
+    }
+
+    private void setSceneBlocks() {
+        this.sceneBlocks = 0;
+        for(int i = 0; i < this.buildings.length; i++){
+            for(int j = 0; j < this.buildings[i].length; j++){
+                if(this.buildings[i][j] != ' ')
+                    this.sceneBlocks++;
+            }
+        }
     }
 
     public int getWidth() {
@@ -94,13 +112,24 @@ public class Scene {
         return this.height;
     }
 
-    public void removeBuilding(int x, int y) {
-        this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
+    public int removeBuilding(int x, int y) {
+        int destroyedBlocks = 0;
 
-        if(x == 1)
+        if(this.buildings[this.height - y - 5][ this.width - x - 1] != ' '){
+            destroyedBlocks ++;
+            this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
+        }
+
+        if(x == 1 && this.buildings[this.height - y - 5][ this.width - x] != ' '){
+            destroyedBlocks ++;
             this.buildings[this.height - y - 5][ this.width - x] = ' ';
-        else if(x == this.width - 2){
+        }
+
+        else if(x == this.width - 2 && this.buildings[this.height - y - 5][ this.width - 2] != ' '){
+            destroyedBlocks ++;
             this.buildings[this.height - y - 5][0] = ' ';
         }
+
+        return destroyedBlocks;
     }
 }

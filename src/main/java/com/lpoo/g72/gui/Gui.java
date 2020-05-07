@@ -53,7 +53,7 @@ public class Gui {
         this.graphics = this.screen.newTextGraphics();
     }
 
-    public void draw(Helicopter helicopter, List<Monster> monsters) {
+    public void draw(Helicopter helicopter, List<Monster> monsters, int destroyedBlocks) {
 
         this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
         this.graphics.setForegroundColor(TextColor.Factory.fromString("#C0C0C0"));
@@ -63,7 +63,7 @@ public class Gui {
                 ' '
         );
 
-        this.scene.draw(graphics, monsters);
+        this.scene.draw(graphics, monsters, destroyedBlocks);
 
         this.visualHelicopter.draw(graphics,helicopter);
     }
