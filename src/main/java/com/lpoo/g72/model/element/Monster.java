@@ -4,14 +4,24 @@ import com.lpoo.g72.model.Position;
 
 public class Monster extends Element {
     private boolean alive;
+    private boolean resting;
 
     public Monster(Position position) {
         super(position);
         this.alive = true;
+        this.resting = false;
     }
 
     public boolean isAlive(){
         return this.alive;
+    }
+
+    public boolean isResting(){
+        return this.resting;
+    }
+
+    public void rest(){
+        this.resting = true;
     }
 
     public void kill(){
@@ -20,5 +30,6 @@ public class Monster extends Element {
 
     public void revive(){
         this.alive = true;
+        this.resting = false;
     }
 }

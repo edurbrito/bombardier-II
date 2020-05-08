@@ -80,6 +80,7 @@ public class Controller {
 
             this.commandInvoker.executeCommands();
 
+            this.monsterCollision();
             this.horizontalCollisions();
             this.verticalCollisions();
 
@@ -127,6 +128,18 @@ public class Controller {
 
                     this.destroyedBlocks += blocks;
                 }
+            }
+        }
+    }
+
+    private void monsterCollision(){
+        List<Monster> monsters = this.model.getMonsters();
+        Helicopter helicopter = this.model.getHelicopter();
+
+        for(Monster monster : monsters){
+            if(horizontalCollisionChecker(helicopter.getPosition(),monster.getPosition()) && !monster.isResting() && monster.isAlive()){
+                helicopter.loseLife();
+                monster.rest();
             }
         }
     }

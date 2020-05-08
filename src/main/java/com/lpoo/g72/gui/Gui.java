@@ -63,7 +63,7 @@ public class Gui {
                 ' '
         );
 
-        this.scene.draw(graphics, monsters, destroyedBlocks, helicopter.getScore());
+        this.scene.draw(graphics, monsters, destroyedBlocks, helicopter);
 
         this.visualHelicopter.draw(graphics,helicopter);
     }
