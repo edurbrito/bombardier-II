@@ -16,7 +16,7 @@ import java.util.Random;
 
 // TODO: Controller could be Observer of the HelicopterController just to know when to call the gui on drawing the NEW ROUND message with a sleep(1) delay
 
-public class Controller {
+public class Controller{
 
     private final Gui gui;
     private Model model;
@@ -34,7 +34,7 @@ public class Controller {
     public Controller(Gui gui, Model model) {
         this.gui = gui;
         this.model = model;
-        this.model.setHelicopter( new Helicopter(new Position(0,1), 50, 3));
+        this.model.setHelicopter( new Helicopter(new Position(0,1), 6, 3));
 
         // The scene should be set in the menu then when the user chooses the city
         this.initScene();
@@ -67,12 +67,12 @@ public class Controller {
         }
     }
 
-    public void start() throws IOException {
+    public void start() throws IOException, InterruptedException {
         this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
         this.run();
     }
 
-    public void run() throws IOException {
+    public void run() throws IOException, InterruptedException {
         Gui.Key key;
 
         while ((key = this.gui.getKey()) != Gui.Key.QUIT) {
@@ -87,6 +87,13 @@ public class Controller {
             this.horizontalCollisions();
             this.verticalCollisions();
 
+            Helicopter helicopter = this.model.getHelicopter();
+            if(helicopter.getLives() < 0 || this.buildingsCollisions()){
+                // TODO -> implement state patttern to alternate between game states (Game Over, Menu, Game, Results,...)
+                this.lostGame();
+                break;
+            }
+
             this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
             this.gui.refreshScreen();
         }
@@ -95,7 +102,7 @@ public class Controller {
 
     }
 
-    private void horizontalCollisions(){
+    private void horizontalCollisions() throws IOException, InterruptedException {
         List<Missile> horizontalMissiles = this.model.getHelicopter().getHorizontalMissiles();
         List<Monster> monsters = this.model.getMonsters();
         Helicopter helicopter = this.model.getHelicopter();
@@ -114,9 +121,6 @@ public class Controller {
                 monster.kill();
             }
         }
-
-        // TODO: Check here for collisions with buildings & End the Game
-        // TODO: Check here for the Heli lives & End the Game if Needed
     }
 
     private boolean horizontalCollisionChecker(Position pos1, Position pos2){
@@ -138,11 +142,23 @@ public class Controller {
                 }
             }
         }
-
         this.destroyedBlocks += blocks;
         this.score += this.pointsPerBlock * blocks;
+    }
 
-        // TODO: Check here for collisions with buildings & End the Game
+    private boolean buildingsCollisions() throws IOException, InterruptedException {
+        Helicopter helicopter = this.model.getHelicopter();
+        int heliSize = this.gui.getVisualHelicopter().getForm().length - 1;
+        if(this.gui.getScene().removeBuilding(helicopter.getX() + heliSize,helicopter.getY()) > 0){
+            return true;
+        }
+        return false;
+    }
+
+    void lostGame() throws IOException, InterruptedException {
+        this.gui.lostGame();
+        this.gui.refreshScreen();
+        Thread.sleep(5000);
     }
 
     void quit() {

@@ -105,6 +105,8 @@ public class Scene {
     public int removeBuilding(int x, int y) {
         int destroyedBlocks = 0;
 
+        if(x>= this.width) return 0;
+
         if(this.buildings[this.height - y - 5][ this.width - x - 1] != ' '){
             destroyedBlocks ++;
             this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
@@ -115,7 +117,7 @@ public class Scene {
             this.buildings[this.height - y - 5][ this.width - x] = ' ';
         }
 
-        else if(x == this.width - 2 && this.buildings[this.height - y - 5][ this.width - 2] != ' '){
+        else if(x == this.width - 2 && this.buildings[this.height - y - 5][0] != ' '){
             destroyedBlocks ++;
             this.buildings[this.height - y - 5][0] = ' ';
         }
