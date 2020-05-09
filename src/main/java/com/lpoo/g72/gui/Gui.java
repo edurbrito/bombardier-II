@@ -77,7 +77,7 @@ public class Gui {
 
         int sceneBlocks = this.scene.getSceneBlocks();
         destroyedBlocks = Math.min(destroyedBlocks,sceneBlocks);
-        
+
         graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
         graphics.putString(10, this.height - 4, "Blocks: " + destroyedBlocks + "/" + sceneBlocks);
         graphics.putString(30, this.height - 4, "City: " + this.scene.getName());

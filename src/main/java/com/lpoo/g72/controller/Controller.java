@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+// TODO: Controller could be Observer of the HelicopterController just to know when to call the gui on drawing the NEW ROUND message with a sleep(1) delay
+
 public class Controller {
 
     private final Gui gui;
@@ -85,7 +87,7 @@ public class Controller {
             this.horizontalCollisions();
             this.verticalCollisions();
 
-            this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), destroyedBlocks, this.score);
+            this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
             this.gui.refreshScreen();
         }
 
@@ -97,6 +99,7 @@ public class Controller {
         List<Missile> horizontalMissiles = this.model.getHelicopter().getHorizontalMissiles();
         List<Monster> monsters = this.model.getMonsters();
         Helicopter helicopter = this.model.getHelicopter();
+
         for(Monster monster : monsters){
             for(Missile missile : horizontalMissiles){
                 if(horizontalCollisionChecker(missile.getPosition(),monster.getPosition()) && monster.isAlive()){
@@ -110,8 +113,10 @@ public class Controller {
                 helicopter.loseLife();
                 monster.kill();
             }
-
         }
+
+        // TODO: Check here for collisions with buildings & End the Game
+        // TODO: Check here for the Heli lives & End the Game if Needed
     }
 
     private boolean horizontalCollisionChecker(Position pos1, Position pos2){
@@ -136,6 +141,8 @@ public class Controller {
 
         this.destroyedBlocks += blocks;
         this.score += this.pointsPerBlock * blocks;
+
+        // TODO: Check here for collisions with buildings & End the Game
     }
 
     void quit() {
