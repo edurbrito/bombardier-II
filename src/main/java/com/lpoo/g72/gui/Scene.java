@@ -4,10 +4,8 @@ import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.lpoo.g72.gui.visualElement.VisualMonster;
-import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -55,8 +53,7 @@ public class Scene {
         return this.visualMonsters;
     }
 
-    public void draw(TextGraphics graphics, List<Monster> monsters, int destroyedBlocks, Helicopter helicopter){
-        this.drawScoreBar(graphics, destroyedBlocks, helicopter.getScore(), helicopter.getLives());
+    public void draw(TextGraphics graphics, List<Monster> monsters){
         this.drawSceneBuildings(graphics);
         this.drawVisualMonsters(graphics, monsters);
     }
@@ -79,28 +76,6 @@ public class Scene {
         }
     }
 
-    private void drawScoreBar(TextGraphics graphics, int destroyedBlocks, float score, int lives) {
-        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
-        graphics.drawLine(0, this.height - 4, 8, this.height - 4, '=');
-        graphics.drawLine(this.width - 9, this.height - 4, this.width, this.height - 4, '=');
-
-        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
-        graphics.putString(10, this.height - 4, this.blocksToString(destroyedBlocks));
-        graphics.putString(30, this.height - 4, "City: " + name);
-        graphics.putString(this.width - 45, this.height - 4, scoreToString(score));
-        graphics.putString(this.width - 20, this.height - 4, "Lives: " + lives);
-    }
-
-    private String scoreToString(float score){
-        DecimalFormat df = new DecimalFormat("#.##");
-        String formatted = "Score: " + df.format(score);
-        return formatted;
-    }
-
-    private String blocksToString(int destroyedBlocks){
-        return "Blocks: " + destroyedBlocks + "/" + this.sceneBlocks;
-    }
-
     private void setSceneBlocks() {
         this.sceneBlocks = 0;
         for(int i = 0; i < this.buildings.length; i++){
@@ -109,6 +84,14 @@ public class Scene {
                     this.sceneBlocks++;
             }
         }
+    }
+
+    public int getSceneBlocks() {
+        return this.sceneBlocks;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getWidth() {

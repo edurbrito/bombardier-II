@@ -53,7 +53,7 @@ public class Gui {
         this.graphics = this.screen.newTextGraphics();
     }
 
-    public void draw(Helicopter helicopter, List<Monster> monsters, int destroyedBlocks) {
+    public void draw(Helicopter helicopter, List<Monster> monsters, int destroyedBlocks, int score) {
 
         this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
         this.graphics.setForegroundColor(TextColor.Factory.fromString("#C0C0C0"));
@@ -63,9 +63,26 @@ public class Gui {
                 ' '
         );
 
-        this.scene.draw(graphics, monsters, destroyedBlocks, helicopter);
+        this.scene.draw(graphics, monsters);
+
+        this.drawScoreBar(graphics, destroyedBlocks, score, helicopter.getLives());
 
         this.visualHelicopter.draw(graphics,helicopter);
+    }
+
+    private void drawScoreBar(TextGraphics graphics, int destroyedBlocks, int score, int lives) {
+        graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
+        graphics.drawLine(0, this.height - 4, 8, this.height - 4, '=');
+        graphics.drawLine(this.width - 9, this.height - 4, this.width, this.height - 4, '=');
+
+        int sceneBlocks = this.scene.getSceneBlocks();
+        destroyedBlocks = Math.min(destroyedBlocks,sceneBlocks);
+        
+        graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
+        graphics.putString(10, this.height - 4, "Blocks: " + destroyedBlocks + "/" + sceneBlocks);
+        graphics.putString(30, this.height - 4, "City: " + this.scene.getName());
+        graphics.putString(this.width - 45, this.height - 4, "Score: " + score);
+        graphics.putString(this.width - 20, this.height - 4, "Lives: " + lives);
     }
 
     public void refreshScreen() throws IOException {
