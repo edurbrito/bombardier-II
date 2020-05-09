@@ -137,7 +137,15 @@ public class Gui {
         screen.refresh();
     }
 
-    public void lostGame() {
+    public void drawMessage(List<String> message) {
+        this.graphics.setForegroundColor(TextColor.Factory.fromString("#b10000"));
+
+        for(int i = 0; i< message.size();i++){
+            this.graphics.putString((this.width-message.get(i).length()-2) / 2, this.height/4 + i, message.get(i));
+        }
+    }
+
+    public void newRound(){
         List<String> gameOver = this.getGameOverMessage();
         this.graphics.setForegroundColor(TextColor.Factory.fromString("#b10000"));
 
@@ -174,7 +182,7 @@ public class Gui {
         return this.visualHelicopter;
     }
 
-    private List<String> getGameOverMessage(){
+    public List<String> getGameOverMessage(){
         List<String> gameOver = new ArrayList<>();
         gameOver.add(" ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ \n");
         gameOver.add("██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗\n");
@@ -183,5 +191,16 @@ public class Gui {
         gameOver.add("╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║\n");
         gameOver.add(" ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝\n");
         return gameOver;
+    }
+
+    public List<String> getNewRoundMessage(){
+        List<String> newRound = new ArrayList<>();
+        newRound.add("███╗   ██╗███████╗██╗    ██╗    ██████╗  ██████╗ ██╗   ██╗███╗   ██╗██████╗ \n");
+        newRound.add("████╗  ██║██╔════╝██║    ██║    ██╔══██╗██╔═══██╗██║   ██║████╗  ██║██╔══██╗\n");
+        newRound.add("██╔██╗ ██║█████╗  ██║ █╗ ██║    ██████╔╝██║   ██║██║   ██║██╔██╗ ██║██║  ██║\n");
+        newRound.add("██║╚██╗██║██╔══╝  ██║███╗██║    ██╔══██╗██║   ██║██║   ██║██║╚██╗██║██║  ██║\n");
+        newRound.add("██║ ╚████║███████╗╚███╔███╔╝    ██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝\n");
+        newRound.add("╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ \n");
+        return newRound;
     }
 }

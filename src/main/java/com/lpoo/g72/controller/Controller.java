@@ -102,7 +102,7 @@ public class Controller{
 
     }
 
-    private void horizontalCollisions() throws IOException, InterruptedException {
+    private void horizontalCollisions(){
         List<Missile> horizontalMissiles = this.model.getHelicopter().getHorizontalMissiles();
         List<Monster> monsters = this.model.getMonsters();
         Helicopter helicopter = this.model.getHelicopter();
@@ -146,7 +146,7 @@ public class Controller{
         this.score += this.pointsPerBlock * blocks;
     }
 
-    private boolean buildingsCollisions() throws IOException, InterruptedException {
+    private boolean buildingsCollisions(){
         Helicopter helicopter = this.model.getHelicopter();
         int heliSize = this.gui.getVisualHelicopter().getForm().length - 1;
         if(this.gui.getScene().removeBuilding(helicopter.getX() + heliSize,helicopter.getY()) > 0){
@@ -156,7 +156,7 @@ public class Controller{
     }
 
     void lostGame() throws IOException, InterruptedException {
-        this.gui.lostGame();
+        this.gui.drawMessage(this.gui.getGameOverMessage());
         this.gui.refreshScreen();
         Thread.sleep(5000);
     }
