@@ -28,7 +28,4 @@ public class Model {
 
     public void addMonster(Monster monster){ this.monsters.add(monster);}
 
-    public void increaseScore(float points){
-        this.helicopter.increaseScore(points);
-    }
 }

@@ -8,13 +8,11 @@ import java.util.List;
 public class Helicopter extends Element{
     private List<Missile> verticalMissiles;
     private List<Missile> horizontalMissiles;
-    private float score;
     private int lives;
 
     public Helicopter(Position position, int verticalMissiles, int horizontalMissiles) {
         super(position);
         this.initMissiles(verticalMissiles, horizontalMissiles);
-        this.score = 0;
         this.lives = 2;
     }
 
@@ -81,14 +79,6 @@ public class Helicopter extends Element{
             }
         }
         return null;
-    }
-
-    public void increaseScore(float points){
-        this.score += points;
-    }
-
-    public float getScore(){
-        return this.score;
     }
 
     public void loseLife(){

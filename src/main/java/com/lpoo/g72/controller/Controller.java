@@ -20,8 +20,9 @@ public class Controller {
     private Model model;
 
     private int destroyedBlocks;
-    private float pointsPerBlock;
-    private float pointsPerMonster;
+    private int score;
+    private final int pointsPerBlock;
+    private final int pointsPerMonster;
 
     private HelicopterController helicopterController;
     private List<MonsterController> monsterControllers;
@@ -38,8 +39,9 @@ public class Controller {
         this.initElementControllers();
 
         this.destroyedBlocks = 0;
-        this.pointsPerBlock = 0.2f;
-        this.pointsPerMonster = 0.4f;
+        this.score = 0;
+        this.pointsPerBlock = 2;
+        this.pointsPerMonster = 1;
 
         this.commandInvoker = CommandInvoker.getInstance();
     }
@@ -64,7 +66,7 @@ public class Controller {
     }
 
     public void start() throws IOException {
-        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks);
+        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
         this.run();
     }
 
@@ -80,11 +82,10 @@ public class Controller {
 
             this.commandInvoker.executeCommands();
 
-            this.monsterCollision();
             this.horizontalCollisions();
             this.verticalCollisions();
 
-            this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), destroyedBlocks);
+            this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), destroyedBlocks, this.score);
             this.gui.refreshScreen();
         }
 
@@ -95,15 +96,21 @@ public class Controller {
     private void horizontalCollisions(){
         List<Missile> horizontalMissiles = this.model.getHelicopter().getHorizontalMissiles();
         List<Monster> monsters = this.model.getMonsters();
-
-        for(Missile missile : horizontalMissiles){
-            for(Monster monster : monsters){
+        Helicopter helicopter = this.model.getHelicopter();
+        for(Monster monster : monsters){
+            for(Missile missile : horizontalMissiles){
                 if(horizontalCollisionChecker(missile.getPosition(),monster.getPosition()) && monster.isAlive()){
                     missile.setExploded();
                     monster.kill();
-                    this.model.increaseScore( this.pointsPerMonster);
+                    this.score += this.pointsPerMonster;
                 }
             }
+
+            if(horizontalCollisionChecker(helicopter.getPosition(),monster.getPosition()) && monster.isAlive()){
+                helicopter.loseLife();
+                monster.kill();
+            }
+
         }
     }
 
@@ -117,31 +124,18 @@ public class Controller {
         List<Missile> verticalMissiles = this.model.getHelicopter().getVerticalMissiles();
 
         for(Missile missile : verticalMissiles){
-            if(!missile.hasExploded()){
+            if(!missile.hasExploded() && missile.isActive()){
                 int x = missile.getX();
                 int y = missile.getY() % (this.gui.getScene().getBuildings().length - 2);
 
                 for(int i = 0; i < 3; i++){
                     blocks += this.gui.getScene().removeBuilding( x, y + i);
-
-                    this.model.increaseScore(blocks * this.pointsPerBlock);
-
-                    this.destroyedBlocks += blocks;
                 }
             }
         }
-    }
 
-    private void monsterCollision(){
-        List<Monster> monsters = this.model.getMonsters();
-        Helicopter helicopter = this.model.getHelicopter();
-
-        for(Monster monster : monsters){
-            if(horizontalCollisionChecker(helicopter.getPosition(),monster.getPosition()) && !monster.isResting() && monster.isAlive()){
-                helicopter.loseLife();
-                monster.rest();
-            }
-        }
+        this.destroyedBlocks += blocks;
+        this.score += this.pointsPerBlock * blocks;
     }
 
     void quit() {
