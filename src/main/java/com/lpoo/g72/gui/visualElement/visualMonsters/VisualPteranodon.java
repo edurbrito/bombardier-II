@@ -1,8 +1,10 @@
-package com.lpoo.g72.gui.visualElement;
+package com.lpoo.g72.gui.visualElement.visualMonsters;
 
-public class VisualMonster extends VisualElement {
+import com.lpoo.g72.gui.visualElement.VisualElement;
 
-    public VisualMonster() {
+public class VisualPteranodon extends VisualElement {
+
+    public VisualPteranodon() {
         super(new char[]{'<','-','/','-','{'}, new String[]{"#2f4a28", "#28910d", "#2f4a28","#28910d","#2f4a28"});
     }
 

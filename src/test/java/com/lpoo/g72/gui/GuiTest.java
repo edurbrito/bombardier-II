@@ -1,7 +1,6 @@
 package com.lpoo.g72.gui;
 
-import com.lpoo.g72.gui.visualElement.VisualHelicopter;
-import com.lpoo.g72.gui.visualElement.VisualMonster;
+import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
@@ -36,10 +35,10 @@ public class GuiTest {
 
     @Test
     public void testDraw() throws IOException {
-        List<VisualMonster> visualMonsterList = new ArrayList<>();
-        visualMonsterList.add(new VisualMonster());
-        visualMonsterList.add(new VisualMonster());
-        visualMonsterList.add(new VisualMonster());
+        List<VisualPteranodon> visualPteranodonList = new ArrayList<>();
+        visualPteranodonList.add(new VisualPteranodon());
+        visualPteranodonList.add(new VisualPteranodon());
+        visualPteranodonList.add(new VisualPteranodon());
 
         Scene scene = Mockito.mock(Scene.class);
 

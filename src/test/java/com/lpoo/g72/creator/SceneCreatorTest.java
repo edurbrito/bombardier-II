@@ -1,6 +1,6 @@
 package com.lpoo.g72.creator;
 
-import com.lpoo.g72.gui.visualElement.VisualMonster;
+import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;
 import com.lpoo.g72.gui.Scene;
 import org.junit.Test;
 
@@ -34,11 +34,11 @@ public class SceneCreatorTest {
 
         @Override
         public Scene createScene(int width, int height) {
-            List<VisualMonster> visualMonsters = new ArrayList<>();
+            List<VisualPteranodon> visualPteranodons = new ArrayList<>();
 
-            visualMonsters.add(new VisualMonster());
+            visualPteranodons.add(new VisualPteranodon());
 
-            this.scene = new Scene(width, height, visualMonsters,3);
+            this.scene = new Scene(width, height, visualPteranodons,3);
             this.scene.setBuildings(this.generateBuildings(width,height,new Random(),4));
 
             return this.scene;
