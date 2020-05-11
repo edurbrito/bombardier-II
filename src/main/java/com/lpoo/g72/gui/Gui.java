@@ -81,7 +81,7 @@ public class Gui {
 
         this.graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
         this.graphics.putString(5, this.height - 3, "Blocks: " + destroyedBlocks + "/" + sceneBlocks);
-        this.graphics.putString(22, this.height - 3, "City: " + this.scene.getName());
+        this.graphics.putString(24, this.height - 3, "City: " + this.scene.getName());
         this.graphics.putString(39, this.height - 3, "Lives: " + helicopter.getLives());
         this.graphics.putString(this.width - 48, this.height - 3, "Missiles: " + helicopter.unusedVerticalMissiles());
         this.graphics.putString(this.width - 31, this.height - 3, "Bombs: " + helicopter.unusedHorizontalMissiles());

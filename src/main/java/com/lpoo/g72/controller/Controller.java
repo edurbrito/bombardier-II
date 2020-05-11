@@ -2,6 +2,7 @@ package com.lpoo.g72.controller;
 
 import com.lpoo.g72.commands.CommandInvoker;
 import com.lpoo.g72.creator.LisbonSceneCreator;
+import com.lpoo.g72.creator.RandomSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
@@ -34,10 +35,14 @@ public class Controller{
     public Controller(Gui gui, Model model) {
         this.gui = gui;
         this.model = model;
-        this.model.setHelicopter( new Helicopter(new Position(0,1), 6, 3));
 
         // The scene should be set in the menu then when the user chooses the city
         this.initScene();
+
+        int missiles = this.gui.getScene().getVisualMonsters().size() / 2;
+        int bombs  = this.gui.getScene().getSceneBlocks()  / 80;
+        this.model.setHelicopter( new Helicopter(new Position(0,1),bombs,missiles));
+
         this.initElementControllers();
 
         this.destroyedBlocks = 0;
@@ -49,9 +54,9 @@ public class Controller{
     }
 
     private void initScene() {
-        this.gui.setScene(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+        this.gui.setScene(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
 
-        for(int i = 0; i< this.gui.getScene().getVisualMonsters().size(); i++){
+        for(int i = 0; i < this.gui.getScene().getVisualMonsters().size(); i++){
             this.model.addMonster(new Monster(new Position(this.gui.getScene().getWidth() + new Random().nextInt(20),i*2)));
         }
     }
