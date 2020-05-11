@@ -4,7 +4,7 @@ import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.gui.visualElement.VisualElementStub;
 import com.lpoo.g72.gui.visualElement.VisualHelicopter;
-import com.lpoo.g72.gui.visualElement.VisualMonster;
+import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;
 import com.lpoo.g72.model.ElementStub;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Element;
@@ -91,10 +91,10 @@ public class ElementControllerTest {
 
     @Test
     public void testMonsterController(){
-        VisualMonster visualMonster = Mockito.spy(new VisualMonster());
+        VisualPteranodon visualPteranodon = Mockito.spy(new VisualPteranodon());
         Monster monster = Mockito.spy(new Monster(new Position(0,1)));
 
-        this.monsterController = Mockito.spy(new MonsterController(visualMonster,monster,10));
+        this.monsterController = Mockito.spy(new MonsterController(visualPteranodon,monster,10));
 
         assertEquals(10,this.monsterController.maxWidth);
         assertEquals(monster.getY(),this.monsterController.altitude);
@@ -110,7 +110,7 @@ public class ElementControllerTest {
         if(lastInstant != this.monsterController.lastForwardMove){
             Mockito.verify(monster.getY(),Mockito.times(1));
 
-            Mockito.verify(visualMonster,Mockito.times(1)).animation();
+            Mockito.verify(visualPteranodon,Mockito.times(1)).animation();
             assertNotEquals(lastInstant,this.monsterController.lastForwardMove);
         }
 

@@ -1,7 +1,6 @@
 package com.lpoo.g72.controller;
 
 import com.lpoo.g72.commands.CommandInvoker;
-import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.creator.RandomSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.model.Model;
@@ -15,9 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-// TODO: Controller could be Observer of the HelicopterController just to know when to call the gui on drawing the NEW ROUND message with a sleep(1) delay
-
-public class Controller{
+public class Controller implements Observer{
 
     private final Gui gui;
     private Model model;
@@ -68,14 +65,16 @@ public class Controller{
             this.monsterControllers.add(new MonsterController(this.gui.getScene().getVisualMonsters().get(i), this.model.getMonsters().get(i), this.gui.getScene().getWidth()-1));
             this.helicopterController.addObserver(this.monsterControllers.get(i));
         }
+
+        this.helicopterController.addObserver(this);
     }
 
-    public void start() throws IOException, InterruptedException {
+    public void start() throws IOException {
         this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
         this.run();
     }
 
-    public void run() throws IOException, InterruptedException {
+    public void run() throws IOException {
         Gui.Key key;
 
         while ((key = this.gui.getKey()) != Gui.Key.QUIT) {
@@ -158,15 +157,30 @@ public class Controller{
         return false;
     }
 
-    void lostGame() throws IOException, InterruptedException {
-        this.gui.drawMessage(this.gui.getGameOverMessage());
-        this.gui.refreshScreen();
-        Thread.sleep(5000);
+    void lostGame() {
+        try{
+            this.gui.drawMessage(this.gui.getGameOverMessage(), "#b10000","Score: " + score);
+            this.gui.refreshScreen();
+            Thread.sleep(2000);
+        } catch (Exception e){
+
+        }
     }
 
     void quit() {
         try {
             this.gui.closeScreen();
         } catch (IOException e) {}
+    }
+
+    @Override
+    public void update(int info){
+        try{
+            this.gui.drawMessage(this.gui.getNewRoundMessage(),"#0000b1","Current Altitude: " + (this.gui.getHeight() - info));
+            this.gui.refreshScreen();
+            Thread.sleep(800);
+        } catch (Exception e){
+
+        }
     }
 }

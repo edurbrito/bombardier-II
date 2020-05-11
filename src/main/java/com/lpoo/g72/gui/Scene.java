@@ -3,12 +3,10 @@ package com.lpoo.g72.gui;
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.lpoo.g72.gui.visualElement.VisualMonster;
+import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.model.element.Monster;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Scene {
     private final int width;
@@ -16,9 +14,9 @@ public class Scene {
     private char[][] buildings;
     private int sceneBlocks;
     private String name;
-    private List<VisualMonster> visualMonsters;
+    private List<VisualElement> visualMonsters;
 
-    public Scene(int width, int height, String name, List<VisualMonster> visualMonsters){
+    public Scene(int width, int height, String name, List<VisualElement> visualMonsters){
         this.width = width;
         this.height = height;
         this.name = name;
@@ -34,7 +32,7 @@ public class Scene {
         return this.buildings;
     }
 
-    public List<VisualMonster> getVisualMonsters() {
+    public List<VisualElement> getVisualMonsters() {
         return this.visualMonsters;
     }
 

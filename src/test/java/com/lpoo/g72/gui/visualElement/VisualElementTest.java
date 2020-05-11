@@ -1,7 +1,7 @@
 package com.lpoo.g72.gui.visualElement;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.lpoo.g72.model.ElementStub;
+import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Element;
 import com.lpoo.g72.model.element.Helicopter;
@@ -159,7 +159,7 @@ public class VisualElementTest {
         Mockito.clearInvocations(position);
         Mockito.clearInvocations(graphics);
 
-        this.visualElement = new VisualMonster();
+        this.visualElement = new VisualPteranodon();
 
         this.visualElement.draw(graphics,element);
 
@@ -201,7 +201,7 @@ public class VisualElementTest {
 
     @Test
     public void testVisualMonster(){
-        visualElement = new VisualMonster();
+        visualElement = new VisualPteranodon();
 
         assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
 
@@ -254,7 +254,7 @@ public class VisualElementTest {
 
     @Test
     public void testConcreteAnimationsVM(){
-        visualElement = new VisualMonster();
+        visualElement = new VisualPteranodon();
 
         assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
 

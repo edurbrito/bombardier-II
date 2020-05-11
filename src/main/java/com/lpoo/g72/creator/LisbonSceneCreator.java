@@ -1,7 +1,9 @@
 package com.lpoo.g72.creator;
 
 import com.lpoo.g72.gui.Scene;
-import com.lpoo.g72.gui.visualElement.VisualMonster;
+import com.lpoo.g72.gui.visualElement.VisualElement;
+import com.lpoo.g72.gui.visualElement.visualMonsters.VisualDimorphodon;
+import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +14,12 @@ public class LisbonSceneCreator extends SceneCreator {
     @Override
     public Scene createScene(int width, int height) {
 
-        List<VisualMonster> visualMonsters = new ArrayList<>();
+        List<VisualElement> visualMonsters = new ArrayList<>();
 
-        for(int i = 0; i < 3; i++) {
-            visualMonsters.add(new VisualMonster());
-        }
+        visualMonsters.add(new VisualPteranodon());
+        visualMonsters.add(new VisualPteranodon());
+        visualMonsters.add(new VisualDimorphodon());
+
 
         this.scene = new Scene(width, height, "Lisbon", visualMonsters);
 

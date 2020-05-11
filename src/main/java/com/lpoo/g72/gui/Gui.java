@@ -139,11 +139,20 @@ public class Gui {
         screen.refresh();
     }
 
-    public void drawMessage(List<String> message) {
-        this.graphics.setForegroundColor(TextColor.Factory.fromString("#b10000"));
+    public void drawMessage(List<String> message, String hexColor, String additionalInfo) {
+        this.graphics.setForegroundColor(TextColor.Factory.fromString(hexColor));
 
         for(int i = 0; i< message.size();i++){
             this.graphics.putString((this.width-message.get(i).length()-2) / 2, this.height/4 + i, message.get(i));
+        }
+
+        if(!additionalInfo.isEmpty()){
+            this.graphics.fillRectangle(
+                    new TerminalPosition((this.width-additionalInfo.length()-2) / 2, this.height/4 + message.size() + 3),
+                    new TerminalSize(additionalInfo.length(), 3),
+                    '█'
+            );
+            this.graphics.putString((this.width-additionalInfo.length()-2) / 2, this.height/4 + message.size() + 4, additionalInfo);
         }
     }
 
@@ -184,5 +193,16 @@ public class Gui {
         gameOver.add("╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║\n");
         gameOver.add(" ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝\n");
         return gameOver;
+    }
+
+    public List<String> getNewRoundMessage(){
+        List<String> newRound = new ArrayList<>();
+        newRound.add("███╗   ██╗███████╗██╗    ██╗    ██████╗  ██████╗ ██╗   ██╗███╗   ██╗██████╗ \n");
+        newRound.add("████╗  ██║██╔════╝██║    ██║    ██╔══██╗██╔═══██╗██║   ██║████╗  ██║██╔══██╗\n");
+        newRound.add("██╔██╗ ██║█████╗  ██║ █╗ ██║    ██████╔╝██║   ██║██║   ██║██╔██╗ ██║██║  ██║\n");
+        newRound.add("██║╚██╗██║██╔══╝  ██║███╗██║    ██╔══██╗██║   ██║██║   ██║██║╚██╗██║██║  ██║\n");
+        newRound.add("██║ ╚████║███████╗╚███╔███╔╝    ██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝\n");
+        newRound.add("╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ \n");
+        return newRound;
     }
 }
