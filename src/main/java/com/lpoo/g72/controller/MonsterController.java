@@ -17,7 +17,7 @@ public class MonsterController extends ElementController implements Observer{
     private boolean newRound;
 
     public MonsterController(VisualMonster visualMonster, Monster monster, int maxWidth) {
-        super(maxWidth, monster.getPosition().getY(),0.1 * Math.pow(10,9));
+        super(maxWidth, monster.getPosition().getY(),0.12 * Math.pow(10,9));
 
         this.monster = monster;
         this.visualMonster = visualMonster;
@@ -46,7 +46,7 @@ public class MonsterController extends ElementController implements Observer{
     @Override
     public void update(int info) {
         this.newRound = true;
-        this.altitude = info + new Random().nextInt(6) - 2;
+        this.altitude = info + new Random().nextInt(3) - 1;
         this.monster.setPosition(new Position(this.maxWidth + new Random().nextInt(30),this.altitude));
 
         this.monster.revive();

@@ -83,8 +83,8 @@ public class Gui {
         this.graphics.putString(5, this.height - 3, "Blocks: " + destroyedBlocks + "/" + sceneBlocks);
         this.graphics.putString(24, this.height - 3, "City: " + this.scene.getName());
         this.graphics.putString(39, this.height - 3, "Lives: " + helicopter.getLives());
-        this.graphics.putString(this.width - 48, this.height - 3, "Missiles: " + helicopter.unusedVerticalMissiles());
-        this.graphics.putString(this.width - 31, this.height - 3, "Bombs: " + helicopter.unusedHorizontalMissiles());
+        this.graphics.putString(this.width - 48, this.height - 3, "Missiles: " + helicopter.unusedHorizontalMissiles());
+        this.graphics.putString(this.width - 31, this.height - 3, "Bombs: " + helicopter.unusedVerticalMissiles());
         this.graphics.putString(this.width - 17, this.height - 3, "Score: " + score);
     }
 

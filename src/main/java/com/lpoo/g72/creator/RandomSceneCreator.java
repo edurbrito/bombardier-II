@@ -14,11 +14,13 @@ public class RandomSceneCreator extends SceneCreator {
 
         List<VisualMonster> visualMonsters = new ArrayList<>();
 
-        visualMonsters.add(new VisualMonster());
+        for(int i = 0; i < 4; i++){
+            visualMonsters.add(new VisualMonster());
+        }
 
-        this.scene = new Scene(width, height, "Random", visualMonsters,4);
+        this.scene = new Scene(width, height, "Random", visualMonsters);
 
-        this.scene.setBuildings(this.generateBuildings(width,height, new Random(),3));
+        this.scene.setBuildings(this.generateBuildings(width,height, new Random(),4));
 
         return this.scene;
     }

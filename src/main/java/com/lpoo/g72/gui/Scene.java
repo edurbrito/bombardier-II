@@ -16,28 +16,13 @@ public class Scene {
     private char[][] buildings;
     private int sceneBlocks;
     private String name;
-    private List<VisualMonster> visualMonsterTypes;
     private List<VisualMonster> visualMonsters;
 
-    public Scene(int width, int height, String name, List<VisualMonster> visualMonsterTypes, int numMonsters){
+    public Scene(int width, int height, String name, List<VisualMonster> visualMonsters){
         this.width = width;
         this.height = height;
         this.name = name;
-        this.visualMonsters = new ArrayList<>();
-        this.visualMonsterTypes = visualMonsterTypes;
-
-        this.setVisualMonsters(numMonsters);
-    }
-
-    public void setVisualMonsters(int numMonsters) {
-        int pos;
-        Random r = new Random();
-        this.visualMonsters.clear();
-
-        for(int i = 0; i < numMonsters; i++){
-            pos = r.nextInt(this.visualMonsterTypes.size());
-            this.visualMonsters.add(this.visualMonsterTypes.get(pos));
-        }
+        this.visualMonsters = visualMonsters;
     }
 
     public void setBuildings(char[][] buildings) {

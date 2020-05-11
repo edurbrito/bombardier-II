@@ -39,9 +39,7 @@ public class Controller{
         // The scene should be set in the menu then when the user chooses the city
         this.initScene();
 
-        int missiles = this.gui.getScene().getVisualMonsters().size() / 2;
-        int bombs  = this.gui.getScene().getSceneBlocks()  / 80;
-        this.model.setHelicopter( new Helicopter(new Position(0,1),bombs,missiles));
+        this.model.setHelicopter( new Helicopter(new Position(0,1),6,2));
 
         this.initElementControllers();
 
@@ -57,7 +55,7 @@ public class Controller{
         this.gui.setScene(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
 
         for(int i = 0; i < this.gui.getScene().getVisualMonsters().size(); i++){
-            this.model.addMonster(new Monster(new Position(this.gui.getScene().getWidth() + new Random().nextInt(20),i*2)));
+            this.model.addMonster(new Monster(new Position(this.gui.getScene().getWidth() + new Random().nextInt(20),i%2)));
         }
     }
 
