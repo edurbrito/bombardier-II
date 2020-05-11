@@ -28,4 +28,7 @@ public class Model {
 
     public void addMonster(Monster monster){ this.monsters.add(monster);}
 
+    public void deleteMonsters(){
+        this.monsters.clear();
+    }
 }

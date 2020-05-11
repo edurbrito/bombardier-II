@@ -1,9 +1,14 @@
 package com.lpoo.g72.controller;
 
 import com.lpoo.g72.commands.CommandInvoker;
+import com.lpoo.g72.controller.states.EndGame;
+import com.lpoo.g72.controller.states.GameState;
+import com.lpoo.g72.controller.states.MenuState;
+import com.lpoo.g72.controller.states.State;
 import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.creator.RandomSceneCreator;
 import com.lpoo.g72.gui.Gui;
+import com.lpoo.g72.gui.Scene;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Helicopter;
@@ -21,6 +26,7 @@ public class Controller{
 
     private final Gui gui;
     private Model model;
+    private State state;
 
     private int destroyedBlocks;
     private int score;
@@ -36,12 +42,7 @@ public class Controller{
         this.gui = gui;
         this.model = model;
 
-        // The scene should be set in the menu then when the user chooses the city
-        this.initScene();
-
-        this.model.setHelicopter( new Helicopter(new Position(0,1),6,2));
-
-        this.initElementControllers();
+        this.state = new MenuState(this);
 
         this.destroyedBlocks = 0;
         this.score = 0;
@@ -51,12 +52,19 @@ public class Controller{
         this.commandInvoker = CommandInvoker.getInstance();
     }
 
-    private void initScene() {
-        this.gui.setScene(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+    public void resetModel(){
+        this.model.setHelicopter( new Helicopter(new Position(0,1),6,2));
+        this.model.deleteMonsters();
+    }
+
+    public void initScene(Scene scene) {
+        this.gui.setScene(scene);
 
         for(int i = 0; i < this.gui.getScene().getVisualMonsters().size(); i++){
             this.model.addMonster(new Monster(new Position(this.gui.getScene().getWidth() + new Random().nextInt(20),i%2)));
         }
+
+        this.initElementControllers();
     }
 
     private void initElementControllers() {
@@ -70,39 +78,70 @@ public class Controller{
         }
     }
 
-    public void start() throws IOException, InterruptedException {
-        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
-        this.run();
-    }
+    public void run(){
 
-    public void run() throws IOException, InterruptedException {
-        Gui.Key key;
-
-        while ((key = this.gui.getKey()) != Gui.Key.QUIT) {
-
-            this.helicopterController.run(key);
-
-            for(MonsterController monsterController : this.monsterControllers)
-                monsterController.move();
-
-            this.commandInvoker.executeCommands();
-
-            this.horizontalCollisions();
-            this.verticalCollisions();
-
-            Helicopter helicopter = this.model.getHelicopter();
-            if(helicopter.getLives() < 0 || this.buildingsCollisions()){
-                // TODO -> implement state patttern to alternate between game states (Game Over, Menu, Game, Results,...)
-                this.lostGame();
+        while (true) {
+            try {
+                this.state.action(this.gui.getKey());
+            } catch (Exception e) {
                 break;
             }
+        }
+    }
 
-            this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
-            this.gui.refreshScreen();
+    public void play(Gui.Key key) throws IOException {
+
+        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
+
+        this.helicopterController.run(key);
+
+        for(MonsterController monsterController : this.monsterControllers)
+            monsterController.move();
+
+        this.commandInvoker.executeCommands();
+
+        this.horizontalCollisions();
+        this.verticalCollisions();
+
+        Helicopter helicopter = this.model.getHelicopter();
+        if(helicopter.getLives() < 0 || this.buildingsCollisions()){
+            this.state = new EndGame(this);
+            return;
         }
 
-        this.quit();
+        this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
+        this.gui.refreshScreen();
 
+
+        if(key == Gui.Key.QUIT){
+            this.state = new MenuState(this);
+        }
+    }
+
+    public void menu(Gui.Key key) throws IOException {
+        this.resetModel();
+        this.gui.drawMenu();
+        this.gui.refreshScreen();
+
+        if(key == Gui.Key.QUIT){
+            this.quit();
+        }
+        else if(key == Gui.Key.SPACE){
+            this.initScene(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+            this.changeState(new GameState(this));
+        }
+    }
+
+    public void endGame(Gui.Key key) throws IOException {
+        if(this.model.getHelicopter().getLives() < 0){
+            this.gui.drawMessage(this.gui.getGameOverMessage());
+        }
+
+        this.gui.refreshScreen();
+
+        if(key == Gui.Key.QUIT){
+            this.state = new MenuState(this);
+        }
     }
 
     private void horizontalCollisions(){
@@ -158,15 +197,12 @@ public class Controller{
         return false;
     }
 
-    void lostGame() throws IOException, InterruptedException {
-        this.gui.drawMessage(this.gui.getGameOverMessage());
-        this.gui.refreshScreen();
-        Thread.sleep(5000);
+    void quit() throws IOException {
+        this.gui.closeScreen();
+        throw new IOException();
     }
 
-    void quit() {
-        try {
-            this.gui.closeScreen();
-        } catch (IOException e) {}
+    public void changeState(State state) {
+        this.state = state;
     }
 }

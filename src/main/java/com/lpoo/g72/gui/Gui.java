@@ -114,12 +114,8 @@ public class Gui {
     }
 
     public void drawMenu() throws IOException {
-        screen.clear();
-
-        TextGraphics graphics = this.screen.newTextGraphics();
-
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#A0A0A0"));
-        graphics.fillRectangle(
+        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#A0A0A0"));
+        this.graphics.fillRectangle(
                 new TerminalPosition(0, 0),
                 new TerminalSize(this.width, this.height),
                 ' '
@@ -129,14 +125,12 @@ public class Gui {
         int start = screen.getTerminalSize().getColumns() / 2 - 5;
         int height = screen.getTerminalSize().getRows() / 4;
 
-        graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
-        graphics.enableModifiers(SGR.BOLD);
+        this.graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
+        this.graphics.enableModifiers(SGR.BOLD);
 
         for (char character : gameOver.toCharArray()) {
             graphics.putString(new TerminalPosition(start++, height), String.valueOf(character));
         }
-
-        screen.refresh();
     }
 
     public void drawMessage(List<String> message) {
