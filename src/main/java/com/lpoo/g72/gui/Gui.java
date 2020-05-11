@@ -66,24 +66,26 @@ public class Gui {
 
         this.scene.draw(this.graphics, monsters);
 
-        this.drawScoreBar(destroyedBlocks, score, helicopter.getLives());
+        this.drawScoreBar(destroyedBlocks, score, helicopter);
 
         this.visualHelicopter.draw(this.graphics,helicopter);
     }
 
-    private void drawScoreBar(int destroyedBlocks, int score, int lives) {
-        this.graphics.setForegroundColor(TextColor.Factory.fromString("#e60000"));
-        this.graphics.drawLine(0, this.height - 4, 8, this.height - 4, '=');
-        this.graphics.drawLine(this.width - 9, this.height - 4, this.width, this.height - 4, '=');
+    private void drawScoreBar(int destroyedBlocks, int score, Helicopter helicopter) {
+        this.graphics.setForegroundColor(TextColor.Factory.fromString("#ce0000"));
+
+        this.graphics.drawLine(0, this.height - 4, this.width, this.height - 4, '▘');
 
         int sceneBlocks = this.scene.getSceneBlocks();
         destroyedBlocks = Math.min(destroyedBlocks,sceneBlocks);
 
         this.graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
-        this.graphics.putString(10, this.height - 4, "Blocks: " + destroyedBlocks + "/" + sceneBlocks);
-        this.graphics.putString(30, this.height - 4, "City: " + this.scene.getName());
-        this.graphics.putString(this.width - 45, this.height - 4, "Score: " + score);
-        this.graphics.putString(this.width - 20, this.height - 4, "Lives: " + lives);
+        this.graphics.putString(5, this.height - 3, "Blocks: " + destroyedBlocks + "/" + sceneBlocks);
+        this.graphics.putString(22, this.height - 3, "City: " + this.scene.getName());
+        this.graphics.putString(39, this.height - 3, "Lives: " + helicopter.getLives());
+        this.graphics.putString(this.width - 48, this.height - 3, "Missiles: " + helicopter.unusedVerticalMissiles());
+        this.graphics.putString(this.width - 31, this.height - 3, "Bombs: " + helicopter.unusedHorizontalMissiles());
+        this.graphics.putString(this.width - 17, this.height - 3, "Score: " + score);
     }
 
     public void refreshScreen() throws IOException {
@@ -145,15 +147,6 @@ public class Gui {
         }
     }
 
-    public void newRound(){
-        List<String> gameOver = this.getGameOverMessage();
-        this.graphics.setForegroundColor(TextColor.Factory.fromString("#b10000"));
-
-        for(int i = 0; i< gameOver.size();i++){
-            this.graphics.putString((this.width-gameOver.get(i).length()-2) / 2, this.height/4 + i, gameOver.get(i));
-        }
-    }
-
     public void closeScreen() throws IOException {
         this.screen.close();
     }
@@ -191,16 +184,5 @@ public class Gui {
         gameOver.add("╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║\n");
         gameOver.add(" ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝\n");
         return gameOver;
-    }
-
-    public List<String> getNewRoundMessage(){
-        List<String> newRound = new ArrayList<>();
-        newRound.add("███╗   ██╗███████╗██╗    ██╗    ██████╗  ██████╗ ██╗   ██╗███╗   ██╗██████╗ \n");
-        newRound.add("████╗  ██║██╔════╝██║    ██║    ██╔══██╗██╔═══██╗██║   ██║████╗  ██║██╔══██╗\n");
-        newRound.add("██╔██╗ ██║█████╗  ██║ █╗ ██║    ██████╔╝██║   ██║██║   ██║██╔██╗ ██║██║  ██║\n");
-        newRound.add("██║╚██╗██║██╔══╝  ██║███╗██║    ██╔══██╗██║   ██║██║   ██║██║╚██╗██║██║  ██║\n");
-        newRound.add("██║ ╚████║███████╗╚███╔███╔╝    ██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝\n");
-        newRound.add("╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ \n");
-        return newRound;
     }
 }

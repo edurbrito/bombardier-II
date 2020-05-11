@@ -63,6 +63,22 @@ public class Helicopter extends Element{
         return activeMissiles;
     }
 
+    public int unusedHorizontalMissiles() {
+        int i = 0;
+        for(Missile missile : this.horizontalMissiles){
+            if(!missile.isActive()) i++;
+        }
+        return i;
+    }
+
+    public int unusedVerticalMissiles() {
+        int i = 0;
+        for(Missile missile : this.verticalMissiles){
+            if(!missile.isActive()) i++;
+        }
+        return i;
+    }
+
     public Missile drop() {
         for(Missile missile : this.verticalMissiles){
             if(!missile.isActive()){
