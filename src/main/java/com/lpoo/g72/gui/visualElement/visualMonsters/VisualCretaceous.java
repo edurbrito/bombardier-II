@@ -5,7 +5,7 @@ import com.lpoo.g72.gui.visualElement.VisualElement;
 public class VisualCretaceous extends VisualElement {
 
     public VisualCretaceous() {
-        super(new char[]{'>','-','§','-','-'}, new String[]{"#2f4a28", "#28910d", "#2f4a28","#28910d","#2f4a28"} );
+        super(new char[]{'>','-','§','-','-'}, new String[]{"#870334", "#CD366E", "#870334","#CD366E","#870334"} );
     }
 
     @Override

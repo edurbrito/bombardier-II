@@ -5,7 +5,7 @@ import com.lpoo.g72.gui.visualElement.VisualElement;
 public class VisualDimorphodon extends VisualElement {
 
     public VisualDimorphodon() {
-        super(new char[]{'=','-','/','-','~'}, new String[]{"#2f4a28", "#28910d", "#2f4a28","#28910d","#2f4a28"} );
+        super(new char[]{'=','-','/','-','~'}, new String[]{"#054bc1", "#05A9C1", "#054bc1","#05A9C1","#054bc1"} );
     }
 
     @Override

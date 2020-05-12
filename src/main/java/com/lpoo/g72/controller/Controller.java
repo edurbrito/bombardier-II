@@ -6,6 +6,7 @@ import com.lpoo.g72.controller.states.GameState;
 import com.lpoo.g72.controller.states.MenuState;
 import com.lpoo.g72.controller.states.State;
 import com.lpoo.g72.creator.LisbonSceneCreator;
+import com.lpoo.g72.creator.RandomSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.gui.Scene;
 import com.lpoo.g72.model.Model;
@@ -90,6 +91,10 @@ public class Controller implements Observer{
 
     public void play(Gui.Key key) throws IOException {
 
+        if(key == Gui.Key.QUIT){
+            this.state = new MenuState(this);
+        }
+
         this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
 
         this.helicopterController.run(key);
@@ -110,11 +115,6 @@ public class Controller implements Observer{
 
         this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
         this.gui.refreshScreen();
-
-
-        if(key == Gui.Key.QUIT){
-            this.state = new MenuState(this);
-        }
     }
 
     public void menu(Gui.Key key) throws IOException {

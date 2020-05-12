@@ -114,23 +114,14 @@ public class Gui {
     }
 
     public void drawMenu() throws IOException {
-        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#A0A0A0"));
+        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
         this.graphics.fillRectangle(
                 new TerminalPosition(0, 0),
                 new TerminalSize(this.width, this.height),
                 ' '
         );
-
-        String gameOver = "Main Menu";
-        int start = screen.getTerminalSize().getColumns() / 2 - 5;
-        int height = screen.getTerminalSize().getRows() / 4;
-
-        this.graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
-        this.graphics.enableModifiers(SGR.BOLD);
-
-        for (char character : gameOver.toCharArray()) {
-            graphics.putString(new TerminalPosition(start++, height), String.valueOf(character));
-        }
+        graphics.enableModifiers(SGR.BOLD);
+        this.drawMessage(this.getGameTitle(), "#00009f", "THE REVENGE OF THE SKYSCRAPPERS");
     }
 
     public void drawMessage(List<String> message, String hexColor, String additionalInfo) {
@@ -198,5 +189,16 @@ public class Gui {
         newRound.add("██║ ╚████║███████╗╚███╔███╔╝    ██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝\n");
         newRound.add("╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ \n");
         return newRound;
+    }
+
+    public List<String> getGameTitle(){
+        List<String> gameName = new ArrayList<>();
+        gameName.add("██████╗  ██████╗ ███╗   ███╗██████╗  █████╗ ██████╗ ██████╗ ██╗███████╗██████╗     ██╗██╗");
+        gameName.add("██╔══██╗██╔═══██╗████╗ ████║██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║██╔════╝██╔══██╗    ██║██║");
+        gameName.add("██████╔╝██║   ██║██╔████╔██║██████╔╝███████║██████╔╝██║  ██║██║█████╗  ██████╔╝    ██║██║");
+        gameName.add("██╔══██╗██║   ██║██║╚██╔╝██║██╔══██╗██╔══██║██╔══██╗██║  ██║██║██╔══╝  ██╔══██╗    ██║██║");
+        gameName.add("██████╔╝╚██████╔╝██║ ╚═╝ ██║██████╔╝██║  ██║██║  ██║██████╔╝██║███████╗██║  ██║    ██║██║");
+        gameName.add("╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝╚══════╝╚═╝  ╚═╝    ╚═╝╚═╝");
+        return gameName;
     }
 }
