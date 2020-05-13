@@ -6,6 +6,7 @@ import com.lpoo.g72.controller.states.GameState;
 import com.lpoo.g72.controller.states.MenuState;
 import com.lpoo.g72.controller.states.State;
 import com.lpoo.g72.creator.LisbonSceneCreator;
+import com.lpoo.g72.creator.OportoSceneCreator;
 import com.lpoo.g72.creator.RandomSceneCreator;
 import com.lpoo.g72.gui.Gui;
 import com.lpoo.g72.gui.Scene;
@@ -31,6 +32,9 @@ public class Controller implements Observer{
     private final int pointsPerBlock;
     private final int pointsPerMonster;
 
+    private int selectedScene;
+    private List<Scene> scenes;
+
     private HelicopterController helicopterController;
     private List<MonsterController> monsterControllers;
 
@@ -41,6 +45,8 @@ public class Controller implements Observer{
         this.model = model;
 
         this.state = new MenuState(this);
+        this.selectedScene = 0;
+        this.setScenes();
 
         this.destroyedBlocks = 0;
         this.score = 0;
@@ -50,11 +56,6 @@ public class Controller implements Observer{
         this.commandInvoker = CommandInvoker.getInstance();
     }
 
-    public void resetModel(){
-        this.model.setHelicopter( new Helicopter(new Position(0,1),6,2));
-        this.model.deleteMonsters();
-    }
-
     public void initScene(Scene scene) {
         this.gui.setScene(scene);
 
@@ -62,6 +63,8 @@ public class Controller implements Observer{
             this.model.addMonster(new Monster(new Position(this.gui.getScene().getWidth() + new Random().nextInt(20),i%2)));
         }
 
+        this.score = 0;
+        this.destroyedBlocks = 0;
         this.initElementControllers();
     }
 
@@ -107,33 +110,45 @@ public class Controller implements Observer{
         this.horizontalCollisions();
         this.verticalCollisions();
 
+        this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
+
         Helicopter helicopter = this.model.getHelicopter();
-        if(helicopter.getLives() < 0 || this.buildingsCollisions()){
+        if(helicopter.getLives() < 0 || this.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks()){
             this.state = new EndGame(this);
             return;
         }
 
-        this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
         this.gui.refreshScreen();
     }
 
     public void menu(Gui.Key key) throws IOException {
-        this.resetModel();
-        this.gui.drawMenu();
+
+        this.gui.drawMenu(this.selectedScene,this.getSceneNames());
         this.gui.refreshScreen();
 
         if(key == Gui.Key.QUIT){
             this.quit();
         }
-        else if(key == Gui.Key.SPACE){
-            this.initScene(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
-            this.changeState(new GameState(this));
+        else if(key == Gui.Key.UP && this.selectedScene > 0){
+            this.selectedScene --;
         }
+        else if(key == Gui.Key.DOWN && this.selectedScene < this.scenes.size()-1){
+            this.selectedScene ++;
+        }
+        else if(key == Gui.Key.ENTER){
+            this.model.reset( new Helicopter(new Position(0,1),256,2));
+            this.initScene(this.scenes.get(this.selectedScene));
+            this.state = new GameState(this);
+        }
+
     }
 
     public void endGame(Gui.Key key) throws IOException {
         if(this.model.getHelicopter().getLives() < 0){
             this.gui.drawMessage(this.gui.getGameOverMessage(), "#b10000","Score: " + score);
+        }
+        else{
+            this.gui.drawMessage(this.gui.getVictoryMessage(), "#28a016","Score: " + score);
         }
 
         this.gui.refreshScreen();
@@ -201,10 +216,6 @@ public class Controller implements Observer{
         throw new IOException();
     }
 
-    public void changeState(State state) {
-        this.state = state;
-    }
-
     @Override
     public void update(int info){
         try{
@@ -214,5 +225,20 @@ public class Controller implements Observer{
         } catch (Exception e){
 
         }
+    }
+
+    private void setScenes(){
+        this.scenes = new ArrayList<>();
+        scenes.add(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+        scenes.add(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+        scenes.add(new OportoSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+    }
+
+    private List<String> getSceneNames(){
+        List<String> sceneNames = new ArrayList<>();
+        for(int i = 0; i< this.scenes.size(); i++){
+            sceneNames.add(this.scenes.get(i).getName());
+        }
+        return sceneNames;
     }
 }

@@ -31,4 +31,9 @@ public class Model {
     public void deleteMonsters(){
         this.monsters.clear();
     }
+
+    public void reset(Helicopter helicopter){
+        this.helicopter = helicopter;
+        this.deleteMonsters();
+    }
 }

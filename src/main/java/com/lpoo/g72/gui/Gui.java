@@ -10,9 +10,11 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
+import sun.security.rsa.RSAUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class Gui {
     private final int height;
     private TextGraphics graphics;
 
-    public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, NULL}
+    public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, ENTER, NULL}
 
     public Gui(int width, int height) throws IOException {
         this.width = width;
@@ -104,6 +106,8 @@ public class Gui {
                 return Key.RIGHT;
             if ((input.getKeyType() == KeyType.Character && input.getCharacter() == ' '))
                 return Key.SPACE;
+            if((input.getKeyType() == KeyType.Enter))
+                return Key.ENTER;
             if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))
                 return Key.QUIT;
         } catch (NullPointerException n) {
@@ -113,7 +117,10 @@ public class Gui {
         return Key.NULL;
     }
 
-    public void drawMenu() throws IOException {
+    public void drawMenu(int selected, List<String> sceneNames){
+        String color1 =  "#00009f";
+        String color2 =  "#191919";
+
         this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
         this.graphics.fillRectangle(
                 new TerminalPosition(0, 0),
@@ -121,23 +128,36 @@ public class Gui {
                 ' '
         );
         graphics.enableModifiers(SGR.BOLD);
-        this.drawMessage(this.getGameTitle(), "#00009f", "THE REVENGE OF THE SKYSCRAPPERS");
+        this.drawMessage(this.getGameTitle(), color1, "THE REVENGE OF THE SKYSCRAPPERS");
+
+        String s;
+        for(int i = 0; i< sceneNames.size();i++){
+            if(i == selected){
+                this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
+                s = ">> (" + i + ") "  + sceneNames.get(i).toUpperCase() + " <<";
+            }
+            else{
+                this.graphics.setForegroundColor(TextColor.Factory.fromString(color1));
+                s = "(" + i + ") " + sceneNames.get(i).toUpperCase();
+            }
+            this.graphics.putString((this.width-s.length()) / 2, this.height/2 + 2 +3*i, s);
+        }
     }
 
     public void drawMessage(List<String> message, String hexColor, String additionalInfo) {
         this.graphics.setForegroundColor(TextColor.Factory.fromString(hexColor));
 
         for(int i = 0; i< message.size();i++){
-            this.graphics.putString((this.width-message.get(i).length()-2) / 2, this.height/4 + i, message.get(i));
+            this.graphics.putString((this.width-message.get(i).length()) / 2, this.height/4 + i, message.get(i));
         }
 
         if(!additionalInfo.isEmpty()){
             this.graphics.fillRectangle(
-                    new TerminalPosition((this.width-additionalInfo.length()-2) / 2, this.height/4 + message.size() + 3),
+                    new TerminalPosition((this.width-additionalInfo.length()) / 2, this.height/4 + message.size() + 3),
                     new TerminalSize(additionalInfo.length(), 3),
                     '█'
             );
-            this.graphics.putString((this.width-additionalInfo.length()-2) / 2, this.height/4 + message.size() + 4, additionalInfo);
+            this.graphics.putString((this.width-additionalInfo.length()) / 2, this.height/4 + message.size() + 4, additionalInfo);
         }
     }
 
@@ -177,6 +197,17 @@ public class Gui {
         gameOver.add("██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗\n");
         gameOver.add("╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║\n");
         gameOver.add(" ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝\n");
+        return gameOver;
+    }
+
+    public List<String> getVictoryMessage(){
+        List<String> gameOver = new ArrayList<>();
+        gameOver.add("██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗ ██████╗ ███╗   ██╗██╗\n");
+        gameOver.add("╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██╔═══██╗████╗  ██║██║\n");
+        gameOver.add(" ╚████╔╝ ██║   ██║██║   ██║    ██║ █╗ ██║██║   ██║██╔██╗ ██║██║\n");
+        gameOver.add("  ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██║   ██║██║╚██╗██║╚═╝\n");
+        gameOver.add("   ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝╚██████╔╝██║ ╚████║██╗\n");
+        gameOver.add("   ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝\n");
         return gameOver;
     }
 
