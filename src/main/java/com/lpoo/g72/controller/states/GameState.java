@@ -11,7 +11,7 @@ public class GameState extends State{
     }
 
     @Override
-    public void action(Gui.Key key) throws IOException {
-        this.controller.play(key);
-    }
+        public void action(Gui.Key key) throws IOException {
+            this.controller.play(key);
+        }
 }

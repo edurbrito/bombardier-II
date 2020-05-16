@@ -5,7 +5,7 @@ import com.lpoo.g72.gui.Gui;
 import java.io.IOException;
 
 public abstract class State {
-        Controller controller;
+        protected Controller controller;
 
         State(Controller controller){
             this.controller = controller;
