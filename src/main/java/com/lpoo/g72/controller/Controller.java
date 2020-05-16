@@ -56,7 +56,7 @@ public class Controller implements Observer{
         this.commandInvoker = CommandInvoker.getInstance();
     }
 
-    public void initScene(Scene scene) {
+    private void initScene(Scene scene) {
         this.gui.setScene(scene);
 
         for(int i = 0; i < this.gui.getScene().getVisualMonsters().size(); i++){
@@ -66,6 +66,28 @@ public class Controller implements Observer{
         this.score = 0;
         this.destroyedBlocks = 0;
         this.initElementControllers();
+    }
+
+    private void initModel(){
+        int bombs = 0, missiles = 0;
+
+        switch(selectedScene){
+            case 0:
+                bombs = 6;
+                missiles = 2;
+                break;
+            case 1:
+                bombs = 8;
+                missiles = 3;
+                break;
+            case 2:
+                bombs = 3;
+                missiles = 1;
+                break;
+            default:
+                break;
+        }
+        this.model.reset( new Helicopter(new Position(0,1),bombs,missiles));
     }
 
     private void initElementControllers() {
@@ -136,7 +158,7 @@ public class Controller implements Observer{
             this.selectedScene ++;
         }
         else if(key == Gui.Key.ENTER){
-            this.model.reset( new Helicopter(new Position(0,1),256,2));
+            this.initModel();
             this.initScene(this.scenes.get(this.selectedScene));
             this.state = new GameState(this);
         }
