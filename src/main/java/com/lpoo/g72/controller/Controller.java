@@ -56,6 +56,20 @@ public class Controller implements Observer{
         this.commandInvoker = CommandInvoker.getInstance();
     }
 
+    private void setScenes(){
+        this.scenes = new ArrayList<>();
+        scenes.add(new OportoSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+        scenes.add(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+        scenes.add(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+    }
+
+    private List<String> getSceneNames(){
+        List<String> sceneNames = new ArrayList<>();
+        for(int i = 0; i< this.scenes.size(); i++){
+            sceneNames.add(this.scenes.get(i).getName());
+        }
+        return sceneNames;
+    }
     private void initScene(Scene scene) {
         this.gui.setScene(scene);
 
@@ -114,35 +128,6 @@ public class Controller implements Observer{
         }
     }
 
-    public void play(Gui.Key key) throws IOException {
-
-        if(key == Gui.Key.QUIT){
-            this.state = new MenuState(this);
-        }
-
-        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
-
-        this.helicopterController.run(key);
-
-        for(MonsterController monsterController : this.monsterControllers)
-            monsterController.move();
-
-        this.commandInvoker.executeCommands();
-
-        this.horizontalCollisions();
-        this.verticalCollisions();
-
-        this.gui.draw(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
-
-        Helicopter helicopter = this.model.getHelicopter();
-        if(helicopter.getLives() < 0 || this.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks()){
-            this.state = new EndGame(this);
-            return;
-        }
-
-        this.gui.refreshScreen();
-    }
-
     public void menu(Gui.Key key) throws IOException {
 
         this.gui.drawMenu(this.selectedScene,this.getSceneNames());
@@ -162,11 +147,40 @@ public class Controller implements Observer{
             this.initScene(this.scenes.get(this.selectedScene));
             this.state = new GameState(this);
         }
+    }
 
+    public void play(Gui.Key key) throws IOException {
+
+        if(key == Gui.Key.QUIT){
+            this.state = new MenuState(this);
+        }
+
+        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
+
+        this.helicopterController.run(key);
+
+        for(MonsterController monsterController : this.monsterControllers)
+            monsterController.move();
+
+        this.commandInvoker.executeCommands();
+
+        this.horizontalCollisions();
+        this.verticalCollisions();
+
+        Helicopter helicopter = this.model.getHelicopter();
+        if(helicopter.getLives() < 0 || this.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks()){
+            this.state = new EndGame(this);
+            return;
+        }
+
+        this.gui.refreshScreen();
     }
 
     public void endGame(Gui.Key key) throws IOException {
-        if(this.model.getHelicopter().getLives() < 0){
+
+        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
+
+        if(this.model.getHelicopter().getLives() < 0 || this.destroyedBlocks != this.gui.getScene().getSceneBlocks()){
             this.gui.drawMessage(this.gui.getGameOverMessage(), "#b10000","Score: " + score);
         }
         else{
@@ -249,18 +263,4 @@ public class Controller implements Observer{
         }
     }
 
-    private void setScenes(){
-        this.scenes = new ArrayList<>();
-        scenes.add(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
-        scenes.add(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
-        scenes.add(new OportoSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
-    }
-
-    private List<String> getSceneNames(){
-        List<String> sceneNames = new ArrayList<>();
-        for(int i = 0; i< this.scenes.size(); i++){
-            sceneNames.add(this.scenes.get(i).getName());
-        }
-        return sceneNames;
-    }
 }
