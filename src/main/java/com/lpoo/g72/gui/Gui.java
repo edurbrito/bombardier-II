@@ -10,11 +10,9 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
-import sun.security.rsa.RSAUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
