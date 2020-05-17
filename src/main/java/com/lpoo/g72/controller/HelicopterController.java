@@ -84,7 +84,7 @@ public class HelicopterController extends ElementController implements Observabl
     }
 
     private boolean newRound(){
-        return this.helicopter.getX() >= this.maxWidth;
+        return this.helicopter.getX() >= this.maxWidth + 1;
     }
 
     private boolean isWithinUpLimit(){

@@ -14,7 +14,7 @@ public class DropMissile implements Command{
     public void execute() {
         Missile missile = this.helicopter.drop();
         if(missile != null){
-            missile.setPosition(this.helicopter.getPosition().down());
+            missile.setPosition(this.helicopter.getPosition().down().left());
             missile.activate();
         }
     }
