@@ -70,6 +70,16 @@ public class Controller implements Observer{
         }
         return sceneNames;
     }
+
+    private void initModel(){
+        int bombs , missiles;
+
+        bombs = (int) Math.round(Math.pow(this.scenes.get(selectedScene).getSceneBlocks(),1/5.0));
+        missiles = 2;
+
+        this.model.reset( new Helicopter(new Position(0,1),bombs,missiles));
+    }
+
     private void initScene(Scene scene) {
         this.gui.setScene(scene);
 
@@ -80,28 +90,6 @@ public class Controller implements Observer{
         this.score = 0;
         this.destroyedBlocks = 0;
         this.initElementControllers();
-    }
-
-    private void initModel(){
-        int bombs = 0, missiles = 0;
-
-        switch(selectedScene){
-            case 0:
-                bombs = 6;
-                missiles = 2;
-                break;
-            case 1:
-                bombs = 8;
-                missiles = 3;
-                break;
-            case 2:
-                bombs = 3;
-                missiles = 1;
-                break;
-            default:
-                break;
-        }
-        this.model.reset( new Helicopter(new Position(0,1),bombs,missiles));
     }
 
     private void initElementControllers() {
