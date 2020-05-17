@@ -321,25 +321,25 @@ Some advantages of this pattern:
 ### Different game sections should be shown according to the state of the game
 
 ##### Problem in Context
-Given the fact that the user should be able to choose between a couple of different game scenes, we decided to implement a menu that enables this interaction with the user. Also, at any time the user must have the possibility to go back and choose a different scene or even to quit the game. Furthermore, when the user wins or loses, a message should be shown on the screen to let him know the score he achieved. At this point, if the user wants to quit, we want to encourage him to try again by showing him the menu.
+Given the fact that the user should be able to choose between a couple of different game scenes, we decided to implement a menu that enables this interaction with the user. Also, at any time the user must have the possibility to go back and choose a different scene or even to quit the game. Furthermore, when the user wins or loses, a message should be shown on the screen to let him know the score he achieved. At this point, if the user wants to quit, we encourage him to try again by showing him the menu.
 
 ##### The Pattern
-Applying the **State** pattern allowed us to achieve different game behaviors according to the state of the game and to establish connections between the states. In particular, we defined that, initially, a menu should be shown, *Menu State*, while the user is deciding the game scene or until he quits de game. When the scene is picked, the game elements and visual features are set accordingly, switching the state of the Controller to *Game State*. During this state, if the user performs an action to quit the game, we take him back to the *Menu State*. Otherwise, the game state will only be changed if the user wins or loses the game. *End Game State* is set in this case, where, once more, pressing 'Q' will take the user back to the menu.
+Applying the **State** pattern allowed us to achieve different game behaviors according to the state of the game and to establish connections between the states. In particular, we defined that, initially, a menu should be shown, *Menu State*, while the user is deciding the game scene or until he quits de game, pressing 'Q'. When the scene is picked, the game elements and visual features are set accordingly, switching the state of the Controller to *Game State*. During this state, if the user performs an action to quit the game, we take him back to the *Menu State*. Otherwise, the state will only be changed if the user wins or loses the game. *End Game State* is set in this case, where pressing 'Q' will take the user back to the menu.
 
 ##### Implementation
 <img src="../images/statePatternClassDiagram.svg"> 
 
 // TODO - state machine diagram
 
-* State = [State](../src/src/main/java/com/lpoo/g72/controller/states/State.java), an asbtract class that stores a protected reference to the context object and which declares the following abstract method:
+* State = [State](../src/src/main/java/com/lpoo/g72/controller/states/State.java), an abstract class that stores a protected reference to the context object and which declares the following abstract method:
   * handle() = `public abstract void action(Gui.key key)`, the state-specific method.
 
 Concrete States that extend the **State** abstract class and define `public void action(Gui.Key key)` state-specific method, calling Context methods to perform their actions:
-* [MenuState](../src/src/main/java/com/lpoo/g72/controller/states/MenuState.java), which calls Controller's 'public void menu(Gui.Key key)';
-* [GameState](../src/src/main/java/com/lpoo/g72/controller/states/GameState.java), which calls Controller's 'public void play(Gui.Key key)';
-* [EndGame](../src/src/main/java/com/lpoo/g72/controller/states/EndGame.java), which calls Controller's 'public void endGame(Gui.Key key)';
+* [MenuState](../src/src/main/java/com/lpoo/g72/controller/states/MenuState.java), which calls Controller's `public void menu(Gui.Key key)`;
+* [GameState](../src/src/main/java/com/lpoo/g72/controller/states/GameState.java), which calls Controller's `public void play(Gui.Key key)`;
+* [EndGame](../src/src/main/java/com/lpoo/g72/controller/states/EndGame.java), which calls Controller's `public void endGame(Gui.Key key)`;
 
-*All states can be found on [states package](../src/src/main/java/com/lpoo/g72/controller/states)*
+*All states can be found in the [states package](../src/src/main/java/com/lpoo/g72/controller/states)*
 
 * Context = [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java), which stores a reference to a concrete state object and delegates to it all state-specific work. It also defines some methods that are called by each Concrete State to change the interface according to the state and where state changes are sometimes performed as well:
   * `public void menu(Gui.Key key)`, where the menu is drawn until a scene is chosen by the user;
@@ -360,7 +360,7 @@ Some advantages of this pattern:
 
 ### Switch Statement && Conditionals
 
-// TODO - explain why the switch statement in Controller's initModel() and menu() and in Gui's getKey() are not a problem.
+// TODO - explain why the switch statement in menu() and in Gui's getKey() are not a problem.
 
 ### Data Class
 
