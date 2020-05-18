@@ -1,5 +1,6 @@
 package com.lpoo.g72.creator;
 
+import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;
 import com.lpoo.g72.gui.Scene;
 import org.junit.Test;
@@ -34,11 +35,13 @@ public class SceneCreatorTest {
 
         @Override
         public Scene createScene(int width, int height) {
-            List<VisualPteranodon> visualPteranodons = new ArrayList<>();
+            List<VisualElement> visualMonsters = new ArrayList<>();
 
-            visualPteranodons.add(new VisualPteranodon());
+            visualMonsters.add(new VisualPteranodon());
+            visualMonsters.add(new VisualPteranodon());
+            visualMonsters.add(new VisualPteranodon());
 
-            this.scene = new Scene(width, height, visualPteranodons,3);
+            this.scene = new Scene(width, height,"StubScene", visualMonsters);
             this.scene.setBuildings(this.generateBuildings(width,height,new Random(),4));
 
             return this.scene;
@@ -113,7 +116,7 @@ public class SceneCreatorTest {
 
         assertEquals(scene.getHeight(), scene.getBuildings().length);
 
-        assertEquals(218,buildingCounter(scene));
+        assertEquals(346,buildingCounter(scene));
     }
 
     @Test
@@ -126,7 +129,7 @@ public class SceneCreatorTest {
 
         assertEquals(3, scene.getVisualMonsters().size());
 
-        assertEquals(176,buildingCounter(scene));
+        assertEquals(510,buildingCounter(scene));
     }
 
     @Test
@@ -138,5 +141,7 @@ public class SceneCreatorTest {
         assertEquals(90, scene.getHeight());
 
         assertEquals(4, scene.getVisualMonsters().size());
+
+        assertTrue(scene.getBuildings().length > 0);
     }
 }
