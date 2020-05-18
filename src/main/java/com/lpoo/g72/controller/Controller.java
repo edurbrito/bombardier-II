@@ -1,10 +1,12 @@
 package com.lpoo.g72.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextColor;
 import com.lpoo.g72.commands.CommandInvoker;
-import com.lpoo.g72.controller.states.EndGame;
-import com.lpoo.g72.controller.states.GameState;
-import com.lpoo.g72.controller.states.MenuState;
-import com.lpoo.g72.controller.states.State;
+import com.lpoo.g72.controller.states.*;
 import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.creator.OportoSceneCreator;
 import com.lpoo.g72.creator.RandomSceneCreator;
@@ -16,10 +18,12 @@ import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.io.Writer;
+import java.lang.reflect.Type;
+import java.util.*;
 
 public class Controller implements Observer{
 
@@ -34,6 +38,9 @@ public class Controller implements Observer{
 
     private int selectedScene;
     private List<Scene> scenes;
+    private List<String> menuOptions;
+
+    Map<String,List<Integer>> highscores;
 
     private HelicopterController helicopterController;
     private List<MonsterController> monsterControllers;
@@ -53,22 +60,27 @@ public class Controller implements Observer{
         this.pointsPerBlock = 2;
         this.pointsPerMonster = 1;
 
+        this.highscores = new HashMap<>();
+        this.readHighscores();
+
         this.commandInvoker = CommandInvoker.getInstance();
     }
 
     private void setScenes(){
         this.scenes = new ArrayList<>();
-        scenes.add(new OportoSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
-        scenes.add(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
-        scenes.add(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+        this.scenes.add(new OportoSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+        this.scenes.add(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+        this.scenes.add(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
+
+        this.setMenuOptions();
     }
 
-    private List<String> getSceneNames(){
-        List<String> sceneNames = new ArrayList<>();
+    private void setMenuOptions(){
+        this.menuOptions = new ArrayList<>();
         for(int i = 0; i< this.scenes.size(); i++){
-            sceneNames.add(this.scenes.get(i).getName());
+           this.menuOptions.add(this.scenes.get(i).getName());
         }
-        return sceneNames;
+        this.menuOptions.add("Highscores");
     }
 
     private void initModel(){
@@ -118,7 +130,7 @@ public class Controller implements Observer{
 
     public void menu(Gui.Key key) throws IOException {
 
-        this.gui.drawMenu(this.selectedScene,this.getSceneNames());
+        this.gui.drawMenu(this.selectedScene,this.menuOptions);
         this.gui.refreshScreen();
 
         if(key == Gui.Key.QUIT){
@@ -127,13 +139,16 @@ public class Controller implements Observer{
         else if(key == Gui.Key.UP && this.selectedScene > 0){
             this.selectedScene --;
         }
-        else if(key == Gui.Key.DOWN && this.selectedScene < this.scenes.size()-1){
+        else if(key == Gui.Key.DOWN && this.selectedScene < this.scenes.size()){
             this.selectedScene ++;
         }
-        else if(key == Gui.Key.ENTER){
+        else if(key == Gui.Key.ENTER && this.selectedScene < this.scenes.size()){
             this.initModel();
             this.initScene(this.scenes.get(this.selectedScene));
             this.state = new GameState(this);
+        }
+        else if(key == Gui.Key.ENTER && this.selectedScene == this.scenes.size()){
+            this.state = new Highscores(this);
         }
     }
 
@@ -157,11 +172,21 @@ public class Controller implements Observer{
 
         Helicopter helicopter = this.model.getHelicopter();
         if(helicopter.getLives() < 0 || this.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks()){
+            this.addScore();
             this.state = new EndGame(this);
             return;
         }
 
         this.gui.refreshScreen();
+    }
+
+    public void highscores(Gui.Key key) throws IOException {
+        this.gui.drawHighscores(this.highscores);
+        this.gui.refreshScreen();
+
+        if(key == Gui.Key.QUIT){
+            this.state = new MenuState(this);
+        }
     }
 
     public void endGame(Gui.Key key) throws IOException {
@@ -236,6 +261,7 @@ public class Controller implements Observer{
     }
 
     void quit() throws IOException {
+        this.writeHighscores();
         this.gui.closeScreen();
         throw new IOException();
     }
@@ -248,6 +274,43 @@ public class Controller implements Observer{
             Thread.sleep(800);
         } catch (Exception e){
 
+        }
+    }
+
+    private void readHighscores(){
+
+        try {
+            Type type = new TypeToken<Map<String, List<Integer>>>(){}.getType();
+            this.highscores = new Gson().fromJson(new FileReader("src/main/java/com/lpoo/g72/highscores.json"), type);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void writeHighscores(){
+        try {
+            Writer writer = new FileWriter("src/main/java/com/lpoo/g72/highscores.json");
+
+            new Gson().toJson(this.highscores, writer);
+
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addScore(){
+
+        this.highscores.get(this.menuOptions.get(this.selectedScene)).add(this.score);
+
+        for (Map.Entry<String, List<Integer>> entry : this.highscores.entrySet()) {
+            Collections.sort(entry.getValue(), Collections.reverseOrder());
+            while (entry.getValue().size() > 5){
+                entry.getValue().remove(entry.getValue().size()-1);
+            }
         }
     }
 

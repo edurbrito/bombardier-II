@@ -17,6 +17,7 @@ import com.lpoo.g72.model.element.Monster;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Gui {
 
@@ -115,7 +116,7 @@ public class Gui {
         return Key.NULL;
     }
 
-    public void drawMenu(int selected, List<String> sceneNames){
+    public void drawMenu(int selected, List<String> menuOptions){
         String color1 =  "#00009f";
         String color2 =  "#191919";
 
@@ -129,16 +130,54 @@ public class Gui {
         this.drawMessage(this.getGameTitle(), color1, "THE REVENGE OF THE SKYSCRAPPERS");
 
         String s;
-        for(int i = 0; i< sceneNames.size();i++){
+        for(int i = 0; i< menuOptions.size(); i++){
             if(i == selected){
                 this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
-                s = ">> (" + i + ") "  + sceneNames.get(i).toUpperCase() + " <<";
+                s = ">>  " + menuOptions.get(i).toUpperCase() + "  <<";
             }
             else{
                 this.graphics.setForegroundColor(TextColor.Factory.fromString(color1));
-                s = "(" + i + ") " + sceneNames.get(i).toUpperCase();
+                s = menuOptions.get(i).toUpperCase();
             }
             this.graphics.putString((this.width-s.length()) / 2, this.height/2 + 2 +3*i, s);
+        }
+
+    }
+
+    public void drawHighscores(Map<String, List<Integer>> highscores){
+        String color1 =  "#9f395d";
+        String color2 = "#191919";
+
+        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        this.graphics.fillRectangle(
+                new TerminalPosition(0, 0),
+                new TerminalSize(this.width, this.height),
+                ' '
+        );
+
+        List<String> title = this.getHighscoresMessage();
+        graphics.enableModifiers(SGR.BOLD);
+        this.drawMessage(title, color1,"");
+
+        int i = 0, j;
+        String s;
+        for(Map.Entry<String, List<Integer>> entry : highscores.entrySet()) {
+            this.graphics.setForegroundColor(TextColor.Factory.fromString(color1));
+            s = entry.getKey() + " Scene";
+            this.graphics.fillRectangle(
+                    new TerminalPosition(this.width/ 4 -2 + i, this.height/4 + title.size() + 3),
+                    new TerminalSize(s.length(), 3),
+                    '█'
+            );
+            this.graphics.putString(this.width / 4 - 2 + i, this.height/4 + title.size() + 4, s.toUpperCase());
+
+            j = 0;
+            this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
+            for(Integer score : entry.getValue()){
+                this.graphics.putString(this.width / 4 + 2 + i, this.height/4 + 3 + j + title.size() + 4, score.toString());
+                j += 2;
+            }
+            i += 20;
         }
     }
 
@@ -217,6 +256,17 @@ public class Gui {
         newRound.add("██║╚██╗██║██╔══╝  ██║███╗██║    ██╔══██╗██║   ██║██║   ██║██║╚██╗██║██║  ██║\n");
         newRound.add("██║ ╚████║███████╗╚███╔███╔╝    ██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝\n");
         newRound.add("╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ \n");
+        return newRound;
+    }
+
+    public List<String> getHighscoresMessage(){
+        List<String> newRound = new ArrayList<>();
+        newRound.add("██╗  ██╗██╗ ██████╗ ██╗  ██╗███████╗ ██████╗ ██████╗ ██████╗ ███████╗███████╗\n");
+        newRound.add("██║  ██║██║██╔════╝ ██║  ██║██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔════╝\n");
+        newRound.add("███████║██║██║  ███╗███████║███████╗██║     ██║   ██║██████╔╝█████╗  ███████╗\n");
+        newRound.add("██╔══██║██║██║   ██║██╔══██║╚════██║██║     ██║   ██║██╔══██╗██╔══╝  ╚════██║\n");
+        newRound.add("██║  ██║██║╚██████╔╝██║  ██║███████║╚██████╗╚██████╔╝██║  ██║███████╗███████║\n");
+        newRound.add("╚═╝  ╚═╝╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝\n");
         return newRound;
     }
 
