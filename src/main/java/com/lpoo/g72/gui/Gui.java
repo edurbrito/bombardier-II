@@ -142,6 +142,7 @@ public class Gui {
             this.graphics.putString((this.width-s.length()) / 2, this.height/2 + 2 +3*i, s);
         }
 
+        drawControls();
     }
 
     public void drawHighscores(Map<String, List<Integer>> highscores){
@@ -179,6 +180,23 @@ public class Gui {
             }
             i += 20;
         }
+    }
+
+    public void drawControls(){
+        String[] controls = {"▲", "▼", "▶", "SPACE BAR", "Q"};
+        String[] description = {"Move Up","Move Down","Shoot", "Drop Bomb", "Quit"};
+
+
+        int y = 7;
+        for(int i = 0; i< controls.length; i++){
+            this.graphics.setForegroundColor(TextColor.Factory.fromString("#00009f"));
+            this.graphics.putString(y , this.height- 4,controls[i]);
+            y += controls[i].length() + 2;
+            this.graphics.setForegroundColor(TextColor.Factory.fromString("#333333"));
+            this.graphics.putString(y, this.height- 4 ,description[i]);
+            y += 7 + description[i].length();
+        }
+
     }
 
     public void drawMessage(List<String> message, String hexColor, String additionalInfo) {
