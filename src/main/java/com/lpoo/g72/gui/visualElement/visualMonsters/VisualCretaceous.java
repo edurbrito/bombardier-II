@@ -10,14 +10,14 @@ public class VisualCretaceous extends VisualElement {
 
     @Override
     public void animation() {
-        if (this.form[2] == '§'){
-            this.form[2] = '(';
+        if (this.form[0] == '>'){
             this.form[0] = '-';
+            this.form[2] = '(';
             this.form[4] = '.';
         }
         else{
-            this.form[2] = '§';
             this.form[0] = '>';
+            this.form[2] = '§';
             this.form[4] = '-';
         }
     }

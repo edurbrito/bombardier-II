@@ -2,6 +2,7 @@ package com.lpoo.g72.gui;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.lpoo.g72.creator.LisbonSceneCreator;
+import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
@@ -27,15 +28,18 @@ public class SceneTest {
             int w = r.nextInt(300) + 1;
             int h = r.nextInt(300) + 1;
 
-            int nMonsters = r.nextInt(5);
-            List<VisualPteranodon> visualPteranodons = new ArrayList<>();
+            List<VisualElement> visualPteranodons = new ArrayList<>();
+            visualPteranodons.add(new VisualPteranodon());
+            visualPteranodons.add(new VisualPteranodon());
             visualPteranodons.add(new VisualPteranodon());
 
-            this.scene = new Scene(w, h, visualPteranodons,nMonsters);
+            this.scene = new Scene(w, h,"StubScene", visualPteranodons);
 
             assertEquals(w, scene.getWidth());
             assertEquals(h, scene.getHeight());
-            assertEquals(nMonsters, scene.getVisualMonsters().size());
+            assertEquals(3, scene.getVisualMonsters().size());
+            assertEquals("StubScene", scene.getName());
+            assertEquals(0, scene.getSceneBlocks());
         }
     }
 
@@ -66,11 +70,52 @@ public class SceneTest {
         Mockito.verify(this.scene,Mockito.times(1)).draw(Mockito.any(), Mockito.any());
         Mockito.verify(this.scene,Mockito.times(1)).drawSceneBuildings(Mockito.any());
 
-        Mockito.verify(graphics, Mockito.times(1+vmonstersSize)).enableModifiers(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(1 + vmonstersSize)).enableModifiers(Mockito.any());
         Mockito.verify(graphics, Mockito.times(vmonstersSize)).setBackgroundColor(Mockito.any());
-        Mockito.verify(graphics, Mockito.times(3+vmonstersSize*this.scene.getVisualMonsters().get(0).getForm().length)).setForegroundColor(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(1 + vmonstersSize*this.scene.getVisualMonsters().get(0).getForm().length)).setForegroundColor(Mockito.any());
 
         Mockito.verify(this.scene,Mockito.times(1)).drawVisualMonsters(Mockito.any(), Mockito.any());
 
+    }
+
+    @Test
+    public void removeBuildings(){
+        int x = 0, y = 0;
+
+        assertEquals(0, this.scene.removeBuilding(x,y));
+
+        x = 200;
+
+        assertEquals(0, this.scene.removeBuilding(x,y));
+
+        x = 50;
+
+        assertEquals(0, this.scene.removeBuilding(x,y));
+
+
+        x = 30;
+        y = 40;
+
+        assertEquals(0, this.scene.removeBuilding(x,y));
+
+        x = 30;
+        y = 90;
+
+        assertEquals(1, this.scene.removeBuilding(x,y));
+        assertEquals(' ', this.scene.getBuildings()[this.scene.getHeight() - y - 5][ this.scene.getWidth() - x - 1]);
+
+        x = 1;
+        y = 92;
+
+        assertEquals(2, this.scene.removeBuilding(x,y));
+        assertEquals(' ', this.scene.getBuildings()[this.scene.getHeight() - y - 5][ this.scene.getWidth() - x - 1]);
+        assertEquals(' ', this.scene.getBuildings()[this.scene.getHeight() - y - 5][ this.scene.getWidth() - x]);
+
+        x = this.scene.getWidth() - 2;
+        y = 93;
+
+        assertEquals(2, this.scene.removeBuilding(x,y));
+        assertEquals(' ', this.scene.getBuildings()[this.scene.getHeight() - y - 5][ this.scene.getWidth() - x - 1]);
+        assertEquals(' ', this.scene.getBuildings()[this.scene.getHeight() - y - 5][0]);
     }
 }

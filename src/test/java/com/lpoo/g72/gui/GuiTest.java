@@ -11,13 +11,14 @@ import org.mockito.Mockito;
 import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GuiTest {
     private Gui gui;
     @Before
     public void init() throws IOException {
-        this.gui = new Gui(12,15);
+        this.gui = Mockito.spy(new Gui(12,15));
     }
 
     @Test
@@ -53,11 +54,16 @@ public class GuiTest {
         monsterList.add(new Monster(new Position(12,13)));
         monsterList.add(new Monster(new Position(12,15)));
 
-        this.gui.draw(helicopter,monsterList);
+        this.gui.draw(helicopter,monsterList,0,0);
 
         Mockito.verify(scene,Mockito.times(1)).draw(Mockito.any(),Mockito.any());
 
         this.gui.closeScreen();
+
+        this.gui.drawMenu(0,new ArrayList<>(Arrays.asList("A", "B", "C")));
+
+        Mockito.verify(gui, Mockito.times(1)).drawMessage(Mockito.any(),Mockito.any(),Mockito.any());
+        Mockito.verify(gui, Mockito.times(1)).getGameTitle();
     }
 
 }

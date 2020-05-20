@@ -122,6 +122,7 @@ public class Controller implements Observer{
         while (true) {
             try {
                 this.state.action(this.gui.getKey());
+                this.gui.refreshScreen();
             } catch (Exception e) {
                 break;
             }
@@ -131,7 +132,6 @@ public class Controller implements Observer{
     public void menu(Gui.Key key) throws IOException {
 
         this.gui.drawMenu(this.selectedScene,this.menuOptions);
-        this.gui.refreshScreen();
 
         if(key == Gui.Key.QUIT){
             this.quit();
@@ -176,8 +176,6 @@ public class Controller implements Observer{
             this.state = new EndGame(this);
             return;
         }
-
-        this.gui.refreshScreen();
     }
 
     public void highscores(Gui.Key key) throws IOException {
@@ -199,8 +197,6 @@ public class Controller implements Observer{
         else{
             this.gui.drawMessage(this.gui.getVictoryMessage(), "#28a016","Score: " + score);
         }
-
-        this.gui.refreshScreen();
 
         if(key == Gui.Key.QUIT){
             this.state = new MenuState(this);
