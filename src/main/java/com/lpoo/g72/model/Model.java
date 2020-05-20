@@ -12,7 +12,10 @@ public class Model {
 
     public Model() {
         this.monsters = new ArrayList<>();
-        this.helicopter = new Helicopter(new Position(0,1), 50, 3);
+    }
+
+    public void setHelicopter(Helicopter helicopter){
+        this.helicopter = helicopter;
     }
 
     public List<Monster> getMonsters() {
@@ -25,4 +28,12 @@ public class Model {
 
     public void addMonster(Monster monster){ this.monsters.add(monster);}
 
+    public void deleteMonsters(){
+        this.monsters.clear();
+    }
+
+    public void reset(Helicopter helicopter){
+        this.helicopter = helicopter;
+        this.deleteMonsters();
+    }
 }

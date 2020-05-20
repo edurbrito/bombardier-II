@@ -18,6 +18,9 @@ public class PositionTest {
 
         assertEquals(6, pos2.getX());
         assertEquals(0, pos2.getY());
+
+        assertEquals(true, pos1.equals(pos1));
+        assertEquals(false, pos1.equals(null));
     }
 
     @Test

@@ -3,7 +3,7 @@ package com.lpoo.g72.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandInvoker {
+public class CommandInvoker{
     private List<Command> commands;
     private static CommandInvoker instance;
 

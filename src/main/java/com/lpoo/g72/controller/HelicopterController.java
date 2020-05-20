@@ -27,13 +27,13 @@ public class HelicopterController extends ElementController implements Observabl
     private double missileDeltaTime;
 
     public HelicopterController(VisualHelicopter visualHelicopter, Helicopter helicopter, int maxWidth, int maxHeight){
-        super(maxWidth, helicopter.getY(),0.15 * Math.pow(10,9));
+        super(maxWidth, helicopter.getY(),0.12 * Math.pow(10,9));
 
         this.helicopter = helicopter;
         this.visualHelicopter = visualHelicopter;
 
         this.maxHeight = maxHeight;
-        this.missileDeltaTime = 0.14 * Math.pow(10,9);
+        this.missileDeltaTime = 0.11 * Math.pow(10,9);
 
         this.observerList = new ArrayList<>();
     }
@@ -84,7 +84,7 @@ public class HelicopterController extends ElementController implements Observabl
     }
 
     private boolean newRound(){
-        return this.helicopter.getX() >= this.maxWidth;
+        return this.helicopter.getX() >= this.maxWidth + 1;
     }
 
     private boolean isWithinUpLimit(){

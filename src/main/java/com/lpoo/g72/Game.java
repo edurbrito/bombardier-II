@@ -20,7 +20,7 @@ public class Game {
         this.gui = new Gui(100, 50);
         this.model = new Model();
         this.controller = new Controller(this.gui, this.model);
-        this.controller.start();
+        this.controller.run();
     }
 
     public Gui getGui() {

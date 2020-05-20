@@ -12,9 +12,9 @@ public class DropMissile implements Command{
 
     @Override
     public void execute() {
-        Missile missile = this.helicopter.getInactiveVerticalMissile();
+        Missile missile = this.helicopter.drop();
         if(missile != null){
-            missile.setPosition(this.helicopter.getPosition().down());
+            missile.setPosition(this.helicopter.getPosition().down().left());
             missile.activate();
         }
     }

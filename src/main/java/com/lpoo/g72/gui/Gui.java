@@ -15,7 +15,9 @@ import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Gui {
 
@@ -27,7 +29,7 @@ public class Gui {
     private final int height;
     private TextGraphics graphics;
 
-    public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, NULL}
+    public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, ENTER, NULL}
 
     public Gui(int width, int height) throws IOException {
         this.width = width;
@@ -53,7 +55,7 @@ public class Gui {
         this.graphics = this.screen.newTextGraphics();
     }
 
-    public void draw(Helicopter helicopter, List<Monster> monsters) {
+    public void draw(Helicopter helicopter, List<Monster> monsters, int destroyedBlocks, int score) {
 
         this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
         this.graphics.setForegroundColor(TextColor.Factory.fromString("#C0C0C0"));
@@ -63,9 +65,28 @@ public class Gui {
                 ' '
         );
 
-        this.scene.draw(graphics, monsters);
+        this.scene.draw(this.graphics, monsters);
 
-        this.visualHelicopter.draw(graphics,helicopter);
+        this.drawScoreBar(destroyedBlocks, score, helicopter);
+
+        this.visualHelicopter.draw(this.graphics,helicopter);
+    }
+
+    private void drawScoreBar(int destroyedBlocks, int score, Helicopter helicopter) {
+        this.graphics.setForegroundColor(TextColor.Factory.fromString("#ce0000"));
+
+        this.graphics.drawLine(0, this.height - 4, this.width, this.height - 4, '▘');
+
+        int sceneBlocks = this.scene.getSceneBlocks();
+        destroyedBlocks = Math.min(destroyedBlocks,sceneBlocks);
+
+        this.graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
+        this.graphics.putString(5, this.height - 3, "Blocks: " + destroyedBlocks + "/" + sceneBlocks);
+        this.graphics.putString(24, this.height - 3, "City: " + this.scene.getName());
+        this.graphics.putString(39, this.height - 3, "Lives: " + helicopter.getLives());
+        this.graphics.putString(this.width - 48, this.height - 3, "Missiles: " + helicopter.unusedHorizontalMissiles());
+        this.graphics.putString(this.width - 31, this.height - 3, "Bombs: " + helicopter.unusedVerticalMissiles());
+        this.graphics.putString(this.width - 17, this.height - 3, "Score: " + score);
     }
 
     public void refreshScreen() throws IOException {
@@ -84,6 +105,8 @@ public class Gui {
                 return Key.RIGHT;
             if ((input.getKeyType() == KeyType.Character && input.getCharacter() == ' '))
                 return Key.SPACE;
+            if((input.getKeyType() == KeyType.Enter))
+                return Key.ENTER;
             if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))
                 return Key.QUIT;
         } catch (NullPointerException n) {
@@ -93,30 +116,104 @@ public class Gui {
         return Key.NULL;
     }
 
-    public void drawMenu() throws IOException {
-        screen.clear();
+    public void drawMenu(int selected, List<String> menuOptions){
+        String color1 =  "#00009f";
+        String color2 =  "#191919";
 
-        TextGraphics graphics = this.screen.newTextGraphics();
+        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        this.graphics.fillRectangle(
+                new TerminalPosition(0, 0),
+                new TerminalSize(this.width, this.height),
+                ' '
+        );
+        graphics.enableModifiers(SGR.BOLD);
+        this.drawMessage(this.getGameTitle(), color1, "THE REVENGE OF THE SKYSCRAPPERS");
 
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#A0A0A0"));
-        graphics.fillRectangle(
+        String s;
+        for(int i = 0; i< menuOptions.size(); i++){
+            if(i == selected){
+                this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
+                s = ">>  " + menuOptions.get(i).toUpperCase() + "  <<";
+            }
+            else{
+                this.graphics.setForegroundColor(TextColor.Factory.fromString(color1));
+                s = menuOptions.get(i).toUpperCase();
+            }
+            this.graphics.putString((this.width-s.length()) / 2, this.height/2 + 2 +3*i, s);
+        }
+
+        drawControls();
+    }
+
+    public void drawHighscores(Map<String, List<Integer>> highscores){
+        String color1 =  "#9f395d";
+        String color2 = "#191919";
+
+        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        this.graphics.fillRectangle(
                 new TerminalPosition(0, 0),
                 new TerminalSize(this.width, this.height),
                 ' '
         );
 
-        String gameOver = "Main Menu";
-        int start = screen.getTerminalSize().getColumns() / 2 - 5;
-        int height = screen.getTerminalSize().getRows() / 4;
-
-        graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
+        List<String> title = this.getHighscoresMessage();
         graphics.enableModifiers(SGR.BOLD);
+        this.drawMessage(title, color1,"");
 
-        for (char character : gameOver.toCharArray()) {
-            graphics.putString(new TerminalPosition(start++, height), String.valueOf(character));
+        int i = 0, j;
+        String s;
+        for(Map.Entry<String, List<Integer>> entry : highscores.entrySet()) {
+            this.graphics.setForegroundColor(TextColor.Factory.fromString(color1));
+            s = entry.getKey() + " Scene";
+            this.graphics.fillRectangle(
+                    new TerminalPosition(this.width/ 4 -2 + i, this.height/4 + title.size() + 3),
+                    new TerminalSize(s.length(), 3),
+                    '█'
+            );
+            this.graphics.putString(this.width / 4 - 2 + i, this.height/4 + title.size() + 4, s.toUpperCase());
+
+            j = 0;
+            this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
+            for(Integer score : entry.getValue()){
+                this.graphics.putString(this.width / 4 + 2 + i, this.height/4 + 3 + j + title.size() + 4, score.toString());
+                j += 2;
+            }
+            i += 20;
+        }
+    }
+
+    public void drawControls(){
+        String[] controls = {"▲", "▼", "▶", "SPACE BAR", "Q"};
+        String[] description = {"Move Up","Move Down","Shoot", "Drop Bomb", "Quit"};
+
+
+        int y = 7;
+        for(int i = 0; i< controls.length; i++){
+            this.graphics.setForegroundColor(TextColor.Factory.fromString("#00009f"));
+            this.graphics.putString(y , this.height- 4,controls[i]);
+            y += controls[i].length() + 2;
+            this.graphics.setForegroundColor(TextColor.Factory.fromString("#333333"));
+            this.graphics.putString(y, this.height- 4 ,description[i]);
+            y += 7 + description[i].length();
         }
 
-        screen.refresh();
+    }
+
+    public void drawMessage(List<String> message, String hexColor, String additionalInfo) {
+        this.graphics.setForegroundColor(TextColor.Factory.fromString(hexColor));
+
+        for(int i = 0; i< message.size();i++){
+            this.graphics.putString((this.width-message.get(i).length()) / 2, this.height/4 + i, message.get(i));
+        }
+
+        if(!additionalInfo.isEmpty()){
+            this.graphics.fillRectangle(
+                    new TerminalPosition((this.width-additionalInfo.length()) / 2, this.height/4 + message.size() + 3),
+                    new TerminalSize(additionalInfo.length(), 3),
+                    '█'
+            );
+            this.graphics.putString((this.width-additionalInfo.length()) / 2, this.height/4 + message.size() + 4, additionalInfo);
+        }
     }
 
     public void closeScreen() throws IOException {
@@ -145,5 +242,60 @@ public class Gui {
 
     public VisualHelicopter getVisualHelicopter() {
         return this.visualHelicopter;
+    }
+
+    public List<String> getGameOverMessage(){
+        List<String> gameOver = new ArrayList<>();
+        gameOver.add(" ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ \n");
+        gameOver.add("██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗\n");
+        gameOver.add("██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║██║   ██║█████╗  ██████╔╝\n");
+        gameOver.add("██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗\n");
+        gameOver.add("╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║\n");
+        gameOver.add(" ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝\n");
+        return gameOver;
+    }
+
+    public List<String> getVictoryMessage(){
+        List<String> gameOver = new ArrayList<>();
+        gameOver.add("██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗ ██████╗ ███╗   ██╗██╗\n");
+        gameOver.add("╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██╔═══██╗████╗  ██║██║\n");
+        gameOver.add(" ╚████╔╝ ██║   ██║██║   ██║    ██║ █╗ ██║██║   ██║██╔██╗ ██║██║\n");
+        gameOver.add("  ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██║   ██║██║╚██╗██║╚═╝\n");
+        gameOver.add("   ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝╚██████╔╝██║ ╚████║██╗\n");
+        gameOver.add("   ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝\n");
+        return gameOver;
+    }
+
+    public List<String> getNewRoundMessage(){
+        List<String> newRound = new ArrayList<>();
+        newRound.add("███╗   ██╗███████╗██╗    ██╗    ██████╗  ██████╗ ██╗   ██╗███╗   ██╗██████╗ \n");
+        newRound.add("████╗  ██║██╔════╝██║    ██║    ██╔══██╗██╔═══██╗██║   ██║████╗  ██║██╔══██╗\n");
+        newRound.add("██╔██╗ ██║█████╗  ██║ █╗ ██║    ██████╔╝██║   ██║██║   ██║██╔██╗ ██║██║  ██║\n");
+        newRound.add("██║╚██╗██║██╔══╝  ██║███╗██║    ██╔══██╗██║   ██║██║   ██║██║╚██╗██║██║  ██║\n");
+        newRound.add("██║ ╚████║███████╗╚███╔███╔╝    ██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝\n");
+        newRound.add("╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ \n");
+        return newRound;
+    }
+
+    public List<String> getHighscoresMessage(){
+        List<String> newRound = new ArrayList<>();
+        newRound.add("██╗  ██╗██╗ ██████╗ ██╗  ██╗███████╗ ██████╗ ██████╗ ██████╗ ███████╗███████╗\n");
+        newRound.add("██║  ██║██║██╔════╝ ██║  ██║██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔════╝\n");
+        newRound.add("███████║██║██║  ███╗███████║███████╗██║     ██║   ██║██████╔╝█████╗  ███████╗\n");
+        newRound.add("██╔══██║██║██║   ██║██╔══██║╚════██║██║     ██║   ██║██╔══██╗██╔══╝  ╚════██║\n");
+        newRound.add("██║  ██║██║╚██████╔╝██║  ██║███████║╚██████╗╚██████╔╝██║  ██║███████╗███████║\n");
+        newRound.add("╚═╝  ╚═╝╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝\n");
+        return newRound;
+    }
+
+    public List<String> getGameTitle(){
+        List<String> gameName = new ArrayList<>();
+        gameName.add("██████╗  ██████╗ ███╗   ███╗██████╗  █████╗ ██████╗ ██████╗ ██╗███████╗██████╗     ██╗██╗");
+        gameName.add("██╔══██╗██╔═══██╗████╗ ████║██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║██╔════╝██╔══██╗    ██║██║");
+        gameName.add("██████╔╝██║   ██║██╔████╔██║██████╔╝███████║██████╔╝██║  ██║██║█████╗  ██████╔╝    ██║██║");
+        gameName.add("██╔══██╗██║   ██║██║╚██╔╝██║██╔══██╗██╔══██║██╔══██╗██║  ██║██║██╔══╝  ██╔══██╗    ██║██║");
+        gameName.add("██████╔╝╚██████╔╝██║ ╚═╝ ██║██████╔╝██║  ██║██║  ██║██████╔╝██║███████╗██║  ██║    ██║██║");
+        gameName.add("╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝╚══════╝╚═╝  ╚═╝    ╚═╝╚═╝");
+        return gameName;
     }
 }

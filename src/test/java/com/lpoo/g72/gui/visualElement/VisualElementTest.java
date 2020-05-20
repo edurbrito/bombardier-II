@@ -1,10 +1,13 @@
 package com.lpoo.g72.gui.visualElement;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.lpoo.g72.model.ElementStub;
+import com.lpoo.g72.gui.visualElement.visualMonsters.VisualCretaceous;
+import com.lpoo.g72.gui.visualElement.visualMonsters.VisualDimorphodon;
+import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Element;
 import com.lpoo.g72.model.element.Helicopter;
+import com.lpoo.g72.model.element.Missile;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -61,7 +64,6 @@ public class VisualElementTest {
         assertEquals('b', visualElement.getForm()[1]);
         assertEquals('c', visualElement.getForm()[2]);
     }
-
 
     @Test
     public void testSetters(){
@@ -148,7 +150,6 @@ public class VisualElementTest {
         Mockito.verify(graphics, Mockito.times(1)).enableModifiers(Mockito.any());
         Mockito.verify(graphics, Mockito.times(1)).setBackgroundColor(Mockito.any());
 
-
         Mockito.verify(graphics, Mockito.times(this.visualElement.getForm().length)).setForegroundColor(Mockito.any());
 
         Mockito.verify(graphics, Mockito.times(1)).setCharacter(1,2 ,'/');
@@ -159,7 +160,80 @@ public class VisualElementTest {
         Mockito.clearInvocations(position);
         Mockito.clearInvocations(graphics);
 
-        this.visualElement = new VisualMonster();
+        VisualVerticalMissile visualVerticalMissile = new VisualVerticalMissile();
+        Missile missile = ((Helicopter) element).drop();
+        missile.setPosition(element.getPosition().down().left());
+        visualVerticalMissile.draw(graphics,missile);
+
+        Mockito.verify(graphics, Mockito.times(1)).enableModifiers(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(1)).setBackgroundColor(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(visualVerticalMissile.getForm().length)).setForegroundColor(Mockito.any());
+
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0,3 ,'_');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0,4 ,'|');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0,5 ,'W');
+
+        visualVerticalMissile.animation();
+        visualVerticalMissile.draw(graphics,missile);
+
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0,3 ,'.');
+        Mockito.verify(graphics, Mockito.times(2)).setCharacter(0,4 ,'|');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0,5 ,'U');
+
+        Mockito.clearInvocations(element);
+        Mockito.clearInvocations(position);
+        Mockito.clearInvocations(graphics);
+
+        VisualHorizontalMissile visualHorizontalMissile = new VisualHorizontalMissile();
+        Missile missile2 = ((Helicopter) element).shoot();
+        missile2.setPosition(element.getPosition().right().right());
+        visualHorizontalMissile.draw(graphics,missile2);
+
+        Mockito.verify(graphics, Mockito.times(1)).enableModifiers(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(1)).setBackgroundColor(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(visualHorizontalMissile.getForm().length)).setForegroundColor(Mockito.any());
+
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(3,2 ,'»');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(4,2 ,'»');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(5,2 ,'-');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(6,2 ,'-');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(7,2 ,'►');
+
+        visualHorizontalMissile.animation();
+        visualHorizontalMissile.draw(graphics,missile2);
+
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(3,2 ,'>');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(4,2 ,'>');
+        Mockito.verify(graphics, Mockito.times(2)).setCharacter(5,2 ,'-');
+        Mockito.verify(graphics, Mockito.times(2)).setCharacter(6,2 ,'-');
+        Mockito.verify(graphics, Mockito.times(2)).setCharacter(7,2 ,'►');
+
+        Mockito.clearInvocations(element);
+        Mockito.clearInvocations(position);
+        Mockito.clearInvocations(graphics);
+
+        ((Helicopter) element).drop().activate();
+        ((Helicopter) element).drop().activate();
+        ((Helicopter) element).drop().activate();
+
+        this.visualElement.draw(graphics,element);
+
+        Mockito.verify(graphics, Mockito.times(4)).enableModifiers(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(4)).setBackgroundColor(Mockito.any());
+
+        ((Helicopter) element).shoot().activate();
+        ((Helicopter) element).shoot().activate();
+
+        this.visualElement.draw(graphics,element);
+
+        Mockito.verify(graphics, Mockito.times(10)).enableModifiers(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(10)).setBackgroundColor(Mockito.any());
+
+        Mockito.clearInvocations(element);
+        Mockito.clearInvocations(position);
+        Mockito.clearInvocations(graphics);
+
+        this.visualElement = new VisualPteranodon();
 
         this.visualElement.draw(graphics,element);
 
@@ -201,7 +275,7 @@ public class VisualElementTest {
 
     @Test
     public void testVisualMonster(){
-        visualElement = new VisualMonster();
+        visualElement = new VisualPteranodon();
 
         assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
 
@@ -249,12 +323,12 @@ public class VisualElementTest {
         assertEquals('/', visualElement.getForm()[0]);
         assertEquals('-', visualElement.getForm()[1]);
         assertEquals('Õ', visualElement.getForm()[2]);
-    }
 
+    }
 
     @Test
     public void testConcreteAnimationsVM(){
-        visualElement = new VisualMonster();
+        visualElement = new VisualPteranodon();
 
         assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
 
@@ -286,5 +360,75 @@ public class VisualElementTest {
         assertEquals('/', visualElement.getForm()[2]);
         assertEquals('-', visualElement.getForm()[3]);
         assertEquals('{', visualElement.getForm()[4]);
+
+        //////////////////////////////////////////////////////
+
+        visualElement = new VisualDimorphodon();
+
+        assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
+
+        assertEquals(5, visualElement.getForm().length);
+        assertEquals('=', visualElement.getForm()[0]);
+        assertEquals('-', visualElement.getForm()[1]);
+        assertEquals('/', visualElement.getForm()[2]);
+        assertEquals('-', visualElement.getForm()[3]);
+        assertEquals('~', visualElement.getForm()[4]);
+
+        visualElement.animation();
+
+        assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
+
+        assertEquals(5, visualElement.getForm().length);
+        assertEquals('=', visualElement.getForm()[0]);
+        assertEquals('-', visualElement.getForm()[1]);
+        assertEquals('\\', visualElement.getForm()[2]);
+        assertEquals('-', visualElement.getForm()[3]);
+        assertEquals('«', visualElement.getForm()[4]);
+
+        visualElement.animation();
+
+        assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
+
+        assertEquals(5, visualElement.getForm().length);
+        assertEquals('=', visualElement.getForm()[0]);
+        assertEquals('-', visualElement.getForm()[1]);
+        assertEquals('/', visualElement.getForm()[2]);
+        assertEquals('-', visualElement.getForm()[3]);
+        assertEquals('~', visualElement.getForm()[4]);
+
+        ////////////////////////////////////////////////////// '>','-','§','-','-'
+
+        visualElement = new VisualCretaceous();
+
+        assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
+
+        assertEquals(5, visualElement.getForm().length);
+        assertEquals('>', visualElement.getForm()[0]);
+        assertEquals('-', visualElement.getForm()[1]);
+        assertEquals('§', visualElement.getForm()[2]);
+        assertEquals('-', visualElement.getForm()[3]);
+        assertEquals('-', visualElement.getForm()[4]);
+
+        visualElement.animation();
+
+        assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
+
+        assertEquals(5, visualElement.getForm().length);
+        assertEquals('-', visualElement.getForm()[0]);
+        assertEquals('-', visualElement.getForm()[1]);
+        assertEquals('(', visualElement.getForm()[2]);
+        assertEquals('-', visualElement.getForm()[3]);
+        assertEquals('.', visualElement.getForm()[4]);
+
+        visualElement.animation();
+
+        assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
+
+        assertEquals(5, visualElement.getForm().length);
+        assertEquals('>', visualElement.getForm()[0]);
+        assertEquals('-', visualElement.getForm()[1]);
+        assertEquals('§', visualElement.getForm()[2]);
+        assertEquals('-', visualElement.getForm()[3]);
+        assertEquals('-', visualElement.getForm()[4]);
     }
 }

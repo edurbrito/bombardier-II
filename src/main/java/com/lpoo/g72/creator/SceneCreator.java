@@ -12,7 +12,7 @@ public abstract class SceneCreator {
     protected char[][] generateBuildings(int width, int height, Random r, int heightFactor) {
 
         int minHeight = 1;
-        int maxHeight = height * 5 / 10; // ratio of maximum building height in relation to the scene dimension
+        int maxHeight = height * 4 / 5; // ratio of maximum building height in relation to the scene dimension
 
         char[] btops = {'T', 'L', 'N', 'H', 'S', 'R'}; // building allowed tops
 
