@@ -81,12 +81,6 @@ public class SceneCreatorTest {
 
         assertEquals(3, scene.getVisualMonsters().size());
 
-        assertTrue(stub.heightFactor(new Random(19),3));
-        assertTrue(stub.heightFactor(new Random(22),3));
-        assertTrue(stub.heightFactor(new Random(31),3));
-        assertTrue(stub.heightFactor(new Random(42),3));
-        assertTrue(stub.heightFactor(new Random(25),3));
-
     }
 
     private int buildingCounter(Scene scene){

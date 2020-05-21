@@ -28,6 +28,11 @@ public class StatesTest {
         public void endGame(Gui.Key key){
 
         }
+
+        @Override
+        public void highscores(Gui.Key key){
+
+        }
     }
 
     @Test
@@ -39,6 +44,7 @@ public class StatesTest {
         MenuState menuState = new MenuState(controller);
         GameState gameState = new GameState(controller);
         EndGame endGame = new EndGame(controller);
+        Highscores highscores = new Highscores(controller);
 
         try{
             menuState.action(Gui.Key.DOWN);
@@ -65,6 +71,9 @@ public class StatesTest {
             Mockito.verify(controller,Mockito.times(1)).endGame(Gui.Key.SPACE);
             endGame.action(Gui.Key.RIGHT);
             Mockito.verify(controller,Mockito.times(1)).endGame(Gui.Key.RIGHT);
+
+            highscores.action(Gui.Key.RIGHT);
+            Mockito.verify(controller,Mockito.times(1)).highscores(Gui.Key.RIGHT);
         } catch (Exception e){
         }
     }
