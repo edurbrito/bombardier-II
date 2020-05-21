@@ -11,7 +11,7 @@ public class UpCommand extends DirectionalCommand {
 
     @Override
     public void execute() {
-        Position position = element.getPosition().up();
-        element.setPosition(position);
+        Position position = this.element.getPosition().up();
+        this.element.setPosition(position);
     }
 }

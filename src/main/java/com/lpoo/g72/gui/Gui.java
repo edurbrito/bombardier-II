@@ -89,33 +89,6 @@ public class Gui {
         this.graphics.putString(this.width - 17, this.height - 3, "Score: " + score);
     }
 
-    public void refreshScreen() throws IOException {
-        this.screen.refresh();
-    }
-
-    public Key getKey() throws IOException {
-        try {
-            KeyStroke input = this.screen.pollInput();
-
-            if (input.getKeyType() == KeyType.ArrowDown)
-                return Key.DOWN;
-            if (input.getKeyType() == KeyType.ArrowUp)
-                return Key.UP;
-            if (input.getKeyType() == KeyType.ArrowRight)
-                return Key.RIGHT;
-            if ((input.getKeyType() == KeyType.Character && input.getCharacter() == ' '))
-                return Key.SPACE;
-            if((input.getKeyType() == KeyType.Enter))
-                return Key.ENTER;
-            if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))
-                return Key.QUIT;
-        } catch (NullPointerException n) {
-            return Key.NULL;
-        }
-
-        return Key.NULL;
-    }
-
     public void drawMenu(int selected, List<String> menuOptions){
         String color1 =  "#00009f";
         String color2 =  "#191919";
@@ -214,6 +187,33 @@ public class Gui {
             );
             this.graphics.putString((this.width-additionalInfo.length()) / 2, this.height/4 + message.size() + 4, additionalInfo);
         }
+    }
+
+    public Key getKey() throws IOException {
+        try {
+            KeyStroke input = this.screen.pollInput();
+
+            if (input.getKeyType() == KeyType.ArrowDown)
+                return Key.DOWN;
+            if (input.getKeyType() == KeyType.ArrowUp)
+                return Key.UP;
+            if (input.getKeyType() == KeyType.ArrowRight)
+                return Key.RIGHT;
+            if ((input.getKeyType() == KeyType.Character && input.getCharacter() == ' '))
+                return Key.SPACE;
+            if((input.getKeyType() == KeyType.Enter))
+                return Key.ENTER;
+            if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))
+                return Key.QUIT;
+        } catch (NullPointerException n) {
+            return Key.NULL;
+        }
+
+        return Key.NULL;
+    }
+
+    public void refreshScreen() throws IOException {
+        this.screen.refresh();
     }
 
     public void closeScreen() throws IOException {

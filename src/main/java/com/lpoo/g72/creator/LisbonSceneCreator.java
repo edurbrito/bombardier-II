@@ -20,10 +20,7 @@ public class LisbonSceneCreator extends SceneCreator {
         visualMonsters.add(new VisualPteranodon());
         visualMonsters.add(new VisualDimorphodon());
 
-
         this.scene = new Scene(width, height, "Lisbon", visualMonsters);
-
-        // TODO: Create some elements like buildings, monsters, etc
 
         this.scene.setBuildings(this.generateBuildings(width,height, new Random(2),3));
 

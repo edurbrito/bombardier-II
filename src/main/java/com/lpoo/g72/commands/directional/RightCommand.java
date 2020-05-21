@@ -10,8 +10,8 @@ public class RightCommand extends DirectionalCommand {
 
     @Override
     public void execute() {
-        Position position = element.getPosition().right();
-        element.setPosition(position);
+        Position position = this.element.getPosition().right();
+        this.element.setPosition(position);
     }
 
 }

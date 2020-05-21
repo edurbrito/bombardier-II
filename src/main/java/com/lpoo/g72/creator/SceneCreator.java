@@ -64,7 +64,7 @@ public abstract class SceneCreator {
         return buildings;
     }
 
-    public boolean heightFactor(Random r, int factor){
+    private boolean heightFactor(Random r, int factor){
 
         // This will return a true or false answer for continuing to "grow" the current building in the loop.
         // The answer is based on some probability associated with the @param factor.

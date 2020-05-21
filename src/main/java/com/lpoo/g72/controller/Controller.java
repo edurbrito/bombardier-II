@@ -2,9 +2,6 @@ package com.lpoo.g72.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextColor;
 import com.lpoo.g72.commands.CommandInvoker;
 import com.lpoo.g72.controller.states.*;
 import com.lpoo.g72.creator.LisbonSceneCreator;
@@ -77,8 +74,8 @@ public class Controller implements Observer{
 
     private void setMenuOptions(){
         this.menuOptions = new ArrayList<>();
-        for(int i = 0; i< this.scenes.size(); i++){
-           this.menuOptions.add(this.scenes.get(i).getName());
+        for (Scene scene : this.scenes) {
+            this.menuOptions.add(scene.getName());
         }
         this.menuOptions.add("Highscores");
     }
@@ -127,6 +124,7 @@ public class Controller implements Observer{
                 break;
             }
         }
+
     }
 
     public void menu(Gui.Key key) throws IOException {
@@ -152,10 +150,11 @@ public class Controller implements Observer{
         }
     }
 
-    public void play(Gui.Key key) throws IOException {
+    public void play(Gui.Key key){
 
         if(key == Gui.Key.QUIT){
             this.state = new MenuState(this);
+            this.setScenes();
         }
 
         this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
@@ -172,9 +171,9 @@ public class Controller implements Observer{
 
         Helicopter helicopter = this.model.getHelicopter();
         if(helicopter.getLives() < 0 || this.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks()){
+            this.score += this.gui.getHeight() - this.helicopterController.getAltitude();
             this.addScore();
             this.state = new EndGame(this);
-            return;
         }
     }
 
@@ -187,7 +186,7 @@ public class Controller implements Observer{
         }
     }
 
-    public void endGame(Gui.Key key) throws IOException {
+    public void endGame(Gui.Key key){
 
         this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
 
@@ -200,6 +199,7 @@ public class Controller implements Observer{
 
         if(key == Gui.Key.QUIT){
             this.state = new MenuState(this);
+            this.setScenes();
         }
     }
 
@@ -303,7 +303,7 @@ public class Controller implements Observer{
         this.highscores.get(this.menuOptions.get(this.selectedScene)).add(this.score);
 
         for (Map.Entry<String, List<Integer>> entry : this.highscores.entrySet()) {
-            Collections.sort(entry.getValue(), Collections.reverseOrder());
+            entry.getValue().sort(Collections.reverseOrder());
             while (entry.getValue().size() > 5){
                 entry.getValue().remove(entry.getValue().size()-1);
             }

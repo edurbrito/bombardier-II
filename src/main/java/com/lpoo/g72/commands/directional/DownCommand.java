@@ -9,7 +9,7 @@ public class DownCommand extends DirectionalCommand {
     }
 
     public void execute() {
-        Position position = element.getPosition().down();
-        element.setPosition(position);
+        Position position = this.element.getPosition().down();
+        this.element.setPosition(position);
     }
 }

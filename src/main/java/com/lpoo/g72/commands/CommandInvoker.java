@@ -8,7 +8,7 @@ public class CommandInvoker{
     private static CommandInvoker instance;
 
     private CommandInvoker() {
-        commands = new ArrayList<>();
+        this.commands = new ArrayList<>();
     }
 
     public static CommandInvoker getInstance() {
