@@ -1,6 +1,8 @@
 package com.lpoo.g72.gui.visualElement;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.lpoo.g72.gui.visualElement.visualMissiles.VisualHorizontalMissile;
+import com.lpoo.g72.gui.visualElement.visualMissiles.VisualVerticalMissile;
 import com.lpoo.g72.model.element.Element;
 import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Missile;

@@ -1,6 +1,8 @@
-package com.lpoo.g72.gui.visualElement;
+package com.lpoo.g72.gui.visualElement.visualMissiles;
 
-public class VisualHorizontalMissile extends VisualElement{
+import com.lpoo.g72.gui.visualElement.VisualElement;
+
+public class VisualHorizontalMissile extends VisualElement {
 
     public VisualHorizontalMissile() {
         super(new char[]{'»', '»', '-', '-', '►'}, new String[]{"#0e539a", "#0e539a", "#233F5C", "#233F5C", "#0e539a"});

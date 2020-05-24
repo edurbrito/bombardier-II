@@ -53,7 +53,7 @@ public class Scene {
     }
 
     public void drawVisualMonsters(TextGraphics graphics, List<Monster> monsters){
-        for(int i = 0; i< monsters.size(); i++){
+        for(int i = 0; i < monsters.size(); i++){
             if(monsters.get(i).isAlive())
                 this.visualMonsters.get(i).draw(graphics,monsters.get(i));
         }
@@ -88,7 +88,7 @@ public class Scene {
     public int removeBuilding(int x, int y) {
         int destroyedBlocks = 0;
 
-        if(x>= this.width) return 0;
+        if(x >= this.width) return 0;
 
         if(this.buildings[this.height - y - 5][ this.width - x - 1] != ' '){
             destroyedBlocks ++;

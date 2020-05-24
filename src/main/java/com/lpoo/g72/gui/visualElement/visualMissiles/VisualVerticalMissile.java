@@ -1,11 +1,12 @@
-package com.lpoo.g72.gui.visualElement;
+package com.lpoo.g72.gui.visualElement.visualMissiles;
 
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.model.element.Element;
 
-public class VisualVerticalMissile extends VisualElement{
+public class VisualVerticalMissile extends VisualElement {
 
     public VisualVerticalMissile() {
         super(new char[]{'_', '|', 'W'}, new String[]{"#b84b0f", "#fd610c", "#b84b0f"});

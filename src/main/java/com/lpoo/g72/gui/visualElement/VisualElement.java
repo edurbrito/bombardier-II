@@ -16,7 +16,7 @@ public abstract class VisualElement {
     }
 
     public char[] getForm() {
-        return form;
+        return this.form;
     }
 
     public void setForm(char[] form) {
@@ -24,7 +24,7 @@ public abstract class VisualElement {
     }
 
     public String[] getColorPallet() {
-        return colorPallet;
+        return this.colorPallet;
     }
 
     public void setColorPallet(String[] colorPallet) {

@@ -1,6 +1,8 @@
 package com.lpoo.g72.gui.visualElement;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.lpoo.g72.gui.visualElement.visualMissiles.VisualHorizontalMissile;
+import com.lpoo.g72.gui.visualElement.visualMissiles.VisualVerticalMissile;
 import com.lpoo.g72.gui.visualElement.visualMonsters.VisualCretaceous;
 import com.lpoo.g72.gui.visualElement.visualMonsters.VisualDimorphodon;
 import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;

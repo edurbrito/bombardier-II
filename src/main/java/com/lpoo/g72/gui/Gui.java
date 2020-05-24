@@ -99,11 +99,12 @@ public class Gui {
                 new TerminalSize(this.width, this.height),
                 ' '
         );
-        graphics.enableModifiers(SGR.BOLD);
+
+        this.graphics.enableModifiers(SGR.BOLD);
         this.drawMessage(this.getGameTitle(), color1, "THE REVENGE OF THE SKYSCRAPPERS");
 
         String s;
-        for(int i = 0; i< menuOptions.size(); i++){
+        for(int i = 0; i < menuOptions.size(); i++){
             if(i == selected){
                 this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
                 s = ">>  " + menuOptions.get(i).toUpperCase() + "  <<";
@@ -115,7 +116,7 @@ public class Gui {
             this.graphics.putString((this.width-s.length()) / 2, this.height/2 + 2 +3*i, s);
         }
 
-        drawControls();
+        this.drawControls();
     }
 
     public void drawHighscores(Map<String, List<Integer>> highscores){
@@ -130,7 +131,7 @@ public class Gui {
         );
 
         List<String> title = this.getHighscoresMessage();
-        graphics.enableModifiers(SGR.BOLD);
+        this.graphics.enableModifiers(SGR.BOLD);
         this.drawMessage(title, color1,"");
 
         int i = 0, j;
@@ -153,12 +154,16 @@ public class Gui {
             }
             i += 20;
         }
+
+        this.graphics.setForegroundColor(TextColor.Factory.fromString(color1));
+        this.graphics.putString(this.width - 15 , this.height- 4,"Q");
+        this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
+        this.graphics.putString(this.width - 12, this.height- 4 ,"Back");
     }
 
     public void drawControls(){
         String[] controls = {"▲", "▼", "▶", "SPACE BAR", "Q"};
         String[] description = {"Move Up","Move Down","Shoot", "Drop Bomb", "Quit"};
-
 
         int y = 7;
         for(int i = 0; i< controls.length; i++){
@@ -175,7 +180,7 @@ public class Gui {
     public void drawMessage(List<String> message, String hexColor, String additionalInfo) {
         this.graphics.setForegroundColor(TextColor.Factory.fromString(hexColor));
 
-        for(int i = 0; i< message.size();i++){
+        for(int i = 0; i < message.size();i++){
             this.graphics.putString((this.width-message.get(i).length()) / 2, this.height/4 + i, message.get(i));
         }
 

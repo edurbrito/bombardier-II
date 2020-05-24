@@ -28,10 +28,10 @@ public class Game {
     }
 
     public Model getModel() {
-        return model;
+        return this.model;
     }
 
     public Controller getController() {
-        return controller;
+        return this.controller;
     }
 }

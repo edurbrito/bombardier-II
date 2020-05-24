@@ -158,11 +158,11 @@ To divide our Application in parts that perform different tasks we implemented t
 *For simplification purposes, not all the details about the classes were included in the diagram.*
 
 Mapping the pattern's roles to our classes, we have:
-* Model = [Model](../src/src/main/java/com/lpoo/g72/model/Model.java), containing all the game atomic [Elements](../src/src/main/java/com/lpoo/g72/model/element/Element.java), such as the [Helicopter](../src/src/main/java/com/lpoo/g72/model/element/Helicopter.java) and the [Monsters](../src/src/main/java/com/lpoo/g72/model/element/Monster.java), which also represent Models themselves, only containing their *Position*.
+* Model = [Model](../src/src/main/java/com/lpoo/g72/model/Model.java), containing all the game atomic [Elements](../src/src/main/java/com/lpoo/g72/model/element/Element.java), such as the [Helicopter](../src/src/main/java/com/lpoo/g72/model/element/Helicopter.java), the [Monsters](../src/src/main/java/com/lpoo/g72/model/element/Monster.java), and the missiles[Missile](../src/src/main/java/com/lpoo/g72/model/element/Missile.java) which also represent Models themselves.
 
 * View = [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java), which contains two other Views:
-  * [VisualHelicopter](../src/src/main/java/com/lpoo/g72/gui/visualElement/VisualHelicopter.java), which is responsible for storing visual information about the Helicopter, such as the color and the form, and to draw it on the screen;
-  * [Scene](../src/src/main/java/com/lpoo/g72/gui/Scene.java), which has the ability to draw its buildings in the right way. This also contains a List of Views for the Monsters, [VisualMonsters](../src/src/main/java/com/lpoo/g72/gui/visualElement/VisualMonster.java), because each Scene may have different ways of drawing them.
+  * [VisualHelicopter](../src/src/main/java/com/lpoo/g72/gui/visualElement/VisualHelicopter.java), which is responsible for storing visual information about the Helicopter, such as the color and the form, and to draw it on the screen. It also contains two lists of [Views for the Missiles](../src/src/main/java/com/lpoo/g72/gui/visualElement/visualMissiles.java);
+  * [Scene](../src/src/main/java/com/lpoo/g72/gui/Scene.java), which has the ability to draw its buildings in the right way. This also contains a list of [Views for the Monsters](../src/src/main/java/com/lpoo/g72/gui/visualElement/visualMonsters.java), because each Scene may have different ways of drawing them.
 
 * Controller = [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java) is the main controller of the game, which connects the main View, [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java), and the main [Model](../src/src/main/java/com/lpoo/g72/model/Model.java). It gets the input from the user by calling Gui's `getKey()` function in `run()` and redirects it to subcontrollers, the [ElementControllers](../src/src/main/java/com/lpoo/g72/controller/ElementController.java), each one responsible for controlling the behavior of a game *Element* and its correspondent View, [VisualElement](../src/src/main/java/com/lpoo/g72/controller/VisualElement.java):
   * [HelicopterController](../src/src/main/java/com/lpoo/g72/controller/HelicopterController.java), which decides the next movement of the Helicopter based on the key pressed by the user and also considering a time factor.
@@ -247,6 +247,10 @@ Concrete Commands that extend the **DirectionalCommand** abstract class and defi
 * [RightCommand](../src/src/main/java/com/lpoo/g72/commands/directional/RightCommand.java)
 * [UpCommand](../src/src/main/java/com/lpoo/g72/commands/directional/UpCommand.java)
 
+Other Concrete Commands that define `public void execute()` from **Command** interface:
+* [DropMissile](../src/src/main/java/com/lpoo/g72/commands/DropMissile.java)
+* [ShootMissile](../src/src/main/java/com/lpoo/g72/commands/ShootMissile.java)
+
 *All commands can be found on [commands package](../src/src/main/java/com/lpoo/g72/commands)*
 
 **Singleton Pattern** roles can be mapped to the application classes as follows:
@@ -327,9 +331,11 @@ Given the fact that the user should be able to choose between a couple of differ
 Applying the **State** pattern allowed us to achieve different game behaviors according to the state of the game and to establish connections between the states. In particular, we defined that, initially, a menu should be shown, *Menu State*, while the user is deciding the game scene or until he quits de game, pressing 'Q'. When the scene is picked, the game elements and visual features are set accordingly, switching the state of the Controller to *Game State*. During this state, if the user performs an action to quit the game, we take him back to the *Menu State*. Otherwise, the state will only be changed if the user wins or loses the game. *End Game State* is set in this case, where pressing 'Q' will take the user back to the menu.
 
 ##### Implementation
+*Class Diagram*
 <img src="../images/statePatternClassDiagram.svg"> 
 
-// TODO - state machine diagram
+*State Machine diagram*
+<img src="../images/statePatternStateMachine.svg" width="400">
 
 * State = [State](../src/src/main/java/com/lpoo/g72/controller/states/State.java), an abstract class that stores a protected reference to the context object and which declares the following abstract method:
   * handle() = `public abstract void action(Gui.key key)`, the state-specific method.
@@ -338,6 +344,7 @@ Concrete States that extend the **State** abstract class and define `public void
 * [MenuState](../src/src/main/java/com/lpoo/g72/controller/states/MenuState.java), which calls Controller's `public void menu(Gui.Key key)`;
 * [GameState](../src/src/main/java/com/lpoo/g72/controller/states/GameState.java), which calls Controller's `public void play(Gui.Key key)`;
 * [EndGame](../src/src/main/java/com/lpoo/g72/controller/states/EndGame.java), which calls Controller's `public void endGame(Gui.Key key)`;
+* [HighScores](../src/src/main/java/com/lpoo/g72/controller/states/Highscores.java), which calls Controller's `public void highscores(Gui.Key key)`;
 
 *All states can be found in the [states package](../src/src/main/java/com/lpoo/g72/controller/states)*
 
@@ -345,6 +352,7 @@ Concrete States that extend the **State** abstract class and define `public void
   * `public void menu(Gui.Key key)`, where the menu is drawn until a scene is chosen by the user;
   * `public void play(Gui.Key key)`, where the actual game actions take place, according to the user actions and to a time factor;
   * `public void endGame(Gui.Key key)`, where a victory or game over message is shown;
+  * `public void highscores(Gui.Key key)`, where the high scores are drawn until the user chooses to quit.
 
 Furthermore, the Context includes a method that requests the action from the active State:
   * request() = `public void run()`.
