@@ -30,8 +30,6 @@ public class Controller implements Observer{
 
     private int destroyedBlocks;
     private int score;
-    private final int pointsPerBlock;
-    private final int pointsPerMonster;
 
     private int selectedScene;
     private List<Scene> scenes;
@@ -41,6 +39,7 @@ public class Controller implements Observer{
 
     private HelicopterController helicopterController;
     private List<MonsterController> monsterControllers;
+    private CollisionController collisionController;
 
     protected CommandInvoker commandInvoker;
 
@@ -52,10 +51,9 @@ public class Controller implements Observer{
         this.selectedScene = 0;
         this.setScenes();
 
+        this.collisionController = new CollisionController(gui,model);
         this.destroyedBlocks = 0;
         this.score = 0;
-        this.pointsPerBlock = 2;
-        this.pointsPerMonster = 1;
 
         this.highscores = new HashMap<>();
         this.readHighscores();
@@ -166,15 +164,20 @@ public class Controller implements Observer{
 
         this.commandInvoker.executeCommands();
 
-        this.horizontalCollisions();
-        this.verticalCollisions();
+        this.collisions();
 
         Helicopter helicopter = this.model.getHelicopter();
-        if(helicopter.getLives() < 0 || this.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks()){
+        if(helicopter.getLives() < 0 || this.collisionController.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks()){
             this.score += this.gui.getHeight() - this.helicopterController.getAltitude();
             this.addScore();
             this.state = new EndGame(this);
         }
+    }
+
+    private void collisions() {
+        int blocks = this.collisionController.blocksDestroyed();
+        this.destroyedBlocks += blocks;
+        this.score += this.collisionController.horizontalCollisions() + 2 * blocks;
     }
 
     public void highscores(Gui.Key key) throws IOException {
@@ -203,59 +206,6 @@ public class Controller implements Observer{
         }
     }
 
-    private void horizontalCollisions(){
-        List<Missile> horizontalMissiles = this.model.getHelicopter().getHorizontalMissiles();
-        List<Monster> monsters = this.model.getMonsters();
-        Helicopter helicopter = this.model.getHelicopter();
-
-        for(Monster monster : monsters){
-            for(Missile missile : horizontalMissiles){
-                if(horizontalCollisionChecker(missile.getPosition(),monster.getPosition()) && monster.isAlive()){
-                    missile.setExploded();
-                    monster.kill();
-                    this.score += this.pointsPerMonster;
-                }
-            }
-
-            if(horizontalCollisionChecker(helicopter.getPosition(),monster.getPosition()) && monster.isAlive()){
-                helicopter.loseLife();
-                monster.kill();
-            }
-        }
-    }
-
-    private boolean horizontalCollisionChecker(Position pos1, Position pos2){
-        return pos1.equals(pos2) || pos1.equals(pos2.right()) || pos1.equals(pos2.right().right())|| pos1.equals(pos2.left());
-    }
-
-    private void verticalCollisions(){
-        int blocks = 0;
-
-        List<Missile> verticalMissiles = this.model.getHelicopter().getVerticalMissiles();
-
-        for(Missile missile : verticalMissiles){
-            if(!missile.hasExploded() && missile.isActive()){
-                int x = missile.getX();
-                int y = missile.getY() % (this.gui.getScene().getBuildings().length - 2);
-
-                for(int i = 0; i < 3; i++){
-                    blocks += this.gui.getScene().removeBuilding( x, y + i);
-                }
-            }
-        }
-        this.destroyedBlocks += blocks;
-        this.score += this.pointsPerBlock * blocks;
-    }
-
-    private boolean buildingsCollisions(){
-        Helicopter helicopter = this.model.getHelicopter();
-        int heliSize = this.gui.getVisualHelicopter().getForm().length - 1;
-        if(this.gui.getScene().removeBuilding(helicopter.getX() + heliSize,helicopter.getY()) > 0){
-            return true;
-        }
-        return false;
-    }
-
     void quit() throws IOException {
         this.writeHighscores();
         this.gui.closeScreen();
@@ -274,7 +224,6 @@ public class Controller implements Observer{
     }
 
     private void readHighscores(){
-
         try {
             Type type = new TypeToken<Map<String, List<Integer>>>(){}.getType();
             this.highscores = new Gson().fromJson(new FileReader("src/main/java/com/lpoo/g72/highscores.json"), type);
@@ -282,7 +231,6 @@ public class Controller implements Observer{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void writeHighscores(){
@@ -299,7 +247,6 @@ public class Controller implements Observer{
     }
 
     private void addScore(){
-
         this.highscores.get(this.menuOptions.get(this.selectedScene)).add(this.score);
 
         for (Map.Entry<String, List<Integer>> entry : this.highscores.entrySet()) {
