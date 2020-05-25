@@ -38,7 +38,6 @@ public class ElementControllerTest {
         assertEquals(10, this.helicopterController.getMaxWidth());
         assertEquals(1, this.helicopterController.getAltitude());
         assertEquals(0.12 * Math.pow(10,9),this.helicopterController.getDeltaTime(),10);
-        assertEquals(0.11 * Math.pow(10,9),this.helicopterController.getMissileDeltaTime(),10);
 
         this.helicopterController.run(Gui.Key.DOWN);
 

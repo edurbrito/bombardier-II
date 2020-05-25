@@ -4,6 +4,7 @@ import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Element;
 
 public class RightCommand extends DirectionalCommand {
+
     public RightCommand(Element element) {
         super(element);
     }

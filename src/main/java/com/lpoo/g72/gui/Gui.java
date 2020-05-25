@@ -15,7 +15,6 @@ import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +27,7 @@ public class Gui {
     private final int width;
     private final int height;
     private TextGraphics graphics;
+    private final MessageDrawer messageDrawer;
 
     public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, ENTER, NULL}
 
@@ -38,6 +38,8 @@ public class Gui {
         this.visualHelicopter = new VisualHelicopter();
         this.screen = createTerminalScreen();
         this.setScreenProperties();
+
+        this.messageDrawer = new MessageDrawer(width,height, this.graphics);
     }
 
     private TerminalScreen createTerminalScreen() throws IOException {
@@ -101,7 +103,7 @@ public class Gui {
         );
 
         this.graphics.enableModifiers(SGR.BOLD);
-        this.drawMessage(this.getGameTitle(), color1, "THE REVENGE OF THE SKYSCRAPPERS");
+        this.messageDrawer.drawMessage(this.messageDrawer.getGameTitle(), color1, "THE REVENGE OF THE SKYSCRAPPERS");
 
         String s;
         for(int i = 0; i < menuOptions.size(); i++){
@@ -130,9 +132,9 @@ public class Gui {
                 ' '
         );
 
-        List<String> title = this.getHighscoresMessage();
         this.graphics.enableModifiers(SGR.BOLD);
-        this.drawMessage(title, color1,"");
+        List<String> title = this.messageDrawer.getHighscoresMessage();
+        this.messageDrawer.drawMessage( title, color1,"");
 
         int i = 0, j;
         String s;
@@ -175,23 +177,6 @@ public class Gui {
             y += 7 + description[i].length();
         }
 
-    }
-
-    public void drawMessage(List<String> message, String hexColor, String additionalInfo) {
-        this.graphics.setForegroundColor(TextColor.Factory.fromString(hexColor));
-
-        for(int i = 0; i < message.size();i++){
-            this.graphics.putString((this.width-message.get(i).length()) / 2, this.height/4 + i, message.get(i));
-        }
-
-        if(!additionalInfo.isEmpty()){
-            this.graphics.fillRectangle(
-                    new TerminalPosition((this.width-additionalInfo.length()) / 2, this.height/4 + message.size() + 3),
-                    new TerminalSize(additionalInfo.length(), 3),
-                    '█'
-            );
-            this.graphics.putString((this.width-additionalInfo.length()) / 2, this.height/4 + message.size() + 4, additionalInfo);
-        }
     }
 
     public Key getKey() throws IOException {
@@ -249,58 +234,7 @@ public class Gui {
         return this.visualHelicopter;
     }
 
-    public List<String> getGameOverMessage(){
-        List<String> gameOver = new ArrayList<>();
-        gameOver.add(" ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ \n");
-        gameOver.add("██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗\n");
-        gameOver.add("██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║██║   ██║█████╗  ██████╔╝\n");
-        gameOver.add("██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗\n");
-        gameOver.add("╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║\n");
-        gameOver.add(" ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝\n");
-        return gameOver;
-    }
-
-    public List<String> getVictoryMessage(){
-        List<String> gameOver = new ArrayList<>();
-        gameOver.add("██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗ ██████╗ ███╗   ██╗██╗\n");
-        gameOver.add("╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██╔═══██╗████╗  ██║██║\n");
-        gameOver.add(" ╚████╔╝ ██║   ██║██║   ██║    ██║ █╗ ██║██║   ██║██╔██╗ ██║██║\n");
-        gameOver.add("  ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██║   ██║██║╚██╗██║╚═╝\n");
-        gameOver.add("   ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝╚██████╔╝██║ ╚████║██╗\n");
-        gameOver.add("   ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝\n");
-        return gameOver;
-    }
-
-    public List<String> getNewRoundMessage(){
-        List<String> newRound = new ArrayList<>();
-        newRound.add("███╗   ██╗███████╗██╗    ██╗    ██████╗  ██████╗ ██╗   ██╗███╗   ██╗██████╗ \n");
-        newRound.add("████╗  ██║██╔════╝██║    ██║    ██╔══██╗██╔═══██╗██║   ██║████╗  ██║██╔══██╗\n");
-        newRound.add("██╔██╗ ██║█████╗  ██║ █╗ ██║    ██████╔╝██║   ██║██║   ██║██╔██╗ ██║██║  ██║\n");
-        newRound.add("██║╚██╗██║██╔══╝  ██║███╗██║    ██╔══██╗██║   ██║██║   ██║██║╚██╗██║██║  ██║\n");
-        newRound.add("██║ ╚████║███████╗╚███╔███╔╝    ██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝\n");
-        newRound.add("╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ \n");
-        return newRound;
-    }
-
-    public List<String> getHighscoresMessage(){
-        List<String> newRound = new ArrayList<>();
-        newRound.add("██╗  ██╗██╗ ██████╗ ██╗  ██╗███████╗ ██████╗ ██████╗ ██████╗ ███████╗███████╗\n");
-        newRound.add("██║  ██║██║██╔════╝ ██║  ██║██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔════╝\n");
-        newRound.add("███████║██║██║  ███╗███████║███████╗██║     ██║   ██║██████╔╝█████╗  ███████╗\n");
-        newRound.add("██╔══██║██║██║   ██║██╔══██║╚════██║██║     ██║   ██║██╔══██╗██╔══╝  ╚════██║\n");
-        newRound.add("██║  ██║██║╚██████╔╝██║  ██║███████║╚██████╗╚██████╔╝██║  ██║███████╗███████║\n");
-        newRound.add("╚═╝  ╚═╝╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝\n");
-        return newRound;
-    }
-
-    public List<String> getGameTitle(){
-        List<String> gameName = new ArrayList<>();
-        gameName.add("██████╗  ██████╗ ███╗   ███╗██████╗  █████╗ ██████╗ ██████╗ ██╗███████╗██████╗     ██╗██╗");
-        gameName.add("██╔══██╗██╔═══██╗████╗ ████║██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║██╔════╝██╔══██╗    ██║██║");
-        gameName.add("██████╔╝██║   ██║██╔████╔██║██████╔╝███████║██████╔╝██║  ██║██║█████╗  ██████╔╝    ██║██║");
-        gameName.add("██╔══██╗██║   ██║██║╚██╔╝██║██╔══██╗██╔══██║██╔══██╗██║  ██║██║██╔══╝  ██╔══██╗    ██║██║");
-        gameName.add("██████╔╝╚██████╔╝██║ ╚═╝ ██║██████╔╝██║  ██║██║  ██║██████╔╝██║███████╗██║  ██║    ██║██║");
-        gameName.add("╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝╚══════╝╚═╝  ╚═╝    ╚═╝╚═╝");
-        return gameName;
+    public MessageDrawer getMessageDrawer() {
+        return messageDrawer;
     }
 }

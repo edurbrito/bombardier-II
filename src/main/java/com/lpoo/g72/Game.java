@@ -12,8 +12,12 @@ public class Game {
     private Model model;
     private Controller controller;
 
-    public static void main(String[] args) throws IOException{
-        new Game().start();
+    public static void main(String[] args){
+        try{
+            new Game().start();
+        } catch (Exception e){
+            System.out.println("Gama Over : " + e);
+        }
     }
 
     public void start() throws IOException{

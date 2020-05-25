@@ -139,8 +139,4 @@ public class HelicopterController extends ElementController implements Observabl
         for(Observer observer: this.observerList)
             observer.update(this.altitude);
     }
-
-    public double getMissileDeltaTime() {
-        return this.missileDeltaTime;
-    }
 }

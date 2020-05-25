@@ -1,7 +1,5 @@
 package com.lpoo.g72.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lpoo.g72.commands.CommandInvoker;
 import com.lpoo.g72.controller.states.*;
 import com.lpoo.g72.creator.LisbonSceneCreator;
@@ -15,11 +13,7 @@ import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Type;
 import java.util.*;
 
 public class Controller implements Observer{
@@ -35,13 +29,12 @@ public class Controller implements Observer{
     private List<Scene> scenes;
     private List<String> menuOptions;
 
-    Map<String,List<Integer>> highscores;
-
     private HelicopterController helicopterController;
     private List<MonsterController> monsterControllers;
     private CollisionController collisionController;
 
     protected CommandInvoker commandInvoker;
+    private final HighscoreController highscoreController;
 
     public Controller(Gui gui, Model model) {
         this.gui = gui;
@@ -55,8 +48,7 @@ public class Controller implements Observer{
         this.destroyedBlocks = 0;
         this.score = 0;
 
-        this.highscores = new HashMap<>();
-        this.readHighscores();
+        this.highscoreController = new HighscoreController();
 
         this.commandInvoker = CommandInvoker.getInstance();
     }
@@ -169,7 +161,7 @@ public class Controller implements Observer{
         Helicopter helicopter = this.model.getHelicopter();
         if(helicopter.getLives() < 0 || this.collisionController.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks()){
             this.score += this.gui.getHeight() - this.helicopterController.getAltitude();
-            this.addScore();
+            this.highscoreController.addScore(this.menuOptions.get(this.selectedScene),this.score);
             this.state = new EndGame(this);
         }
     }
@@ -181,7 +173,7 @@ public class Controller implements Observer{
     }
 
     public void highscores(Gui.Key key) throws IOException {
-        this.gui.drawHighscores(this.highscores);
+        this.gui.drawHighscores(this.highscoreController.getHighscores());
         this.gui.refreshScreen();
 
         if(key == Gui.Key.QUIT){
@@ -194,10 +186,10 @@ public class Controller implements Observer{
         this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
 
         if(this.model.getHelicopter().getLives() < 0 || this.destroyedBlocks != this.gui.getScene().getSceneBlocks()){
-            this.gui.drawMessage(this.gui.getGameOverMessage(), "#b10000","Score: " + score);
+            this.gui.getMessageDrawer().drawMessage(this.gui.getMessageDrawer().getGameOverMessage(), "#b10000","Score: " + score);
         }
         else{
-            this.gui.drawMessage(this.gui.getVictoryMessage(), "#28a016","Score: " + score);
+            this.gui.getMessageDrawer().drawMessage(this.gui.getMessageDrawer().getVictoryMessage(), "#28a016","Score: " + score);
         }
 
         if(key == Gui.Key.QUIT){
@@ -207,7 +199,7 @@ public class Controller implements Observer{
     }
 
     void quit() throws IOException {
-        this.writeHighscores();
+        this.highscoreController.write();
         this.gui.closeScreen();
         throw new IOException();
     }
@@ -215,45 +207,11 @@ public class Controller implements Observer{
     @Override
     public void update(int info){
         try{
-            this.gui.drawMessage(this.gui.getNewRoundMessage(),"#0000b1","Current Altitude: " + (this.gui.getHeight() - info));
+            this.gui.getMessageDrawer().drawMessage(this.gui.getMessageDrawer().getNewRoundMessage(),"#0000b1","Current Altitude: " + (this.gui.getHeight() - info));
             this.gui.refreshScreen();
             Thread.sleep(800);
         } catch (Exception e){
 
-        }
-    }
-
-    private void readHighscores(){
-        try {
-            Type type = new TypeToken<Map<String, List<Integer>>>(){}.getType();
-            this.highscores = new Gson().fromJson(new FileReader("src/main/java/com/lpoo/g72/highscores.json"), type);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void writeHighscores(){
-        try {
-            Writer writer = new FileWriter("src/main/java/com/lpoo/g72/highscores.json");
-
-            new Gson().toJson(this.highscores, writer);
-
-            writer.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void addScore(){
-        this.highscores.get(this.menuOptions.get(this.selectedScene)).add(this.score);
-
-        for (Map.Entry<String, List<Integer>> entry : this.highscores.entrySet()) {
-            entry.getValue().sort(Collections.reverseOrder());
-            while (entry.getValue().size() > 5){
-                entry.getValue().remove(entry.getValue().size()-1);
-            }
         }
     }
 

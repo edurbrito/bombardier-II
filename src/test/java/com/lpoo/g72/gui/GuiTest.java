@@ -62,8 +62,8 @@ public class GuiTest {
 
         this.gui.drawMenu(0,new ArrayList<>(Arrays.asList("A", "B", "C")));
 
-        Mockito.verify(gui, Mockito.times(1)).drawMessage(Mockito.any(),Mockito.any(),Mockito.any());
-        Mockito.verify(gui, Mockito.times(1)).getGameTitle();
+        Mockito.verify(gui, Mockito.times(1)).getMessageDrawer().drawMessage(Mockito.any(),Mockito.any(),Mockito.any());
+        Mockito.verify(gui, Mockito.times(1)).getMessageDrawer().getGameTitle();
     }
 
 }
