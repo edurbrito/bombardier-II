@@ -1,9 +1,13 @@
 package com.lpoo.g72.gui;
 
 import com.googlecode.lanterna.SGR;
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.lpoo.g72.gui.visualElement.VisualElement;
+import com.lpoo.g72.gui.visualElement.VisualHelicopter;
+import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
 
 import java.util.List;
@@ -14,12 +18,14 @@ public class Scene {
     private char[][] buildings;
     private int sceneBlocks;
     private String name;
+    private final VisualHelicopter visualHelicopter;
     private List<VisualElement> visualMonsters;
 
     public Scene(int width, int height, String name, List<VisualElement> visualMonsters){
         this.width = width;
         this.height = height;
         this.name = name;
+        this.visualHelicopter = new VisualHelicopter();
         this.visualMonsters = visualMonsters;
     }
 
@@ -36,9 +42,20 @@ public class Scene {
         return this.visualMonsters;
     }
 
-    public void draw(TextGraphics graphics, List<Monster> monsters){
+    public void draw(TextGraphics graphics, Helicopter helicopter, List<Monster> monsters){
+
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        graphics.setForegroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        graphics.fillRectangle(
+                new TerminalPosition(0, 0),
+                new TerminalSize(this.width, this.height),
+                ' '
+        );
+
         this.drawSceneBuildings(graphics);
         this.drawVisualMonsters(graphics, monsters);
+
+        this.visualHelicopter.draw(graphics,helicopter);
     }
 
     public void drawSceneBuildings(TextGraphics graphics) {
@@ -83,6 +100,10 @@ public class Scene {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public VisualHelicopter getVisualHelicopter() {
+        return visualHelicopter;
     }
 
     public int removeBuilding(int x, int y) {

@@ -44,7 +44,7 @@ public class Controller implements Observer{
         this.selectedScene = 0;
         this.setScenes();
 
-        this.collisionController = new CollisionController(gui,model);
+        this.collisionController = new CollisionController(this.model);
         this.destroyedBlocks = 0;
         this.score = 0;
 
@@ -67,7 +67,7 @@ public class Controller implements Observer{
     }
 
     private void initElementControllers() {
-        this.helicopterController = new HelicopterController(this.gui.getVisualHelicopter(), this.model.getHelicopter(),this.gui.getScene().getWidth() - 1, this.gui.getScene().getHeight() - 5);
+        this.helicopterController = new HelicopterController(this.gui.getScene().getVisualHelicopter(), this.model.getHelicopter(),this.gui.getScene().getWidth() - 1, this.gui.getScene().getHeight() - 5);
 
         this.monsterControllers = new ArrayList<>();
 
@@ -90,6 +90,7 @@ public class Controller implements Observer{
 
     private void initScene(Scene scene) {
         this.gui.setScene(scene);
+        this.collisionController.initScene(scene);
 
         for(int i = 0; i < this.gui.getScene().getVisualMonsters().size(); i++){
             this.model.addMonster(new Monster(new Position(this.gui.getScene().getWidth() + new Random().nextInt(20),i%2)));

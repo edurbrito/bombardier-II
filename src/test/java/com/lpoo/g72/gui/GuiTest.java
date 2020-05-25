@@ -26,8 +26,6 @@ public class GuiTest {
         assertEquals(12,this.gui.getWidth());
         assertEquals(15,this.gui.getHeight());
 
-        assertNotNull(this.gui.getVisualHelicopter());
-
         assertNotNull(this.gui.getScreen());
 
         assertNull(this.gui.getScene());
@@ -56,7 +54,7 @@ public class GuiTest {
 
         this.gui.drawScene(helicopter,monsterList,0,0);
 
-        Mockito.verify(scene,Mockito.times(1)).draw(Mockito.any(),Mockito.any());
+        Mockito.verify(scene,Mockito.times(1)).draw(Mockito.any(),Mockito.any(), Mockito.any());
 
         this.gui.closeScreen();
 

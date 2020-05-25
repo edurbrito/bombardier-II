@@ -6,6 +6,7 @@ import com.lpoo.g72.gui.visualElement.VisualElement;
 import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
+import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,13 +66,14 @@ public class SceneTest {
 
         TextGraphics graphics = Mockito.mock(TextGraphics.class);
 
-        this.scene.draw(graphics,model.getMonsters());
+        model.setHelicopter(new Helicopter(new Position(0,1),5,5));
+        this.scene.draw(graphics,model.getHelicopter(),model.getMonsters());
 
-        Mockito.verify(this.scene,Mockito.times(1)).draw(Mockito.any(), Mockito.any());
+        Mockito.verify(this.scene,Mockito.times(1)).draw(Mockito.any(), Mockito.any(),Mockito.any());
         Mockito.verify(this.scene,Mockito.times(1)).drawSceneBuildings(Mockito.any());
 
-        Mockito.verify(graphics, Mockito.times(1 + vmonstersSize)).enableModifiers(Mockito.any());
-        Mockito.verify(graphics, Mockito.times(vmonstersSize)).setBackgroundColor(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(2 + vmonstersSize)).enableModifiers(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(2 + vmonstersSize)).setBackgroundColor(Mockito.any());
         Mockito.verify(graphics, Mockito.times(1 + vmonstersSize*this.scene.getVisualMonsters().get(0).getForm().length)).setForegroundColor(Mockito.any());
 
         Mockito.verify(this.scene,Mockito.times(1)).drawVisualMonsters(Mockito.any(), Mockito.any());
