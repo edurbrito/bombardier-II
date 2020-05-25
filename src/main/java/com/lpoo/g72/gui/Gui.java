@@ -57,7 +57,7 @@ public class Gui {
         this.graphics = this.screen.newTextGraphics();
     }
 
-    public void draw(Helicopter helicopter, List<Monster> monsters, int destroyedBlocks, int score) {
+    public void drawScene(Helicopter helicopter, List<Monster> monsters, int destroyedBlocks, int score) {
 
         this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
         this.graphics.setForegroundColor(TextColor.Factory.fromString("#C0C0C0"));

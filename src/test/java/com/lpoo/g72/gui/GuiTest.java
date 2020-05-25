@@ -54,7 +54,7 @@ public class GuiTest {
         monsterList.add(new Monster(new Position(12,13)));
         monsterList.add(new Monster(new Position(12,15)));
 
-        this.gui.draw(helicopter,monsterList,0,0);
+        this.gui.drawScene(helicopter,monsterList,0,0);
 
         Mockito.verify(scene,Mockito.times(1)).draw(Mockito.any(),Mockito.any());
 
@@ -62,8 +62,6 @@ public class GuiTest {
 
         this.gui.drawMenu(0,new ArrayList<>(Arrays.asList("A", "B", "C")));
 
-        Mockito.verify(gui, Mockito.times(1)).getMessageDrawer().drawMessage(Mockito.any(),Mockito.any(),Mockito.any());
-        Mockito.verify(gui, Mockito.times(1)).getMessageDrawer().getGameTitle();
     }
 
 }

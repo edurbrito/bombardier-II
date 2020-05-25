@@ -6,11 +6,11 @@ import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.creator.OportoSceneCreator;
 import com.lpoo.g72.creator.RandomSceneCreator;
 import com.lpoo.g72.gui.Gui;
+import com.lpoo.g72.gui.MessageDrawer;
 import com.lpoo.g72.gui.Scene;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Helicopter;
-import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
@@ -59,15 +59,24 @@ public class Controller implements Observer{
         this.scenes.add(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
         this.scenes.add(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
 
-        this.setMenuOptions();
-    }
-
-    private void setMenuOptions(){
         this.menuOptions = new ArrayList<>();
         for (Scene scene : this.scenes) {
             this.menuOptions.add(scene.getName());
         }
         this.menuOptions.add("Highscores");
+    }
+
+    private void initElementControllers() {
+        this.helicopterController = new HelicopterController(this.gui.getVisualHelicopter(), this.model.getHelicopter(),this.gui.getScene().getWidth() - 1, this.gui.getScene().getHeight() - 5);
+
+        this.monsterControllers = new ArrayList<>();
+
+        for(int i = 0; i < this.model.getMonsters().size(); i++){
+            this.monsterControllers.add(new MonsterController(this.gui.getScene().getVisualMonsters().get(i), this.model.getMonsters().get(i), this.gui.getScene().getWidth()-1));
+            this.helicopterController.addObserver(this.monsterControllers.get(i));
+        }
+
+        this.helicopterController.addObserver(this);
     }
 
     private void initModel(){
@@ -89,19 +98,6 @@ public class Controller implements Observer{
         this.score = 0;
         this.destroyedBlocks = 0;
         this.initElementControllers();
-    }
-
-    private void initElementControllers() {
-        this.helicopterController = new HelicopterController(this.gui.getVisualHelicopter(), this.model.getHelicopter(),this.gui.getScene().getWidth() - 1, this.gui.getScene().getHeight() - 5);
-
-        this.monsterControllers = new ArrayList<>();
-
-        for(int i = 0; i < this.model.getMonsters().size(); i++){
-            this.monsterControllers.add(new MonsterController(this.gui.getScene().getVisualMonsters().get(i), this.model.getMonsters().get(i), this.gui.getScene().getWidth()-1));
-            this.helicopterController.addObserver(this.monsterControllers.get(i));
-        }
-
-        this.helicopterController.addObserver(this);
     }
 
     public void run(){
@@ -147,7 +143,7 @@ public class Controller implements Observer{
             this.setScenes();
         }
 
-        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
+        this.gui.drawScene(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
 
         this.helicopterController.run(key);
 
@@ -183,13 +179,14 @@ public class Controller implements Observer{
 
     public void endGame(Gui.Key key){
 
-        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
+        this.gui.drawScene(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
 
+        MessageDrawer messageDrawer = this.gui.getMessageDrawer();
         if(this.model.getHelicopter().getLives() < 0 || this.destroyedBlocks != this.gui.getScene().getSceneBlocks()){
-            this.gui.getMessageDrawer().drawMessage(this.gui.getMessageDrawer().getGameOverMessage(), "#b10000","Score: " + score);
+            messageDrawer.drawMessage(messageDrawer.getGameOverMessage(), "#b10000","Score: " + score);
         }
         else{
-            this.gui.getMessageDrawer().drawMessage(this.gui.getMessageDrawer().getVictoryMessage(), "#28a016","Score: " + score);
+            messageDrawer.drawMessage(messageDrawer.getVictoryMessage(), "#28a016","Score: " + score);
         }
 
         if(key == Gui.Key.QUIT){
@@ -207,7 +204,8 @@ public class Controller implements Observer{
     @Override
     public void update(int info){
         try{
-            this.gui.getMessageDrawer().drawMessage(this.gui.getMessageDrawer().getNewRoundMessage(),"#0000b1","Current Altitude: " + (this.gui.getHeight() - info));
+            MessageDrawer messageDrawer = this.gui.getMessageDrawer();
+            messageDrawer.drawMessage(messageDrawer.getNewRoundMessage(),"#0000b1","Current Altitude: " + (this.gui.getHeight() - info));
             this.gui.refreshScreen();
             Thread.sleep(800);
         } catch (Exception e){
