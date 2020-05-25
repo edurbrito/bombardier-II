@@ -77,9 +77,11 @@ The city name, chosen when the main menu is set, will be presented here.
 The place where the score will be shown.
 
 #### Lives
-Not yet configured for the helicopter.
+The Helicopter has a limited number of lives that decreases when it hits the monsters or the buildings.
 
-> The above may change as we fully implement new things...
+#### High Scores
+The best scores for each scene are stored between game sessions.
+
 
 ## PLANNED FEATURES
 
@@ -278,7 +280,9 @@ Advantages of using **Singleton** pattern:
 As described before, in Bombardier II, the Helicopter's altitude decreases each new round (every time it enters the screen from the left side). A few moments later, the monsters will move towards the Helicopter from the right side which implies that their altitude and entrance time should also vary in conformity with the Helicopter's movement. We could easily do this by defining both movements (the one from the Helicopter and the one from the Monsters), one on each Controller. However, that would imply that if we decided that the Helicopter's altitude would decrease more/less on each round we would need to modify both Controllers. We wanted both movements to be synchronized in a way that the Monsters would update their *Positions* based on the modifications that occurred with the Helicopter's *Position*.
 
 ##### The Pattern
-Applying the **Observer** pattern allowed us to obtain the expected outcome, because, by defining the Monsters' Controllers as Observers of the Helicopter Controller (Observable), we can notify them when the altitude decreases and automatically update the Monsters *Position* based on that information.
+Applying the **Observer** pattern allowed us to obtain the expected outcome, because, by defining the Monsters' Controllers as Observers of the Helicopter Controller (Observable), we can notify them when the altitude decreases and automatically update the Monsters *Position* based on that information. Furthermore, by also making the Controller an Observer of the Helicopter Controller, we can easily define when the "New Round" message should be displayed on the screen. 
+
+
 *The Helicopter's Controller method that calls the method that notifies the Observers*
 ```java
 private void decreaseAltitude(){
@@ -287,7 +291,7 @@ private void decreaseAltitude(){
 }
 ```
 
-*The Helicopter's Controller method that calls the Monsters' Controllers update method*
+*The Helicopter's Controller method that calls Observer update method on all its Observers*
 ```java
 public void notifyObservers() {
   for(Observer observer: this.observerList)
@@ -312,8 +316,8 @@ public void notifyObservers() {
 * Observer = [Observer](../src/src/main/java/com/lpoo/g72/controller/Observer.java), an interface with the following methods:
   * update() = `public void update(int info)`.
 
-* ConcreteObserver = [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java), which implements the previous interface and defines its methods:
-  * update() = `public void update(int info)`, in which the altitude of the Monster is calculated based on `info`
+* ConcreteObservers = [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java) and [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java), which implement the previous interface and define its methods:
+  * update() = `public void update(int info)`, in which the altitude of the Monster is calculated based on `info` in the [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java) or the the "New Round" message is displayed in the [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java).
 
 ##### Consequences
 Some advantages of this pattern:
@@ -331,10 +335,14 @@ Given the fact that the user should be able to choose between a couple of differ
 Applying the **State** pattern allowed us to achieve different game behaviors according to the state of the game and to establish connections between the states. In particular, we defined that, initially, a menu should be shown, *Menu State*, while the user is deciding the game scene or until he quits de game, pressing 'Q'. When the scene is picked, the game elements and visual features are set accordingly, switching the state of the Controller to *Game State*. During this state, if the user performs an action to quit the game, we take him back to the *Menu State*. Otherwise, the state will only be changed if the user wins or loses the game. *End Game State* is set in this case, where pressing 'Q' will take the user back to the menu.
 
 ##### Implementation
+
 *Class Diagram*
+
 <img src="../images/statePatternClassDiagram.svg"> 
 
+
 *State Machine diagram*
+
 <img src="../images/statePatternStateMachine.svg" width="400">
 
 * State = [State](../src/src/main/java/com/lpoo/g72/controller/states/State.java), an abstract class that stores a protected reference to the context object and which declares the following abstract method:
