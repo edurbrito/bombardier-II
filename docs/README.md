@@ -395,7 +395,13 @@ There is, indeed, some identical code found, for example, in two subclasses of t
 
 ![](../images/unitest.png)
 
+![](../images/coverage.png)
+
 ![](../images/pitest.png)
+
+![](../images/pbtTesting.png) | ![](../images/pbt-position.png) |  ![](../images/pbt-scene.png) 
+|------|-----|------|
+| Examples of PBT testing |
 
 ## SELF-EVALUATION
 
