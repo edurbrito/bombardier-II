@@ -1,9 +1,14 @@
 package com.lpoo.g72.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.FileReader;
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +27,11 @@ public class HighscoreControllerTest {
     public void testWrite() {
 
         highscoreController.read();
+        Type type = new TypeToken<Map<String, List<Integer>>>() {
+        }.getType();
+
+        Map<String, List<Integer>> oldMap = new HashMap<>();
+        oldMap.putAll(new Gson().fromJson(highscoreController.getHighscores().toString(), type));
 
         assertNotNull(highscoreController.getHighscores());
         Mockito.verify(highscoreController, Mockito.times(1)).read();
@@ -77,6 +87,10 @@ public class HighscoreControllerTest {
                 }
             }
         }
+
+        highscoreController.setHighscores(oldMap);
+
+        highscoreController.write();
     }
 
     @Test
