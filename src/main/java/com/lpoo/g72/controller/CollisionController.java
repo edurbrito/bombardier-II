@@ -71,9 +71,7 @@ public class CollisionController {
     public boolean buildingsCollisions(){
         Helicopter helicopter = this.model.getHelicopter();
         int heliSize = this.scene.getVisualHelicopter().getForm().length - 1;
-        if(this.scene.removeBuilding(helicopter.getX() + heliSize,helicopter.getY()) > 0){
-            return true;
-        }
-        return false;
+        return this.scene.removeBuilding(helicopter.getX() + heliSize, helicopter.getY()) > 0;
     }
+
 }

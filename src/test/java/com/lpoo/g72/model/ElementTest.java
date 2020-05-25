@@ -9,31 +9,31 @@ import static org.junit.Assert.assertEquals;
 
 public class ElementTest {
     @Test
-    public void elementTest(){
-        Element element = new Helicopter(new Position(15,16),4,5);
+    public void elementTest() {
+        Element element = new Helicopter(new Position(15, 16), 4, 5);
 
-        assertEquals(true, element.getPosition().equals(new Position(15,16)));
+        assertEquals(true, element.getPosition().equals(new Position(15, 16)));
         assertEquals(15, element.getX());
         assertEquals(16, element.getY());
 
-        element.setPosition(new Position(15,17));
-        assertEquals(true, element.getPosition().equals(new Position(15,17)));
+        element.setPosition(new Position(15, 17));
+        assertEquals(true, element.getPosition().equals(new Position(15, 17)));
         assertEquals(15, element.getX());
         assertEquals(17, element.getY());
 
-        element = new Monster(new Position(31,22));
+        element = new Monster(new Position(31, 22));
 
-        assertEquals(true, element.getPosition().equals(new Position(31,22)));
+        assertEquals(true, element.getPosition().equals(new Position(31, 22)));
         assertEquals(31, element.getX());
         assertEquals(22, element.getY());
 
-        element.setPosition(new Position(19,95));
-        assertEquals(true, element.getPosition().equals(new Position(19,95)));
+        element.setPosition(new Position(19, 95));
+        assertEquals(true, element.getPosition().equals(new Position(19, 95)));
 
         assertEquals(19, element.getX());
         assertEquals(95, element.getY());
 
-        Helicopter helicopter = new Helicopter(new Position(15,16),4,5);
+        Helicopter helicopter = new Helicopter(new Position(15, 16), 4, 5);
 
         for (int i = 0; i < 4; i++) {
             helicopter.drop().activate();
@@ -53,7 +53,7 @@ public class ElementTest {
         helicopter.loseLife();
         assertEquals(0, helicopter.getLives());
 
-        Monster monster = new Monster(new Position(1,4));
+        Monster monster = new Monster(new Position(1, 4));
 
         assertEquals(true, monster.isAlive());
 

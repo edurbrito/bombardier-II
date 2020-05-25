@@ -196,7 +196,7 @@ public class Controller implements Observer{
         }
     }
 
-    void quit() throws IOException {
+    private void quit() throws IOException {
         this.highscoreController.write();
         this.gui.closeScreen();
         throw new IOException();
