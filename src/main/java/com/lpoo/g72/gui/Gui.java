@@ -59,8 +59,8 @@ public class Gui {
 
     public void draw(Helicopter helicopter, List<Monster> monsters, int destroyedBlocks, int score) {
 
-        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
-        this.graphics.setForegroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#d1d1d1"));
+        this.graphics.setForegroundColor(TextColor.Factory.fromString("#d1d1d1"));
         this.graphics.fillRectangle(
                 new TerminalPosition(0, 0),
                 new TerminalSize(this.width, this.height),
@@ -95,7 +95,7 @@ public class Gui {
         String color1 =  "#00009f";
         String color2 =  "#191919";
 
-        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#d1d1d1"));
         this.graphics.fillRectangle(
                 new TerminalPosition(0, 0),
                 new TerminalSize(this.width, this.height),
@@ -125,7 +125,7 @@ public class Gui {
         String color1 =  "#9f395d";
         String color2 = "#191919";
 
-        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#d1d1d1"));
         this.graphics.fillRectangle(
                 new TerminalPosition(0, 0),
                 new TerminalSize(this.width, this.height),

@@ -6,35 +6,8 @@
 
 > A suicide helicopter tries to bomb a city taken by the forces of evil, while escaping from monsters moving in its direction.
 
-```java
-
-                                             \-O
-                                                                      <-/-{
-                                             _
-                                             |
-               <-(-(                         W
-      T                 T                                               T
-      # S                #                                           S  #
-      # #                #                       R   R  R     R      #  #
-      # #                #                       #   #  #    Q#    Q #  #    Q
-      # #           P    #                R#     #   #  #    ##    # #  #    #
-      # #           #    #   O            ##     #   #  #    ##    # #  #    #
-      # #         N #   N#   #        N   ##   N #   #  #    ##    # #  #    # N
-      # #         # #   ##   # M      #   ##   # #   #  #    ##    # # M#    # #
- L    # #         # # L ##   # #   L  #   ##   # #   #  # L  ##L   # # ##    # #
- #    # #   K     # # # ##   # #   #  #   ##   # #   #  # #  ###   # # ## K  # #
- # J  # #   #     #J# # ## J # #   #J #J  ##   # #   #  # #  ###   # # ## #  # #
- # #  # #   #     ###I# ## # # #   ## ##  ##   # #   #  # #  ###   # #I## #  # #
- # #  # #   #     ##### ## # # #H  ## ##  ##   # #   #  # #  ###   # #### #  # #
-G# #  # #   #   G ##### ## # # ##G ## ##G ##   # #   #  #G#  ###   # #### #  # #
-## #  # # F #   #F##### ## #F# ### ## ### ##F  # #  F#  ###  ###   # ####F#FF# #
-## #  # # # #  E####### ## ### ### ## ### ###  #E#E ##  ###  ###  E#E######### #
-## # D# #D#D#  ######## ## ### ### ## ### ### D#### ##  ###D ###  ############ #
-## # ## #####C ######## ## ###C###C## ### ### ##### ##  #### ###C ############ #
-##B#B## ######B######## ## ##########B### ### #####B##B #### ####B############ #
-####### ###############A##A############## ### ######### #### ################# #
-==========Blocks: 0700/0700, City:          OPorto (01), Score:      -1=========
-```
+<img src="../images/menu.png" width="48%">
+<img src="../images/game.png" width="48%">
 
 ## Description
 
@@ -48,14 +21,15 @@ The helicopter, starting from the top left corner of the scene, will have to des
 
 This project was developed by Diana Freitas ([up201806230@fe.up.pt](mailto:up201806230@fe.up.pt)) and Eduardo Brito ([up201806271@fe.up.pt](up201806271@fe.up.pt)) for LPOO 2019⁄2020.
 
-## Main Features
+## MAIN FEATURES
+
+### Menu
+The user is able to choose between three scene options (OPorto, Lisbon and Random) or to visualize the High Scores. To select an option he must use the "Up" and "Down" arrows and the "Enter" key to start playing.
 
 ### Initial Scene
 
 #### Objects
-There will be a helicopter, placed in the top left corner of the screen, some randomly generated monsters moving towards the helicopter in the top right corner and buildings below them.
-
-### Movement Control and Time Factor
+There is a helicopter placed in the top left corner of the screen, some random generated buildings according to the chosen scene and monsters, whose color also depends on the Scene.
 
 #### Vertical Movement
 The vertical movement of the helicopter is controlled not only by the player, but also by a time factor.
@@ -68,28 +42,40 @@ The vertical movement of the helicopter is controlled not only by the player, bu
 - The flying monsters are moving horizontally towards the helicopter, possibly with different moving techniques and speeds.
 
 ### Bomb & Missile Launching
-- The right arrow key will allow the user to launch a frontal missile.
-- Pressing the space key will launch a bomb onto the buildings.
-- The number of missiles and bombs should be limited and, therefore, should be updated every time the user presses the space or right arrow key. Also, every time the helicopter comes from the left side, this number should be recalculated.
+- The right arrow key allows the user to launch a frontal missile.
+- Pressing the space key launches a bomb onto the buildings.
+- The number of missiles and bombs is limited and, therefore, updated every time the user presses the space or right arrow key. Also, every time the helicopter comes from the left side, this number is recalculated.
 
 ### Collision Detection
 - If the helicopter collides with a skyscraper, the game ends.
-- Colliding with monsters weakens the helicopter, reducing its energy.
-
-### Score
-The score will be shown on the bottom of the screen. This will be increased every time the helicopter successfully reaches the right side, or when it destroys monsters or buildings.
-
-### Energy
-The helicopter has limited energy. This will also be shown on the bottom of the screen and will be reduced every time there is a collision with a monster.
+- Colliding with monsters weakens the helicopter, reducing its life.
 
 ### Game Messages
-The player should be presented with a message when starting or ending the game, giving him instructions or showing him the final score.
+The player is presented with a message when a new round begins showing him the current altitude and when ending the game, showing him the final score and a victory/game over message.
 
-### Ending
+### Info Bar
+This bar is already set on the screen. It is always be below the buildings' bottom line and contains the following info, when a new game starts.
+
+#### Blocks
+An indication for the number of blocks of buildings remaining for destroying.
+
+#### City
+The city name, chosen in the main menu.
+
+#### Score
+This is increased every time the helicopter destroys monsters or buildings.
+
+#### Lives
+The Helicopter has a limited number of lives, that decreases every time there is a collision with a monster.
+
+#### Ending
 The game ends for three reasons:
 - As mentioned before, if the helicopter collides with a building;
 - If it loses all the energy, from clashing with monsters;
 - Or if every building is successfully put on the ground by its bombs.
 
+### High Scores
+The best scores for each scene are stored between game sessions and can be checked by selecting the last option of the menu.
+
 ### Restarting
-It should be possible to restart the game when it ends.
+By including a menu, it is always possible to play again choosing another scene or the same.

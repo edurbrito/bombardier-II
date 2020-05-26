@@ -27,7 +27,7 @@ public class VisualVerticalMissile extends VisualElement {
     @Override
     public void draw(TextGraphics graphics, Element element){
         graphics.enableModifiers(SGR.BOLD);
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#d1d1d1"));
 
         for (int i = 0; i < this.form.length; i++) {
             graphics.setForegroundColor(TextColor.Factory.fromString(this.colorPallet[i]));
