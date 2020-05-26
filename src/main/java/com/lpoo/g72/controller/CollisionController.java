@@ -1,6 +1,6 @@
 package com.lpoo.g72.controller;
 
-import com.lpoo.g72.gui.Gui;
+import com.lpoo.g72.gui.Scene;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Helicopter;
@@ -10,12 +10,15 @@ import com.lpoo.g72.model.element.Monster;
 import java.util.List;
 
 public class CollisionController {
-    private final Gui gui;
-    private Model model;
+    private Scene scene;
+    private final Model model;
 
-    public CollisionController(Gui gui, Model model) {
-        this.gui = gui;
+    public CollisionController(Model model) {
         this.model = model;
+    }
+
+    public void initScene(Scene scene){
+        this.scene = scene;
     }
 
     public int horizontalCollisions(){
@@ -55,10 +58,10 @@ public class CollisionController {
         for(Missile missile : verticalMissiles){
             if(!missile.hasExploded() && missile.isActive()){
                 int x = missile.getX();
-                int y = missile.getY() % (this.gui.getScene().getBuildings().length - 2);
+                int y = missile.getY() % (this.scene.getBuildings().length - 2);
 
                 for(int i = 0; i < 3; i++){
-                    blocks += this.gui.getScene().removeBuilding( x, y + i);
+                    blocks += this.scene.removeBuilding( x, y + i);
                 }
             }
         }
@@ -67,10 +70,8 @@ public class CollisionController {
 
     public boolean buildingsCollisions(){
         Helicopter helicopter = this.model.getHelicopter();
-        int heliSize = this.gui.getVisualHelicopter().getForm().length - 1;
-        if(this.gui.getScene().removeBuilding(helicopter.getX() + heliSize,helicopter.getY()) > 0){
-            return true;
-        }
-        return false;
+        int heliSize = this.scene.getVisualHelicopter().getForm().length - 1;
+        return this.scene.removeBuilding(helicopter.getX() + heliSize, helicopter.getY()) > 0;
     }
+
 }

@@ -21,7 +21,6 @@ import java.util.Map;
 public class Gui {
 
     private final TerminalScreen screen;
-    private final VisualHelicopter visualHelicopter;
     private Scene scene;
 
     private final int width;
@@ -35,7 +34,6 @@ public class Gui {
         this.width = width;
         this.height = height;
 
-        this.visualHelicopter = new VisualHelicopter();
         this.screen = createTerminalScreen();
         this.setScreenProperties();
 
@@ -57,7 +55,7 @@ public class Gui {
         this.graphics = this.screen.newTextGraphics();
     }
 
-    public void draw(Helicopter helicopter, List<Monster> monsters, int destroyedBlocks, int score) {
+    public void drawScene(Helicopter helicopter, List<Monster> monsters, int destroyedBlocks, int score) {
 
         this.graphics.setBackgroundColor(TextColor.Factory.fromString("#d1d1d1"));
         this.graphics.setForegroundColor(TextColor.Factory.fromString("#d1d1d1"));
@@ -67,11 +65,10 @@ public class Gui {
                 ' '
         );
 
-        this.scene.draw(this.graphics, monsters);
+        this.scene.draw(this.graphics, helicopter, monsters);
 
         this.drawScoreBar(destroyedBlocks, score, helicopter);
 
-        this.visualHelicopter.draw(this.graphics,helicopter);
     }
 
     private void drawScoreBar(int destroyedBlocks, int score, Helicopter helicopter) {
@@ -228,10 +225,6 @@ public class Gui {
 
     public Scene getScene() {
         return this.scene;
-    }
-
-    public VisualHelicopter getVisualHelicopter() {
-        return this.visualHelicopter;
     }
 
     public MessageDrawer getMessageDrawer() {
