@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class HighscoreController {
 
-    Map<String,List<Integer>> highscores;
+    private Map<String,List<Integer>> highscores;
 
     public HighscoreController() {
         this.highscores = new HashMap<>();
@@ -39,7 +39,7 @@ public class HighscoreController {
         try {
             Writer writer = new FileWriter("src/main/java/com/lpoo/g72/highscores.json");
 
-            new Gson().toJson(this.getHighscores(), writer);
+            new Gson().toJson(this.highscores, writer);
 
             writer.close();
 
@@ -50,9 +50,9 @@ public class HighscoreController {
 
     public void addScore(String scene, int score) {
 
-        this.getHighscores().get(scene).add(score);
+        this.highscores.get(scene).add(score);
 
-        for (Map.Entry<String, List<Integer>> entry : this.getHighscores().entrySet()) {
+        for (Map.Entry<String, List<Integer>> entry : this.highscores.entrySet()) {
             entry.getValue().sort(Collections.reverseOrder());
             while (entry.getValue().size() > 5) {
                 entry.getValue().remove(entry.getValue().size() - 1);

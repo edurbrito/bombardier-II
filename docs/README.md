@@ -19,7 +19,7 @@ The helicopter, starting from the top left corner of the scene, will have to des
 
 ----
 
-This project was developed by Diana Freitas ([up201806230@fe.up.pt](mailto:up201806230@fe.up.pt)) and Eduardo Brito ([up201806271@fe.up.pt](up201806271@fe.up.pt)) for LPOO 2019⁄2020.
+This project was developed by Diana Freitas ([up201806230@fe.up.pt](mailto:up201806230@fe.up.pt)) and Eduardo Brito ([up201806271@fe.up.pt](mailto:up201806271@fe.up.pt)) for LPOO 2019⁄2020.
 
 ## MAIN FEATURES
 
@@ -99,7 +99,7 @@ With everything considered, we refactored our code until we were able to clearly
 
 [3. Views had references to the Models](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/0b27b7c0f997f7f7ec8078d17a86c61aacb35d51/src/src/main/java/com/lpoo/g72)
 
-[4. Controllers, Views and Models defined](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/86339fee7ecb47b7ddbd6e9778a89eeda95353a7/src/src/test/java/com/lpoo/g72)
+[4. Initial Controllers, Views and Models defined](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/86339fee7ecb47b7ddbd6e9778a89eeda95353a7/src/src/test/java/com/lpoo/g72)
 
 #### The Pattern
 To divide our Application in parts that perform different tasks we implemented the Model-View-Controller architectural pattern , **MVC Pattern**. This way, we have *Models* that represent the data, the 'atomic' elements of the game such as the Helicopter and the Monsters. Then, we have the *Views* that have the responsibility to draw the elements and interact with the user (Graphical User Interface). Finally, we use multiple *Controllers* to connect the Views and the Models, making sure the game events occur in the desired sequence, determining what should change.
@@ -111,16 +111,19 @@ To divide our Application in parts that perform different tasks we implemented t
 *For simplification purposes, not all the details about the classes were included in the diagram.*
 
 Mapping the pattern's roles to our classes, we have:
-* Model = [Model](../src/src/main/java/com/lpoo/g72/model/Model.java), containing all the game atomic [Elements](../src/src/main/java/com/lpoo/g72/model/element/Element.java), such as the [Helicopter](../src/src/main/java/com/lpoo/g72/model/element/Helicopter.java), the [Monsters](../src/src/main/java/com/lpoo/g72/model/element/Monster.java), and the missiles[Missile](../src/src/main/java/com/lpoo/g72/model/element/Missile.java) which also represent Models themselves.
+* Model = [Model](../src/main/java/com/lpoo/g72/model/Model.java), containing all the game atomic [Elements](../src/main/java/com/lpoo/g72/model/element/Element.java), such as the [Helicopter](../src/main/java/com/lpoo/g72/model/element/Helicopter.java), the [Monsters](../src/main/java/com/lpoo/g72/model/element/Monster.java), and the [Missiles](../src/main/java/com/lpoo/g72/model/element/Missile.java) which also represent Models themselves.
 
-* View = [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java), which contains two other Views:
-  * [VisualHelicopter](../src/src/main/java/com/lpoo/g72/gui/visualElement/VisualHelicopter.java), which is responsible for storing visual information about the Helicopter, such as the color and the form, and to draw it on the screen. It also contains two lists of [Views for the Missiles](../src/src/main/java/com/lpoo/g72/gui/visualElement/visualMissiles.java);
-  * [Scene](../src/src/main/java/com/lpoo/g72/gui/Scene.java), which has the ability to draw its buildings in the right way. This also contains a list of [Views for the Monsters](../src/src/main/java/com/lpoo/g72/gui/visualElement/visualMonsters.java), because each Scene may have different ways of drawing them.
+* View = [Gui](../src/main/java/com/lpoo/g72/gui/Gui.java), which contains two other View:
+  * [Scene](../src/main/java/com/lpoo/g72/gui/Scene.java), which has the ability to draw its buildings in the right way. This also contains:
+    * [VisualHelicopter](../src/main/java/com/lpoo/g72/gui/visualElement/VisualHelicopter.java), which is responsible for storing visual information about the Helicopter, such as the color and the form, and to draw it on the screen.It also contains two lists of [Views for the Missiles](../src/main/java/com/lpoo/g72/gui/visualElement/visualMissiles.java);
+    * A list of [Views for the Monsters](../src/main/java/com/lpoo/g72/gui/visualElement/visualMonsters), because each Scene may have different ways of drawing its monsters.
 
-* Controller = [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java) is the main controller of the game, which connects the main View, [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java), and the main [Model](../src/src/main/java/com/lpoo/g72/model/Model.java). It gets the input from the user by calling Gui's `getKey()` function in `run()` and redirects it to subcontrollers, the [ElementControllers](../src/src/main/java/com/lpoo/g72/controller/ElementController.java), each one responsible for controlling the behavior of a game *Element* and its correspondent View, [VisualElement](../src/src/main/java/com/lpoo/g72/controller/VisualElement.java):
-  * [HelicopterController](../src/src/main/java/com/lpoo/g72/controller/HelicopterController.java), which decides the next movement of the Helicopter based on the key pressed by the user and also considering a time factor.
-  * [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java), which controles the movement of a monster.
-When all controllers finish, the main controller orders the invoker to execute all the actions that were determined by each controller and orders the [Gui](../src/src/main/java/com/lpoo/g72/gui/Gui.java) to draw itself, redirecting the information about the Models to the View so it can draw them in the right position.
+* Controller = [Controller](../src/main/java/com/lpoo/g72/controller/Controller.java) is the main controller of the game, which connects the main View, [Gui](../src/main/java/com/lpoo/g72/gui/Gui.java), and the main [Model](../src/main/java/com/lpoo/g72/model/Model.java). It gets the input from the user by calling Gui's `getKey()` function in `run()` and redirects it to subcontrollers, the [ElementControllers](../src/main/java/com/lpoo/g72/controller/ElementController.java), each one responsible for controlling the behavior of a game *Element* and its correspondent View, *VisualElement*:
+  * [HelicopterController](../src/main/java/com/lpoo/g72/controller/HelicopterController.java), which decides the next movement of the Helicopter based on the key pressed by the user and also considering a time factor.
+  * [MonsterController](../src/main/java/com/lpoo/g72/controller/MonsterController.java), which controles the movement of a monster.
+When all controllers finish, the main controller orders the invoker to execute all the actions that were determined by each controller and orders the [Gui](../src/main/java/com/lpoo/g72/gui/Gui.java) to draw itself, redirecting the information about the Models to the View so it can draw them in the right position.
+  * [CollisionController](../src/main/java/com/lpoo/g72/controller/HelicopterController.java), which deals with the collisions.
+  * [HighscoreController](../src/main/java/com/lpoo/g72/controller/HighscoreController.java), which contains all the functions that are related to the high scores.
   
 ##### Consequences
 
@@ -144,12 +147,12 @@ We have applied the **Factory Method** pattern, which allowed us to represent di
 <img src="../images/factoryPattern.svg">
 
 Mapping the pattern's roles to our classes, we have:
-* Creator = [SceneCreator](../src/src/main/java/com/lpoo/g72/creator/SceneCreator.java), an abstract class with some methods:
+* Creator = [SceneCreator](../src/main/java/com/lpoo/g72/creator/SceneCreator.java), an abstract class with some methods:
   * AnOperation() = `protected char[][] generateBuildings(int width, int height, Random r, int heightFactor)`
   * FactoryMethod() = `public abstract Scene createScene(int width, int height)`
-* ConcreteCreator = [LisbonSceneCreator](../src/src/main/java/com/lpoo/g72/creator/LisbonSceneCreator.java), [OportoSceneCreator](../src/src/main/java/com/lpoo/g72/creator/OportoSceneCreator.java), [RandomSceneCreator](../src/src/main/java/com/lpoo/g72/creator/RandomSceneCreator.java), etc...
+* ConcreteCreator = [LisbonSceneCreator](../src/main/java/com/lpoo/g72/creator/LisbonSceneCreator.java), [OportoSceneCreator](../src/main/java/com/lpoo/g72/creator/OportoSceneCreator.java), [RandomSceneCreator](../src/main/java/com/lpoo/g72/creator/RandomSceneCreator.java), etc...
   * These, in fact, implement the FactoryMethod from their base class, returning a brand new featured scene.
-* Product = [Scene](../src/src/main/java/com/lpoo/g72/scene/Scene.java), as the concrete product built and returned.
+* Product = [Scene](../src/main/java/com/lpoo/g72/scene/Scene.java), as the concrete product built and returned.
 
 ##### Consequences
 Some benefits of this pattern:
@@ -171,10 +174,10 @@ Therefore, we concluded that the operations of moving the game elements should b
 
 ##### The Patterns
 To solve this problem we applied both the **Command** and the **Singleton** patterns. 
-The **Command** pattern allowed us to parameterize Elements with different actions, by using an interface, [Command](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/Command.java), with a single execution method, `execute()` that is be implemented by multiple classes (Concrete Commands), each performing a specific operation on its *Element* (Receiver), specifically on its *Position*.
-Furthermore, to follow the *SRP*, we felt the need to split the responsibility of creating and executing the Commands, which led us to the implementation of a [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java).
-At this point, implementing the **Singleton** design pattern became a new possibility, because we only needed one CommandInvoker - which works such like a TV remote; to execute all the Commands on each iteration of the game main loop, meaning that we only wanted an instance of the [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java) to be used in all classes.
-Combining these two design patterns, on each iteration the *ElementControllers* order actions on their respective Elements - by creating Commands and adding them to the Invokers' Command List, `commandInvoker.addCommand(command:Command)`; and then the main Controller, in its `run()` function, asks the [CommandInvoker](https://github.com/FEUP-LPOO/lpoo-2020-g72/commits/master/src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java) to execute all the Commands on its Command List, `commandInvoker.executeCommands()`. 
+The **Command** pattern allowed us to parameterize Elements with different actions, by using an interface, [Command](../src/main/java/com/lpoo/g72/commands/Command.java), with a single execution method, `execute()` that is be implemented by multiple classes (Concrete Commands), each performing a specific operation on its *Element* (Receiver), specifically on its *Position*.
+Furthermore, to follow the *SRP*, we felt the need to split the responsibility of creating and executing the Commands, which led us to the implementation of a [CommandInvoker](../src/main/java/com/lpoo/g72/commands/CommandInvoker.java).
+At this point, implementing the **Singleton** design pattern became a new possibility, because we only needed one CommandInvoker - which works such like a TV remote; to execute all the Commands on each iteration of the game main loop, meaning that we only wanted an instance of the [CommandInvoker](../src/main/java/com/lpoo/g72/commands/CommandInvoker.java) to be used in all classes.
+Combining these two design patterns, on each iteration the *ElementControllers* order actions on their respective Elements - by creating Commands and adding them to the Invokers' Command List, `commandInvoker.addCommand(command:Command)`; and then the main Controller, in its `run()` function, asks the [CommandInvoker](../src/main/java/com/lpoo/g72/commands/CommandInvoker.java) to execute all the Commands on its Command List, `commandInvoker.executeCommands()`. 
 
 
 ##### Implementation
@@ -185,33 +188,33 @@ Combining these two design patterns, on each iteration the *ElementControllers* 
 
 **Command Pattern** roles can be mapped to the application classes as follows:
 
-* Invoker = [CommandInvoker](../src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java)
+* Invoker = [CommandInvoker](../src/main/java/com/lpoo/g72/commands/CommandInvoker.java)
   * setCommand(Command command) = `public void addCommand(Command command)`;
   * executeCommand() = `public void executeCommands()`;
-* Command = [Command](../src/src/main/java/com/lpoo/g72/commands/Command.java), an interface that contains:
+* Command = [Command](../src/main/java/com/lpoo/g72/commands/Command.java), an interface that contains:
   * execute() = `public void execute()`
 
-* ConcreteCommand = [DirectionalCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DirectionalCommand.java), an abstract class for commands related to directional movements of the elements, which will allows us to create other type of Commands that don't act on Elements for example. It implements **Command** interface and also contains:
-  * Receiver = [Element](../src/src/main/java/com/lpoo/g72/scene/element/Element.java)
+* ConcreteCommand = [DirectionalCommand](../src/main/java/com/lpoo/g72/commands/directional/DirectionalCommand.java), an abstract class for commands related to directional movements of the elements, which will allows us to create other type of Commands that don't act on Elements for example. It implements Command interface and also contains:
+  * Receiver = [Element](../src/main/java/com/lpoo/g72/scene/element/Element.java)
 
-Concrete Commands that extend the **DirectionalCommand** abstract class and define `public void execute()` from **Command** interface:
-* [DownCommand](../src/src/main/java/com/lpoo/g72/commands/directional/DownCommand.java)
-* [LeftCommand](../src/src/main/java/com/lpoo/g72/commands/directional/LeftCommand.java)
-* [RightCommand](../src/src/main/java/com/lpoo/g72/commands/directional/RightCommand.java)
-* [UpCommand](../src/src/main/java/com/lpoo/g72/commands/directional/UpCommand.java)
+Concrete Commands that extend the  DirectionalCommand abstract class and define `public void execute()` from **Command** interface:
+* [DownCommand](../src/main/java/com/lpoo/g72/commands/directional/DownCommand.java)
+* [LeftCommand](../src/main/java/com/lpoo/g72/commands/directional/LeftCommand.java)
+* [RightCommand](../src/main/java/com/lpoo/g72/commands/directional/RightCommand.java)
+* [UpCommand](../src/main/java/com/lpoo/g72/commands/directional/UpCommand.java)
 
-Other Concrete Commands that define `public void execute()` from **Command** interface:
-* [DropMissile](../src/src/main/java/com/lpoo/g72/commands/DropMissile.java)
-* [ShootMissile](../src/src/main/java/com/lpoo/g72/commands/ShootMissile.java)
+Other Concrete Commands that define `public void execute()` from Command interface:
+* [DropMissile](../src/main/java/com/lpoo/g72/commands/DropMissile.java)
+* [ShootMissile](../src/main/java/com/lpoo/g72/commands/ShootMissile.java)
 
-*All commands can be found on [commands package](../src/src/main/java/com/lpoo/g72/commands)*
+*All commands can be found on [commands package](../src/main/java/com/lpoo/g72/commands)*
 
 **Singleton Pattern** roles can be mapped to the application classes as follows:
 
-* Singleton = [CommandInvoker](../src/src/main/java/com/lpoo/g72/commands/CommandInvoker.java)
+* Singleton = [CommandInvoker](../src/main/java/com/lpoo/g72/commands/CommandInvoker.java)
   * Singleton() = `private void addCommand(Command command)`, a private constructor;
   * getInstance() = `public static CommandInvoker getInstance()`, a public static creation method for getting the singleton instance;
-* Clients = [controllers package](../src/src/main/java/com/lpoo/g72/controller), because all controllers are clients.
+* Clients = [controllers package](../src/main/java/com/lpoo/g72/controller), because all controllers are clients.
 
 ##### Consequences
 Advantages of using **Command** pattern:
@@ -254,21 +257,21 @@ public void notifyObservers() {
 
 <img src="../images/observerPattern.svg"> 
 
-* Subject = [Observable](../src/src/main/java/com/lpoo/g72/controller/Observable.java), an interface with the following methods:
+* Subject = [Observable](../src/main/java/com/lpoo/g72/controller/Observable.java), an interface with the following methods:
   * attach(Observer) = `public void addObserver(Observer observer)`;
   * detach(Observer) = `public void removeObserver(Observer observer)`;
   * notify() = `public void notifyObservers()`.
 
-* ConcreteSubject = [HelicopterController](../src/src/main/java/com/lpoo/g72/controller/HelicopterController.java), which implements the previous interface and defines its methods:
+* ConcreteSubject = [HelicopterController](../src/main/java/com/lpoo/g72/controller/HelicopterController.java), which implements the previous interface and defines its methods:
   * attach(Observer) = `public void addObserver(Observer observer)`, in which the new Observer is added to a list of Observers;
   * detach(Observer) = `public void removeObserver(Observer observer)`, to remove an Observer from the list;
   * notify() = `public void notifyObservers()`, which is used to indicate an altitude change, by calling the update function of all its Observers.
 
-* Observer = [Observer](../src/src/main/java/com/lpoo/g72/controller/Observer.java), an interface with the following methods:
+* Observer = [Observer](../src/main/java/com/lpoo/g72/controller/Observer.java), an interface with the following methods:
   * update() = `public void update(int info)`.
 
-* ConcreteObservers = [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java) and [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java), which implement the previous interface and define its methods:
-  * update() = `public void update(int info)`, in which the altitude of the Monster is calculated based on `info` in the [MonsterController](../src/src/main/java/com/lpoo/g72/controller/MonsterController.java) or the the "New Round" message is displayed in the [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java).
+* ConcreteObservers = [MonsterController](../src/main/java/com/lpoo/g72/controller/MonsterController.java) and [Controller](../src/main/java/com/lpoo/g72/controller/Controller.java), which implement the previous interface and define its methods:
+  * update() = `public void update(int info)`, in which the altitude of the Monster is calculated based on `info` in the [MonsterController](../src/main/java/com/lpoo/g72/controller/MonsterController.java) or the the "New Round" message is displayed in the [Controller](../src/main/java/com/lpoo/g72/controller/Controller.java).
 
 ##### Consequences
 Some advantages of this pattern:
@@ -285,6 +288,8 @@ Given the fact that the user should be able to choose between a couple of differ
 ##### The Pattern
 Applying the **State** pattern allowed us to achieve different game behaviors according to the state of the game and to establish connections between the states. In particular, we defined that, initially, a menu should be shown, *Menu State*, while the user is deciding the game scene or until he quits de game, pressing 'Q'. When the scene is picked, the game elements and visual features are set accordingly, switching the state of the Controller to *Game State*. During this state, if the user performs an action to quit the game, we take him back to the *Menu State*. Otherwise, the state will only be changed if the user wins or loses the game. *End Game State* is set in this case, where pressing 'Q' will take the user back to the menu.
 
+[*See here our first implementation of the State pattern*](https://github.com/FEUP-LPOO/lpoo-2020-g72/tree/1beee08b4f219941f60e03a1201e1c1be468b888)
+
 ##### Implementation
 
 *Class Diagram*
@@ -296,18 +301,18 @@ Applying the **State** pattern allowed us to achieve different game behaviors ac
 
 <img src="../images/statePatternStateMachine.svg" width="400">
 
-* State = [State](../src/src/main/java/com/lpoo/g72/controller/states/State.java), an abstract class that stores a protected reference to the context object and which declares the following abstract method:
+* State = [State](../src/main/java/com/lpoo/g72/controller/states/State.java), an abstract class that stores a protected reference to the context object and which declares the following abstract method:
   * handle() = `public abstract void action(Gui.key key)`, the state-specific method.
 
 Concrete States that extend the **State** abstract class and define `public void action(Gui.Key key)` state-specific method, calling Context methods to perform their actions:
-* [MenuState](../src/src/main/java/com/lpoo/g72/controller/states/MenuState.java), which calls Controller's `public void menu(Gui.Key key)`;
-* [GameState](../src/src/main/java/com/lpoo/g72/controller/states/GameState.java), which calls Controller's `public void play(Gui.Key key)`;
-* [EndGame](../src/src/main/java/com/lpoo/g72/controller/states/EndGame.java), which calls Controller's `public void endGame(Gui.Key key)`;
-* [HighScores](../src/src/main/java/com/lpoo/g72/controller/states/Highscores.java), which calls Controller's `public void highscores(Gui.Key key)`;
+* [MenuState](../src/main/java/com/lpoo/g72/controller/states/MenuState.java), which calls Controller's `public void menu(Gui.Key key)`;
+* [GameState](../src/main/java/com/lpoo/g72/controller/states/GameState.java), which calls Controller's `public void play(Gui.Key key)`;
+* [EndGame](../src/main/java/com/lpoo/g72/controller/states/EndGame.java), which calls Controller's `public void endGame(Gui.Key key)`;
+* [HighScores](../src/main/java/com/lpoo/g72/controller/states/Highscores.java), which calls Controller's `public void highscores(Gui.Key key)`;
 
-*All states can be found in the [states package](../src/src/main/java/com/lpoo/g72/controller/states)*
+*All states can be found in the [states package](../src/main/java/com/lpoo/g72/controller/states)*
 
-* Context = [Controller](../src/src/main/java/com/lpoo/g72/controller/Controller.java), which stores a reference to a concrete state object and delegates to it all state-specific work. It also defines some methods that are called by each Concrete State to change the interface according to the state and where state changes are sometimes performed as well:
+* Context = [Controller](../src/main/java/com/lpoo/g72/controller/Controller.java), which stores a reference to a concrete state object and delegates to it all state-specific work. It also defines some methods that are called by each Concrete State to change the interface according to the state and where state changes are sometimes performed as well:
   * `public void menu(Gui.Key key)`, where the menu is drawn until a scene is chosen by the user;
   * `public void play(Gui.Key key)`, where the actual game actions take place, according to the user actions and to a time factor;
   * `public void endGame(Gui.Key key)`, where a victory or game over message is shown;

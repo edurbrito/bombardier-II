@@ -44,8 +44,8 @@ public class Scene {
 
     public void draw(TextGraphics graphics, Helicopter helicopter, List<Monster> monsters){
 
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#d1d1d1"));
-        graphics.setForegroundColor(TextColor.Factory.fromString("#d1d1d1"));
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#cccccc"));
+        graphics.setForegroundColor(TextColor.Factory.fromString("#cccccc"));
         graphics.fillRectangle(
                 new TerminalPosition(0, 0),
                 new TerminalSize(this.width, this.height),
