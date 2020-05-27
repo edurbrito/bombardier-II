@@ -76,7 +76,7 @@ public class SceneTest {
         Mockito.verify(this.scene, Mockito.times(1)).drawSceneBuildings(Mockito.any());
 
         Mockito.verify(graphics, Mockito.times(2 + vmonstersSize)).enableModifiers(Mockito.any());
-        Mockito.verify(graphics, Mockito.times( 1 + vmonstersSize)).setBackgroundColor(Mockito.any());
+        Mockito.verify(graphics, Mockito.times(1 + vmonstersSize)).setBackgroundColor(Mockito.any());
         Mockito.verify(graphics, Mockito.times(4 + vmonstersSize * this.scene.getVisualMonsters().get(0).getForm().length)).setForegroundColor(Mockito.any());
 
         Mockito.verify(this.scene, Mockito.times(1)).drawVisualMonsters(Mockito.any(), Mockito.any());

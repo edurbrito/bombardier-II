@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.File;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
@@ -30,12 +29,11 @@ public class HighscoreControllerTest {
         }.getType();
 
         Map<String, List<Integer>> oldMap = new HashMap<>();
-        if(highscoreController.getHighscores() != null){
+        if (highscoreController.getHighscores() != null) {
             oldMap.putAll(new Gson().fromJson(highscoreController.getHighscores().toString(), type));
             Mockito.verify(highscoreController, Mockito.times(1)).read();
             Mockito.verify(highscoreController, Mockito.times(1)).setHighscores(Mockito.any());
-        }
-        else
+        } else
             highscoreController.setHighscores(new HashMap<>());
 
         assertNotNull(highscoreController.getHighscores());
