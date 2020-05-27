@@ -33,7 +33,7 @@ public abstract class SceneCreator {
 
                         if (buildings[h - 1][w] == '#') { // If the current building does not have a top yet
 
-                            if (heightFactor(r, heightFactor) && h < maxHeight) { // See heightFactor function for more details
+                            if (continueToGrow(r, heightFactor) && h < maxHeight) { // See continueToGrow function for more details
 
                                 buildings[h][w] = buildings[h][w + 1] = '#'; // It can grow some meters more
 
@@ -61,7 +61,7 @@ public abstract class SceneCreator {
         return buildings;
     }
 
-    private boolean heightFactor(Random r, int factor) {
+    private boolean continueToGrow(Random r, int factor) {
 
         // This will return a true or false answer for continuing to "grow" the current building in the loop.
         // The answer is based on some probability associated with the @param factor.

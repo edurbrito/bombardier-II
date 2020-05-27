@@ -345,7 +345,7 @@ Referring, for instance, the [`generateBuildings(...)`](../src/main/java/com/lpo
 
 ### Comments
 
-SceneCreator - methods filled with explanatory comments. // Explain better & links for code
+The [SceneCreator](../src/main/java/com/lpoo/g72/creator/SceneCreator.java) class has methods filled with explanatory comments. These methods represent the foundation of our scene building process. The explanations on them assert the need to clarify their preconceived behavior, to be easily used in complacency with other classes. To reach the current state, Extract Variable, Extract Method and Rename Method were all executed, so we do not plan to refactor them a lot more.
 
 ## TESTING
 
