@@ -338,6 +338,11 @@ Some advantages of this pattern:
 
 Classes that contain many fields/methods may exist. The [Controller](../src/main/java/com/lpoo/g72/controller/Controller.java) and the [Gui](../src/main/java/com/lpoo/g72/gui/Gui.java) are our top scorers. We have done some refactorings to *Extract Classes* from these. What remains may only be the fundamental blocks that keep them cohesive and intuitive, so we do not intend to reduce their size.
 
+### Long Method
+
+There are some long methods on some of our classes. At this point, the logic prevails as we do not intend, on them, to extract or separate responsibilities even more. 
+Referring, for instance, the [`generateBuildings(...)`](../src/main/java/com/lpoo/g72/creator/SceneCreator.java) method which represents the pseudo-random algorithm that rises our scenes, or the drawing functions from the [Gui](../src/main/java/com/lpoo/g72/gui/Gui.java) Class, their code needs to be held together to be properly understood as independent algorithms and procedures.
+
 ### Comments
 
 SceneCreator - methods filled with explanatory comments. // Explain better & links for code
