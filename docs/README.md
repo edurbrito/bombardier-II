@@ -334,6 +334,10 @@ Some advantages of this pattern:
 
 // TODO - explain why the switch statement in menu() and in Gui's getKey() are not a problem.
 
+### Large Class
+
+Classes that contain many fields/methods may exist. The [Controller](../src/main/java/com/lpoo/g72/controller/Controller.java) and the [Gui](../src/main/java/com/lpoo/g72/gui/Gui.java) are our top scorers. We have done some refactorings to *Extract Classes* from these. What remains may only be the fundamental blocks that keep them cohesive and intuitive, so we do not intend to reduce their size.
+
 ### Comments
 
 SceneCreator - methods filled with explanatory comments. // Explain better & links for code
