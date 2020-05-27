@@ -39,6 +39,7 @@ public class Gui {
     private TerminalScreen createTerminalScreen() throws IOException {
         TerminalSize terminalSize = new TerminalSize(this.width, this.height);
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
+        terminalFactory.setTerminalEmulatorTitle("Bombardier II : The Revenge of The Skyscrapers");
 
         Terminal terminal = terminalFactory.createTerminal();
         return new TerminalScreen(terminal);
