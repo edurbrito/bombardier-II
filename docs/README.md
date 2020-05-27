@@ -334,18 +334,9 @@ Some advantages of this pattern:
 
 // TODO - explain why the switch statement in menu() and in Gui's getKey() are not a problem.
 
-### Data Class
+### Comments
 
-The models of the game, in particular the game elements - *Monster* and *Helicopter*, come across as **data classes** which only contain their fields - *Position*, and its accessors. However, considering the *MVC* architectural pattern, we don't feel that this code smell represents a problem in our code because Models must not know how to draw themselves nor how to behave. 
-
-### Middle Man
-
-Following the previous problem, the *Element* hierarchy performs, in fact, only one (set of) action(s), delegating work to another class, the *Position*. This is also intentional, because, as the game grows, its elements will start to acquire more inner characteristics (lives, energy, etc... ), as planned.
-
-### Duplicate Code
-
-There is, indeed, some identical code found, for example, in two subclasses of the same level, the *HelicopterController* and the *MonsterController*. At this point, part of this duplication can be purposeful, by the fact that it may be more obvious to leave them as they are now, if, in the future, we need to give them different behavior. If this does not prevail, then *Pull Up Constructor Body*, *Extract Method*, or *Form Template Method* will be used for refactoring this problem. The same happens with the *SceneCreator* hierarchy, where there are also methods filled with explanatory **comments**, due mostly to the necessity of explaining the algorithm for generating the buildings (when all other methods for simplifying the algorithm have been tried and came up short).
-
+SceneCreator - methods filled with explanatory comments. // Explain better & links for code
 
 ## TESTING
 
