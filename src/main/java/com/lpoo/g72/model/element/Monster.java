@@ -10,15 +10,15 @@ public class Monster extends Element {
         this.alive = true;
     }
 
-    public boolean isAlive(){
+    public boolean isAlive() {
         return this.alive;
     }
 
-    public void kill(){
+    public void kill() {
         this.alive = false;
     }
 
-    public void revive(){
+    public void revive() {
         this.alive = true;
     }
 }

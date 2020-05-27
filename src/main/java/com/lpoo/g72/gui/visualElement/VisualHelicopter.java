@@ -19,11 +19,10 @@ public class VisualHelicopter extends VisualElement {
     }
 
     public void animation() {
-        if (this.form[0] == '/'){
+        if (this.form[0] == '/') {
             this.form[0] = '\\';
             this.form[2] = 'O';
-        }
-        else{
+        } else {
             this.form[0] = '/';
             this.form[2] = 'Õ';
         }
@@ -33,16 +32,16 @@ public class VisualHelicopter extends VisualElement {
     }
 
     @Override
-    public void draw(TextGraphics graphics, Element element){
-        super.draw(graphics,element);
+    public void draw(TextGraphics graphics, Element element) {
+        super.draw(graphics, element);
 
         Helicopter helicopter = (Helicopter) element;
 
-        for(Missile missile : helicopter.getHorizontalMissiles()){
+        for (Missile missile : helicopter.getHorizontalMissiles()) {
             this.horizontalMissile.draw(graphics, missile);
         }
 
-        for(Missile missile : helicopter.getVerticalMissiles()){
+        for (Missile missile : helicopter.getVerticalMissiles()) {
             this.verticalMissile.draw(graphics, missile);
         }
     }

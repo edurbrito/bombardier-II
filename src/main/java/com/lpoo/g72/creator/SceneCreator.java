@@ -18,43 +18,40 @@ public abstract class SceneCreator {
 
         char[][] buildings = new char[height][width];
 
-        for(int h = 0; h < height; ++h){
-            for(int w = 0; w < width; w += 2){ // Every building has 2 units of width
+        for (int h = 0; h < height; ++h) {
+            for (int w = 0; w < width; w += 2) { // Every building has 2 units of width
 
-                if(w + 1 == width) // For an odd width not reaching the end without a building
+                if (w + 1 == width) // For an odd width not reaching the end without a building
                     w--;
 
-                if(minHeight > h) // Sets a minimum for every building's height
-                    buildings[h][w] = buildings[h][w+1] = '#';
+                if (minHeight > h) // Sets a minimum for every building's height
+                    buildings[h][w] = buildings[h][w + 1] = '#';
 
-                else{
+                else {
 
-                    if(h < maxHeight + 1){ // while not reaching the maxHeight
+                    if (h < maxHeight + 1) { // while not reaching the maxHeight
 
-                        if(buildings[h-1][w] == '#'){ // If the current building does not have a top yet
+                        if (buildings[h - 1][w] == '#') { // If the current building does not have a top yet
 
-                            if (heightFactor(r,heightFactor) && h < maxHeight){ // See heightFactor function for more details
+                            if (heightFactor(r, heightFactor) && h < maxHeight) { // See heightFactor function for more details
 
-                                buildings[h][w] = buildings[h][w+1] = '#'; // It can grow some meters more
+                                buildings[h][w] = buildings[h][w + 1] = '#'; // It can grow some meters more
 
-                            }
-                            else{
+                            } else {
 
                                 int randomChar = r.nextInt(5); // Chooses a top for the building
-                                buildings[h][w] = buildings[h][w+1] = btops[randomChar]; // Sets it
+                                buildings[h][w] = buildings[h][w + 1] = btops[randomChar]; // Sets it
 
                             }
 
+                        } else { // If the current building already has a top - finished growing
+
+                            buildings[h][w] = buildings[h][w + 1] = ' ';
+
                         }
-                        else{ // If the current building already has a top - finished growing
+                    } else { // If reached the maximum height allowed
 
-                            buildings[h][w] = buildings[h][w+1] = ' ';
-
-                        }
-                    }
-                    else{ // If reached the maximum height allowed
-
-                        buildings[h][w] = buildings[h][w+1] = ' ';
+                        buildings[h][w] = buildings[h][w + 1] = ' ';
 
                     }
                 }
@@ -64,7 +61,7 @@ public abstract class SceneCreator {
         return buildings;
     }
 
-    private boolean heightFactor(Random r, int factor){
+    private boolean heightFactor(Random r, int factor) {
 
         // This will return a true or false answer for continuing to "grow" the current building in the loop.
         // The answer is based on some probability associated with the @param factor.
@@ -73,7 +70,7 @@ public abstract class SceneCreator {
 
         boolean heightProb = r.nextInt(2) == 0;
 
-        for(int i = 0; i < factor; i++){ // Giving it <@param factor> more chances to create a taller building
+        for (int i = 0; i < factor; i++) { // Giving it <@param factor> more chances to create a taller building
             heightProb = heightProb || r.nextInt(2) == 0;
         }
 

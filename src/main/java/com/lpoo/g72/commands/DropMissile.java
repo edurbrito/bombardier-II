@@ -3,7 +3,7 @@ package com.lpoo.g72.commands;
 import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Missile;
 
-public class DropMissile implements Command{
+public class DropMissile implements Command {
     Helicopter helicopter;
 
     public DropMissile(Helicopter helicopter) {
@@ -13,7 +13,7 @@ public class DropMissile implements Command{
     @Override
     public void execute() {
         Missile missile = this.helicopter.drop();
-        if(missile != null){
+        if (missile != null) {
             missile.setPosition(this.helicopter.getPosition().down().left());
             missile.activate();
         }

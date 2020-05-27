@@ -9,13 +9,13 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Random;
 
-public class MonsterController extends ElementController implements Observer{
+public class MonsterController extends ElementController implements Observer {
 
     private VisualElement visualMonster;
     private Monster monster;
 
     public MonsterController(VisualElement visualMonster, Monster monster, int maxWidth) {
-        super(maxWidth, monster.getPosition().getY(),0.12 * Math.pow(10,9));
+        super(maxWidth, monster.getPosition().getY(), 0.12 * Math.pow(10, 9));
 
         this.monster = monster;
         this.visualMonster = visualMonster;
@@ -24,9 +24,9 @@ public class MonsterController extends ElementController implements Observer{
     @Override
     protected void move() {
         Instant current = Instant.now();
-        Duration timePassed = Duration.between(this.lastForwardMove , current);
+        Duration timePassed = Duration.between(this.lastForwardMove, current);
 
-        if(timePassed.getNano() >= this.deltaTime){
+        if (timePassed.getNano() >= this.deltaTime) {
 
             this.commandInvoker.addCommand(new LeftCommand(this.monster));
 
@@ -41,7 +41,7 @@ public class MonsterController extends ElementController implements Observer{
 
         this.altitude = info + new Random().nextInt(3) - 1;
 
-        this.monster.setPosition(new Position(this.maxWidth + new Random().nextInt(30),this.altitude));
+        this.monster.setPosition(new Position(this.maxWidth + new Random().nextInt(30), this.altitude));
 
         this.monster.revive();
     }

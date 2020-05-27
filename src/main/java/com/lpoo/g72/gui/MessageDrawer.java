@@ -23,21 +23,21 @@ public class MessageDrawer {
     public void drawMessage(List<String> message, String hexColor, String additionalInfo) {
         this.graphics.setForegroundColor(TextColor.Factory.fromString(hexColor));
 
-        for(int i = 0; i < message.size();i++){
-            this.graphics.putString((this.width-message.get(i).length()) / 2, this.height/4 + i, message.get(i));
+        for (int i = 0; i < message.size(); i++) {
+            this.graphics.putString((this.width - message.get(i).length()) / 2, this.height / 4 + i, message.get(i));
         }
 
-        if(!additionalInfo.isEmpty()){
+        if (!additionalInfo.isEmpty()) {
             this.graphics.fillRectangle(
-                    new TerminalPosition((this.width-additionalInfo.length()) / 2, this.height/4 + message.size() + 3),
+                    new TerminalPosition((this.width - additionalInfo.length()) / 2, this.height / 4 + message.size() + 3),
                     new TerminalSize(additionalInfo.length(), 3),
                     '█'
             );
-            this.graphics.putString((this.width-additionalInfo.length()) / 2, this.height/4 + message.size() + 4, additionalInfo);
+            this.graphics.putString((this.width - additionalInfo.length()) / 2, this.height / 4 + message.size() + 4, additionalInfo);
         }
     }
 
-    public List<String> getGameOverMessage(){
+    public List<String> getGameOverMessage() {
         List<String> gameOver = new ArrayList<>();
         gameOver.add(" ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ \n");
         gameOver.add("██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗\n");
@@ -48,7 +48,7 @@ public class MessageDrawer {
         return gameOver;
     }
 
-    public List<String> getVictoryMessage(){
+    public List<String> getVictoryMessage() {
         List<String> gameOver = new ArrayList<>();
         gameOver.add("██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗ ██████╗ ███╗   ██╗██╗\n");
         gameOver.add("╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██╔═══██╗████╗  ██║██║\n");
@@ -59,7 +59,7 @@ public class MessageDrawer {
         return gameOver;
     }
 
-    public List<String> getNewRoundMessage(){
+    public List<String> getNewRoundMessage() {
         List<String> newRound = new ArrayList<>();
         newRound.add("███╗   ██╗███████╗██╗    ██╗    ██████╗  ██████╗ ██╗   ██╗███╗   ██╗██████╗ \n");
         newRound.add("████╗  ██║██╔════╝██║    ██║    ██╔══██╗██╔═══██╗██║   ██║████╗  ██║██╔══██╗\n");
@@ -70,7 +70,7 @@ public class MessageDrawer {
         return newRound;
     }
 
-    public List<String> getHighscoresMessage(){
+    public List<String> getHighscoresMessage() {
         List<String> newRound = new ArrayList<>();
         newRound.add("██╗  ██╗██╗ ██████╗ ██╗  ██╗███████╗ ██████╗ ██████╗ ██████╗ ███████╗███████╗\n");
         newRound.add("██║  ██║██║██╔════╝ ██║  ██║██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔════╝\n");
@@ -81,7 +81,7 @@ public class MessageDrawer {
         return newRound;
     }
 
-    public List<String> getGameTitle(){
+    public List<String> getGameTitle() {
         List<String> gameName = new ArrayList<>();
         gameName.add("██████╗  ██████╗ ███╗   ███╗██████╗  █████╗ ██████╗ ██████╗ ██╗███████╗██████╗     ██╗██╗");
         gameName.add("██╔══██╗██╔═══██╗████╗ ████║██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║██╔════╝██╔══██╗    ██║██║");

@@ -7,7 +7,7 @@ public abstract class DirectionalCommand implements Command {
 
     Element element;
 
-    public DirectionalCommand(Element element){
+    public DirectionalCommand(Element element) {
         this.element = element;
     }
 }

@@ -22,7 +22,7 @@ public class LisbonSceneCreator extends SceneCreator {
 
         this.scene = new Scene(width, height, "Lisbon", visualMonsters);
 
-        this.scene.setBuildings(this.generateBuildings(width,height, new Random(2),3));
+        this.scene.setBuildings(this.generateBuildings(width, height, new Random(2), 3));
 
         return this.scene;
     }

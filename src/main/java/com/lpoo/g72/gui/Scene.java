@@ -13,13 +13,13 @@ import java.util.List;
 public class Scene {
     private final int width;
     private final int height;
+    private final VisualHelicopter visualHelicopter;
     private char[][] buildings;
     private int sceneBlocks;
     private String name;
-    private final VisualHelicopter visualHelicopter;
     private List<VisualElement> visualMonsters;
 
-    public Scene(int width, int height, String name, List<VisualElement> visualMonsters){
+    public Scene(int width, int height, String name, List<VisualElement> visualMonsters) {
         this.width = width;
         this.height = height;
         this.name = name;
@@ -27,13 +27,13 @@ public class Scene {
         this.visualMonsters = visualMonsters;
     }
 
-    public void draw(TextGraphics graphics, Helicopter helicopter, List<Monster> monsters){
+    public void draw(TextGraphics graphics, Helicopter helicopter, List<Monster> monsters) {
 
         this.drawSceneBuildings(graphics);
 
         this.drawVisualMonsters(graphics, monsters);
 
-        this.visualHelicopter.draw(graphics,helicopter);
+        this.visualHelicopter.draw(graphics, helicopter);
     }
 
     public void drawSceneBuildings(TextGraphics graphics) {
@@ -47,39 +47,32 @@ public class Scene {
         }
     }
 
-    public void drawVisualMonsters(TextGraphics graphics, List<Monster> monsters){
-        for(int i = 0; i < monsters.size(); i++){
-            if(monsters.get(i).isAlive())
-                this.visualMonsters.get(i).draw(graphics,monsters.get(i));
+    public void drawVisualMonsters(TextGraphics graphics, List<Monster> monsters) {
+        for (int i = 0; i < monsters.size(); i++) {
+            if (monsters.get(i).isAlive())
+                this.visualMonsters.get(i).draw(graphics, monsters.get(i));
         }
     }
 
     public int removeBuilding(int x, int y) {
         int destroyedBlocks = 0;
 
-        if(x >= this.width) return 0;
+        if (x >= this.width) return 0;
 
-        if(this.buildings[this.height - y - 5][ this.width - x - 1] != ' '){
-            destroyedBlocks ++;
-            this.buildings[this.height - y - 5][ this.width - x - 1] = ' ';
+        if (this.buildings[this.height - y - 5][this.width - x - 1] != ' ') {
+            destroyedBlocks++;
+            this.buildings[this.height - y - 5][this.width - x - 1] = ' ';
         }
 
-        if(x == 1 && this.buildings[this.height - y - 5][ this.width - x] != ' '){
-            destroyedBlocks ++;
-            this.buildings[this.height - y - 5][ this.width - x] = ' ';
-        }
-
-        else if(x == this.width - 2 && this.buildings[this.height - y - 5][0] != ' '){
-            destroyedBlocks ++;
+        if (x == 1 && this.buildings[this.height - y - 5][this.width - x] != ' ') {
+            destroyedBlocks++;
+            this.buildings[this.height - y - 5][this.width - x] = ' ';
+        } else if (x == this.width - 2 && this.buildings[this.height - y - 5][0] != ' ') {
+            destroyedBlocks++;
             this.buildings[this.height - y - 5][0] = ' ';
         }
 
         return destroyedBlocks;
-    }
-
-    public void setBuildings(char[][] buildings) {
-        this.buildings = buildings;
-        this.setSceneBlocks();
     }
 
     private void setSceneBlocks() {
@@ -94,6 +87,11 @@ public class Scene {
 
     public char[][] getBuildings() {
         return this.buildings;
+    }
+
+    public void setBuildings(char[][] buildings) {
+        this.buildings = buildings;
+        this.setSceneBlocks();
     }
 
     public List<VisualElement> getVisualMonsters() {

@@ -26,44 +26,41 @@ public class HelicopterController extends ElementController implements Observabl
     private int maxHeight;
     private double missileDeltaTime;
 
-    public HelicopterController(VisualHelicopter visualHelicopter, Helicopter helicopter, int maxWidth, int maxHeight){
-        super(maxWidth, helicopter.getY(),0.12 * Math.pow(10,9));
+    public HelicopterController(VisualHelicopter visualHelicopter, Helicopter helicopter, int maxWidth, int maxHeight) {
+        super(maxWidth, helicopter.getY(), 0.12 * Math.pow(10, 9));
 
         this.helicopter = helicopter;
         this.visualHelicopter = visualHelicopter;
 
         this.maxHeight = maxHeight;
-        this.missileDeltaTime = 0.11 * Math.pow(10,9);
+        this.missileDeltaTime = 0.11 * Math.pow(10, 9);
 
         this.observerList = new ArrayList<>();
     }
 
-    public void run(Key key){
+    public void run(Key key) {
 
         this.move();
 
-        if(key == Key.DOWN && isWithinDownLimit()){
+        if (key == Key.DOWN && isWithinDownLimit()) {
             this.commandInvoker.addCommand(new DownCommand(this.helicopter));
-        }
-        else if(key == Key.UP && isWithinUpLimit()){
+        } else if (key == Key.UP && isWithinUpLimit()) {
             this.commandInvoker.addCommand(new UpCommand(this.helicopter));
-        }
-        else if(key == Key.SPACE && !newRound()){
+        } else if (key == Key.SPACE && !newRound()) {
             this.commandInvoker.addCommand(new DropMissile(this.helicopter));
-        }
-        else if(key == Key.RIGHT && !newRound()){
+        } else if (key == Key.RIGHT && !newRound()) {
             this.commandInvoker.addCommand(new ShootMissile(this.helicopter));
         }
     }
 
-    protected void move(){
+    protected void move() {
 
         Instant current = Instant.now();
-        Duration timePassed = Duration.between(this.lastForwardMove , current);
+        Duration timePassed = Duration.between(this.lastForwardMove, current);
 
-        if(timePassed.getNano() >= this.deltaTime){
+        if (timePassed.getNano() >= this.deltaTime) {
 
-            if(this.newRound() && this.missilesEnded())
+            if (this.newRound() && this.missilesEnded())
                 this.decreaseAltitude();
 
             this.commandInvoker.addCommand(new RightCommand(this.helicopter));
@@ -73,59 +70,58 @@ public class HelicopterController extends ElementController implements Observabl
             this.lastForwardMove = current;
         }
 
-        if(timePassed.getNano() >= this.missileDeltaTime){
+        if (timePassed.getNano() >= this.missileDeltaTime) {
             this.moveMissiles();
         }
     }
 
-    private void decreaseAltitude(){
+    private void decreaseAltitude() {
         this.helicopter.setPosition(new Position(0, ++this.altitude));
         this.notifyObservers();
     }
 
-    private boolean newRound(){
+    private boolean newRound() {
         return this.helicopter.getX() >= this.maxWidth + 1;
     }
 
-    private boolean isWithinUpLimit(){
+    private boolean isWithinUpLimit() {
         return this.helicopter.getY() > this.altitude - 1 && this.helicopter.getY() > 0;
     }
 
-    private boolean isWithinDownLimit(){
+    private boolean isWithinDownLimit() {
         return this.helicopter.getY() < this.altitude + 1;
     }
 
-    private void moveMissiles(){
+    private void moveMissiles() {
 
         List<Missile> horizontalMissiles = this.helicopter.getHorizontalMissiles();
 
-        for(Missile missile : horizontalMissiles){
+        for (Missile missile : horizontalMissiles) {
             this.commandInvoker.addCommand(new RightCommand(missile));
         }
 
         List<Missile> verticalMissiles = this.helicopter.getVerticalMissiles();
 
-        for(Missile missile : verticalMissiles){
-            if(missile.getY() >= this.maxHeight - 2){
+        for (Missile missile : verticalMissiles) {
+            if (missile.getY() >= this.maxHeight - 2) {
                 missile.setExploded();
-            }
-            else{
+            } else {
                 this.commandInvoker.addCommand(new DownCommand(missile));
             }
         }
     }
 
-    private boolean missilesEnded(){
+    private boolean missilesEnded() {
         boolean missilesEnded = true;
 
         List<Missile> verticalMissiles = this.helicopter.getVerticalMissiles();
 
-        for(Missile missile : verticalMissiles){
-            if(!missile.hasExploded())
+        for (Missile missile : verticalMissiles) {
+            if (!missile.hasExploded())
                 missilesEnded = false;
         }
 
-        if(missilesEnded){
+        if (missilesEnded) {
             this.helicopter.resetMissiles();
         }
 
@@ -144,7 +140,7 @@ public class HelicopterController extends ElementController implements Observabl
 
     @Override
     public void notifyObservers() {
-        for(Observer observer: this.observerList)
+        for (Observer observer : this.observerList)
             observer.update(this.altitude);
     }
 }

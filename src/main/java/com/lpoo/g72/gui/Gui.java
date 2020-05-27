@@ -20,14 +20,11 @@ import java.util.Map;
 public class Gui {
 
     private final TerminalScreen screen;
-    private Scene scene;
-
     private final int width;
     private final int height;
-    private TextGraphics graphics;
     private final MessageDrawer messageDrawer;
-
-    public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, ENTER, NULL}
+    private Scene scene;
+    private TextGraphics graphics;
 
     public Gui(int width, int height) throws IOException {
         this.width = width;
@@ -36,7 +33,7 @@ public class Gui {
         this.screen = createTerminalScreen();
         this.setScreenProperties();
 
-        this.messageDrawer = new MessageDrawer(width,height, this.graphics);
+        this.messageDrawer = new MessageDrawer(width, height, this.graphics);
     }
 
     private TerminalScreen createTerminalScreen() throws IOException {
@@ -70,7 +67,7 @@ public class Gui {
         this.graphics.drawLine(0, this.height - 4, this.width, this.height - 4, '▘');
 
         int sceneBlocks = this.scene.getSceneBlocks();
-        destroyedBlocks = Math.min(destroyedBlocks,sceneBlocks);
+        destroyedBlocks = Math.min(destroyedBlocks, sceneBlocks);
 
         this.graphics.setForegroundColor(TextColor.Factory.fromString("#2a2a2a"));
         this.graphics.putString(5, this.height - 3, "Blocks: " + destroyedBlocks + "/" + sceneBlocks);
@@ -81,87 +78,86 @@ public class Gui {
         this.graphics.putString(this.width - 17, this.height - 3, "Score: " + score);
     }
 
-    public void drawMenu(int selected, List<String> menuOptions){
+    public void drawMenu(int selected, List<String> menuOptions) {
 
         this.drawBackground();
 
-        String color1 =  "#00009f";
-        String color2 =  "#191919";
+        String color1 = "#00009f";
+        String color2 = "#191919";
 
         this.graphics.enableModifiers(SGR.BOLD);
         this.messageDrawer.drawMessage(this.messageDrawer.getGameTitle(), color1, "THE REVENGE OF THE SKYSCRAPPERS");
 
         String s;
-        for(int i = 0; i < menuOptions.size(); i++){
-            if(i == selected){
+        for (int i = 0; i < menuOptions.size(); i++) {
+            if (i == selected) {
                 this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
                 s = ">>  " + menuOptions.get(i).toUpperCase() + "  <<";
-            }
-            else{
+            } else {
                 this.graphics.setForegroundColor(TextColor.Factory.fromString(color1));
                 s = menuOptions.get(i).toUpperCase();
             }
-            this.graphics.putString((this.width-s.length()) / 2, this.height/2 + 2 +3*i, s);
+            this.graphics.putString((this.width - s.length()) / 2, this.height / 2 + 2 + 3 * i, s);
         }
 
         this.drawControls();
     }
 
-    public void drawHighscores(Map<String, List<Integer>> highscores){
+    public void drawHighscores(Map<String, List<Integer>> highscores) {
 
         this.drawBackground();
 
-        String color1 =  "#9f395d";
+        String color1 = "#9f395d";
         String color2 = "#191919";
 
         this.graphics.enableModifiers(SGR.BOLD);
         List<String> title = this.messageDrawer.getHighscoresMessage();
-        this.messageDrawer.drawMessage( title, color1,"");
+        this.messageDrawer.drawMessage(title, color1, "");
 
         int i = 0, j;
         String s;
-        for(Map.Entry<String, List<Integer>> entry : highscores.entrySet()) {
+        for (Map.Entry<String, List<Integer>> entry : highscores.entrySet()) {
             this.graphics.setForegroundColor(TextColor.Factory.fromString(color1));
             s = entry.getKey() + " Scene";
             this.graphics.fillRectangle(
-                    new TerminalPosition(this.width/ 4 -2 + i, this.height/4 + title.size() + 3),
+                    new TerminalPosition(this.width / 4 - 2 + i, this.height / 4 + title.size() + 3),
                     new TerminalSize(s.length(), 3),
                     '█'
             );
-            this.graphics.putString(this.width / 4 - 2 + i, this.height/4 + title.size() + 4, s.toUpperCase());
+            this.graphics.putString(this.width / 4 - 2 + i, this.height / 4 + title.size() + 4, s.toUpperCase());
 
             j = 0;
             this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
-            for(Integer score : entry.getValue()){
-                this.graphics.putString(this.width / 4 + 2 + i, this.height/4 + 3 + j + title.size() + 4, score.toString());
+            for (Integer score : entry.getValue()) {
+                this.graphics.putString(this.width / 4 + 2 + i, this.height / 4 + 3 + j + title.size() + 4, score.toString());
                 j += 2;
             }
             i += 20;
         }
 
         this.graphics.setForegroundColor(TextColor.Factory.fromString(color1));
-        this.graphics.putString(this.width - 15 , this.height- 4,"Q");
+        this.graphics.putString(this.width - 15, this.height - 4, "Q");
         this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
-        this.graphics.putString(this.width - 12, this.height- 4 ,"Back");
+        this.graphics.putString(this.width - 12, this.height - 4, "Back");
     }
 
-    public void drawControls(){
+    public void drawControls() {
         String[] controls = {"▲", "▼", "▶", "SPACE BAR", "Q"};
-        String[] description = {"Move Up","Move Down","Shoot", "Drop Bomb", "Quit"};
+        String[] description = {"Move Up", "Move Down", "Shoot", "Drop Bomb", "Quit"};
 
         int y = 7;
-        for(int i = 0; i< controls.length; i++){
+        for (int i = 0; i < controls.length; i++) {
             this.graphics.setForegroundColor(TextColor.Factory.fromString("#00009f"));
-            this.graphics.putString(y , this.height- 4,controls[i]);
+            this.graphics.putString(y, this.height - 4, controls[i]);
             y += controls[i].length() + 2;
             this.graphics.setForegroundColor(TextColor.Factory.fromString("#333333"));
-            this.graphics.putString(y, this.height- 4 ,description[i]);
+            this.graphics.putString(y, this.height - 4, description[i]);
             y += 7 + description[i].length();
         }
 
     }
 
-    private void drawBackground(){
+    private void drawBackground() {
         this.graphics.setForegroundColor(TextColor.Factory.fromString("#cccccc"));
         this.graphics.setBackgroundColor(TextColor.Factory.fromString("#cccccc"));
         this.graphics.fillRectangle(
@@ -183,7 +179,7 @@ public class Gui {
                 return Key.RIGHT;
             if ((input.getKeyType() == KeyType.Character && input.getCharacter() == ' '))
                 return Key.SPACE;
-            if((input.getKeyType() == KeyType.Enter))
+            if ((input.getKeyType() == KeyType.Enter))
                 return Key.ENTER;
             if (input.getKeyType() == KeyType.EOF || (input.getKeyType() == KeyType.Character && input.getCharacter() == 'q'))
                 return Key.QUIT;
@@ -214,15 +210,17 @@ public class Gui {
         return this.height;
     }
 
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
-
     public Scene getScene() {
         return this.scene;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 
     public MessageDrawer getMessageDrawer() {
         return messageDrawer;
     }
+
+    public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, ENTER, NULL}
 }

@@ -24,7 +24,7 @@ public class RandomSceneCreator extends SceneCreator {
 
         this.scene = new Scene(width, height, "Random", visualMonsters);
 
-        this.scene.setBuildings(this.generateBuildings(width,height, new Random(),3));
+        this.scene.setBuildings(this.generateBuildings(width, height, new Random(), 3));
 
         return this.scene;
     }

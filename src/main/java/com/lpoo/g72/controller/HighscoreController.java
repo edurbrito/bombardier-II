@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class HighscoreController {
 
-    private Map<String,List<Integer>> highscores;
+    private Map<String, List<Integer>> highscores;
 
     public HighscoreController() {
         this.highscores = new HashMap<>();
@@ -26,7 +26,7 @@ public class HighscoreController {
             File file = new File("src/main/java/com/lpoo/g72/highscores.json");
             boolean newFile = file.createNewFile();
 
-            if(!newFile){
+            if (!newFile) {
                 Type type = new TypeToken<Map<String, List<Integer>>>() {
                 }.getType();
                 this.setHighscores(new Gson().fromJson(new FileReader(file), type));

@@ -14,24 +14,23 @@ public class VisualVerticalMissile extends VisualElement {
 
     @Override
     public void animation() {
-        if (this.form[0] == '_'){
+        if (this.form[0] == '_') {
             this.form[0] = '.';
             this.form[2] = 'U';
-        }
-        else{
+        } else {
             this.form[0] = '_';
             this.form[2] = 'W';
         }
     }
 
     @Override
-    public void draw(TextGraphics graphics, Element element){
+    public void draw(TextGraphics graphics, Element element) {
         graphics.enableModifiers(SGR.BOLD);
         graphics.setBackgroundColor(TextColor.Factory.fromString("#cccccc"));
 
         for (int i = 0; i < this.form.length; i++) {
             graphics.setForegroundColor(TextColor.Factory.fromString(this.colorPallet[i]));
-            graphics.setCharacter(element.getPosition().getX(),element.getPosition().getY() + i , this.form[i]);
+            graphics.setCharacter(element.getPosition().getX(), element.getPosition().getY() + i, this.form[i]);
         }
     }
 }
