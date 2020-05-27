@@ -95,7 +95,7 @@ public class ElementControllerTest {
         Mockito.verify(monsterController, Mockito.times(1)).update(this.helicopterController.altitude);
 
         assertEquals(this.helicopterController.altitude, monsterController.altitude, 4);
-        assertNotNull(monsterController.monster.getPosition());
+        assertNotNull(monster.getPosition());
         Mockito.verify(monster, Mockito.times(1)).setPosition(Mockito.any());
         Mockito.verify(monster, Mockito.times(1)).revive();
 

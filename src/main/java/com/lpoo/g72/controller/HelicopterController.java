@@ -17,7 +17,7 @@ import java.util.List;
 
 import static com.lpoo.g72.gui.Gui.Key;
 
-public class HelicopterController extends ElementController implements Observable{
+public class HelicopterController extends ElementController implements Observable {
 
     private VisualHelicopter visualHelicopter;
     private Helicopter helicopter;
@@ -96,11 +96,16 @@ public class HelicopterController extends ElementController implements Observabl
     }
 
     private void moveMissiles(){
-        for(Missile missile: this.helicopter.getHorizontalMissiles()){
+
+        List<Missile> horizontalMissiles = this.helicopter.getHorizontalMissiles();
+
+        for(Missile missile : horizontalMissiles){
             this.commandInvoker.addCommand(new RightCommand(missile));
         }
 
-        for(Missile missile: this.helicopter.getVerticalMissiles()){
+        List<Missile> verticalMissiles = this.helicopter.getVerticalMissiles();
+
+        for(Missile missile : verticalMissiles){
             if(missile.getY() >= this.maxHeight - 2){
                 missile.setExploded();
             }
@@ -112,7 +117,10 @@ public class HelicopterController extends ElementController implements Observabl
 
     private boolean missilesEnded(){
         boolean missilesEnded = true;
-        for(Missile missile : this.helicopter.getVerticalMissiles()){
+
+        List<Missile> verticalMissiles = this.helicopter.getVerticalMissiles();
+
+        for(Missile missile : verticalMissiles){
             if(!missile.hasExploded())
                 missilesEnded = false;
         }

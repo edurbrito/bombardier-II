@@ -11,10 +11,8 @@ import java.util.Random;
 
 public class MonsterController extends ElementController implements Observer{
 
-    protected VisualElement visualMonster;
-    protected  Monster monster;
-
-    private boolean newRound;
+    private VisualElement visualMonster;
+    private Monster monster;
 
     public MonsterController(VisualElement visualMonster, Monster monster, int maxWidth) {
         super(maxWidth, monster.getPosition().getY(),0.12 * Math.pow(10,9));
@@ -30,11 +28,6 @@ public class MonsterController extends ElementController implements Observer{
 
         if(timePassed.getNano() >= this.deltaTime){
 
-            if(this.newRound){
-                this.monster.setPosition(new Position(this.maxWidth + new Random().nextInt(30),this.altitude));
-                this.newRound = false;
-            }
-
             this.commandInvoker.addCommand(new LeftCommand(this.monster));
 
             this.visualMonster.animation();
@@ -45,8 +38,9 @@ public class MonsterController extends ElementController implements Observer{
 
     @Override
     public void update(int info) {
-        this.newRound = true;
+
         this.altitude = info + new Random().nextInt(3) - 1;
+
         this.monster.setPosition(new Position(this.maxWidth + new Random().nextInt(30),this.altitude));
 
         this.monster.revive();

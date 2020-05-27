@@ -1,8 +1,6 @@
 package com.lpoo.g72.gui;
 
 import com.googlecode.lanterna.SGR;
-import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.lpoo.g72.gui.visualElement.VisualElement;
@@ -29,30 +27,10 @@ public class Scene {
         this.visualMonsters = visualMonsters;
     }
 
-    public void setBuildings(char[][] buildings) {
-        this.buildings = buildings;
-        this.setSceneBlocks();
-    }
-
-    public char[][] getBuildings() {
-        return this.buildings;
-    }
-
-    public List<VisualElement> getVisualMonsters() {
-        return this.visualMonsters;
-    }
-
     public void draw(TextGraphics graphics, Helicopter helicopter, List<Monster> monsters){
 
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#cccccc"));
-        graphics.setForegroundColor(TextColor.Factory.fromString("#cccccc"));
-        graphics.fillRectangle(
-                new TerminalPosition(0, 0),
-                new TerminalSize(this.width, this.height),
-                ' '
-        );
-
         this.drawSceneBuildings(graphics);
+
         this.drawVisualMonsters(graphics, monsters);
 
         this.visualHelicopter.draw(graphics,helicopter);
@@ -74,36 +52,6 @@ public class Scene {
             if(monsters.get(i).isAlive())
                 this.visualMonsters.get(i).draw(graphics,monsters.get(i));
         }
-    }
-
-    private void setSceneBlocks() {
-        this.sceneBlocks = 0;
-        for(int i = 0; i < this.buildings.length; i++){
-            for(int j = 0; j < this.buildings[i].length; j++){
-                if(this.buildings[i][j] != ' ')
-                    this.sceneBlocks++;
-            }
-        }
-    }
-
-    public int getSceneBlocks() {
-        return this.sceneBlocks;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
-    public VisualHelicopter getVisualHelicopter() {
-        return visualHelicopter;
     }
 
     public int removeBuilding(int x, int y) {
@@ -128,4 +76,48 @@ public class Scene {
 
         return destroyedBlocks;
     }
+
+    public void setBuildings(char[][] buildings) {
+        this.buildings = buildings;
+        this.setSceneBlocks();
+    }
+
+    private void setSceneBlocks() {
+        this.sceneBlocks = 0;
+        for (char[] building : this.buildings) {
+            for (char c : building) {
+                if (c != ' ')
+                    this.sceneBlocks++;
+            }
+        }
+    }
+
+    public char[][] getBuildings() {
+        return this.buildings;
+    }
+
+    public List<VisualElement> getVisualMonsters() {
+        return this.visualMonsters;
+    }
+
+    public int getSceneBlocks() {
+        return this.sceneBlocks;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public VisualHelicopter getVisualHelicopter() {
+        return visualHelicopter;
+    }
+
 }

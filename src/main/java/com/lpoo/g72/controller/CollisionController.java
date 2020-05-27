@@ -47,7 +47,7 @@ public class CollisionController {
     }
 
     private boolean horizontalCollisionChecker(Position pos1, Position pos2){
-        return pos1.equals(pos2) || pos1.equals(pos2.right()) || pos1.equals(pos2.right().right())|| pos1.equals(pos2.left());
+        return pos1.equals(pos2) || pos1.equals(pos2.right()) || pos1.equals(pos2.right().right()) || pos1.equals(pos2.left());
     }
 
     public int blocksDestroyed(){

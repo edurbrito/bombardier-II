@@ -3,10 +3,7 @@ package com.lpoo.g72.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,9 +22,15 @@ public class HighscoreController {
     public void read() {
 
         try {
-            Type type = new TypeToken<Map<String, List<Integer>>>() {
-            }.getType();
-            this.setHighscores(new Gson().fromJson(new FileReader("src/main/java/com/lpoo/g72/highscores.json"), type));
+
+            File file = new File("src/main/java/com/lpoo/g72/highscores.json");
+            boolean newFile = file.createNewFile();
+
+            if(!newFile){
+                Type type = new TypeToken<Map<String, List<Integer>>>() {
+                }.getType();
+                this.setHighscores(new Gson().fromJson(new FileReader(file), type));
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -14,7 +14,9 @@ import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Controller implements Observer{
 
@@ -66,19 +68,6 @@ public class Controller implements Observer{
         this.menuOptions.add("Highscores");
     }
 
-    private void initElementControllers() {
-        this.helicopterController = new HelicopterController(this.gui.getScene().getVisualHelicopter(), this.model.getHelicopter(),this.gui.getScene().getWidth() - 1, this.gui.getScene().getHeight() - 5);
-
-        this.monsterControllers = new ArrayList<>();
-
-        for(int i = 0; i < this.model.getMonsters().size(); i++){
-            this.monsterControllers.add(new MonsterController(this.gui.getScene().getVisualMonsters().get(i), this.model.getMonsters().get(i), this.gui.getScene().getWidth()-1));
-            this.helicopterController.addObserver(this.monsterControllers.get(i));
-        }
-
-        this.helicopterController.addObserver(this);
-    }
-
     private void initModel(){
         int bombs , missiles;
 
@@ -99,6 +88,19 @@ public class Controller implements Observer{
         this.score = 0;
         this.destroyedBlocks = 0;
         this.initElementControllers();
+    }
+
+    private void initElementControllers() {
+        this.helicopterController = new HelicopterController(this.gui.getScene().getVisualHelicopter(), this.model.getHelicopter(),this.gui.getScene().getWidth() - 1, this.gui.getScene().getHeight() - 5);
+
+        this.monsterControllers = new ArrayList<>();
+
+        for(int i = 0; i < this.model.getMonsters().size(); i++){
+            this.monsterControllers.add(new MonsterController(this.gui.getScene().getVisualMonsters().get(i), this.model.getMonsters().get(i), this.gui.getScene().getWidth()-1));
+            this.helicopterController.addObserver(this.monsterControllers.get(i));
+        }
+
+        this.helicopterController.addObserver(this);
     }
 
     public void run(){
@@ -169,9 +171,8 @@ public class Controller implements Observer{
         this.score += this.collisionController.horizontalCollisions() + 2 * blocks;
     }
 
-    public void highscores(Gui.Key key) throws IOException {
+    public void highscores(Gui.Key key) {
         this.gui.drawHighscores(this.highscoreController.getHighscores());
-        this.gui.refreshScreen();
 
         if(key == Gui.Key.QUIT){
             this.state = new MenuState(this);
@@ -183,6 +184,7 @@ public class Controller implements Observer{
         this.gui.drawScene(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
 
         MessageDrawer messageDrawer = this.gui.getMessageDrawer();
+
         if(this.model.getHelicopter().getLives() < 0 || this.destroyedBlocks != this.gui.getScene().getSceneBlocks()){
             messageDrawer.drawMessage(messageDrawer.getGameOverMessage(), "#b10000","Score: " + score);
         }
@@ -209,7 +211,7 @@ public class Controller implements Observer{
             messageDrawer.drawMessage(messageDrawer.getNewRoundMessage(),"#0000b1","Current Altitude: " + (this.gui.getHeight() - info));
             this.gui.refreshScreen();
             Thread.sleep(800);
-        } catch (Exception e){
+        } catch (Exception ignored){
 
         }
     }

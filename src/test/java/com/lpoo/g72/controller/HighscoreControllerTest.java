@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.FileReader;
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
@@ -25,17 +25,20 @@ public class HighscoreControllerTest {
 
     @Test
     public void testWrite() {
-
         highscoreController.read();
         Type type = new TypeToken<Map<String, List<Integer>>>() {
         }.getType();
 
         Map<String, List<Integer>> oldMap = new HashMap<>();
-        oldMap.putAll(new Gson().fromJson(highscoreController.getHighscores().toString(), type));
+        if(highscoreController.getHighscores() != null){
+            oldMap.putAll(new Gson().fromJson(highscoreController.getHighscores().toString(), type));
+            Mockito.verify(highscoreController, Mockito.times(1)).read();
+            Mockito.verify(highscoreController, Mockito.times(1)).setHighscores(Mockito.any());
+        }
+        else
+            highscoreController.setHighscores(new HashMap<>());
 
         assertNotNull(highscoreController.getHighscores());
-        Mockito.verify(highscoreController, Mockito.times(1)).read();
-        Mockito.verify(highscoreController, Mockito.times(1)).setHighscores(Mockito.any());
 
         Map<String, List<Integer>> map = highscoreController.getHighscores();
         if (map.get("OPorto") != null) {

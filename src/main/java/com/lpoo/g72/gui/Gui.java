@@ -10,7 +10,6 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.lpoo.g72.gui.visualElement.VisualHelicopter;
 import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
 
@@ -57,13 +56,7 @@ public class Gui {
 
     public void drawScene(Helicopter helicopter, List<Monster> monsters, int destroyedBlocks, int score) {
 
-        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#cccccc"));
-        this.graphics.setForegroundColor(TextColor.Factory.fromString("#cccccc"));
-        this.graphics.fillRectangle(
-                new TerminalPosition(0, 0),
-                new TerminalSize(this.width, this.height),
-                ' '
-        );
+        this.drawBackground();
 
         this.scene.draw(this.graphics, helicopter, monsters);
 
@@ -89,15 +82,11 @@ public class Gui {
     }
 
     public void drawMenu(int selected, List<String> menuOptions){
+
+        this.drawBackground();
+
         String color1 =  "#00009f";
         String color2 =  "#191919";
-
-        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#cccccc"));
-        this.graphics.fillRectangle(
-                new TerminalPosition(0, 0),
-                new TerminalSize(this.width, this.height),
-                ' '
-        );
 
         this.graphics.enableModifiers(SGR.BOLD);
         this.messageDrawer.drawMessage(this.messageDrawer.getGameTitle(), color1, "THE REVENGE OF THE SKYSCRAPPERS");
@@ -119,15 +108,11 @@ public class Gui {
     }
 
     public void drawHighscores(Map<String, List<Integer>> highscores){
+
+        this.drawBackground();
+
         String color1 =  "#9f395d";
         String color2 = "#191919";
-
-        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#cccccc"));
-        this.graphics.fillRectangle(
-                new TerminalPosition(0, 0),
-                new TerminalSize(this.width, this.height),
-                ' '
-        );
 
         this.graphics.enableModifiers(SGR.BOLD);
         List<String> title = this.messageDrawer.getHighscoresMessage();
@@ -174,6 +159,16 @@ public class Gui {
             y += 7 + description[i].length();
         }
 
+    }
+
+    private void drawBackground(){
+        this.graphics.setForegroundColor(TextColor.Factory.fromString("#cccccc"));
+        this.graphics.setBackgroundColor(TextColor.Factory.fromString("#cccccc"));
+        this.graphics.fillRectangle(
+                new TerminalPosition(0, 0),
+                new TerminalSize(this.width, this.height),
+                ' '
+        );
     }
 
     public Key getKey() throws IOException {

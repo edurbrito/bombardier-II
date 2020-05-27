@@ -1,4 +1,5 @@
 package com.lpoo.g72.controller.states;
+
 import com.lpoo.g72.controller.Controller;
 import com.lpoo.g72.gui.Gui;
 

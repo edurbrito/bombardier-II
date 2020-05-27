@@ -3,8 +3,6 @@ package com.lpoo.g72.controller.states;
 import com.lpoo.g72.controller.Controller;
 import com.lpoo.g72.gui.Gui;
 
-import java.io.IOException;
-
 public class GameState extends State{
 
     public GameState(Controller controller) {
@@ -12,7 +10,7 @@ public class GameState extends State{
     }
 
     @Override
-    public void action(Gui.Key key) throws IOException {
+    public void action(Gui.Key key) {
         this.controller.play(key);
     }
 }
