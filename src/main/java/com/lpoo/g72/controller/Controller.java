@@ -45,6 +45,7 @@ public class Controller implements Observer {
         this.state = new MenuState(this);
         this.selectedScene = 0;
         this.setScenes();
+        this.gui.setMenuOptions(this.scenes);
 
         this.collisionController = new CollisionController(this.model);
         this.destroyedBlocks = 0;
@@ -60,20 +61,19 @@ public class Controller implements Observer {
         this.scenes.add(new OportoSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
         this.scenes.add(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
         this.scenes.add(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
-
-        this.gui.setMenuOptions(this.scenes);
     }
 
-    private void initModel() {
+    private void initModel(Scene scene) {
         int bombs, missiles;
 
-        bombs = (int) Math.round(this.scenes.get(selectedScene).getSceneBlocks() / this.gui.getHeight() / 4.3);
+        bombs = (int) Math.round(scene.getSceneBlocks() / this.gui.getHeight() / 4.3);
         missiles = 2;
 
         this.model.reset(new Helicopter(new Position(0, 1), bombs, missiles));
     }
 
     private void initScene(Scene scene) {
+        this.setScenes();
         this.gui.setScene(scene);
         this.collisionController.initScene(scene);
 
@@ -123,7 +123,7 @@ public class Controller implements Observer {
         } else if (key == Gui.Key.DOWN && this.selectedScene < this.scenes.size()) {
             this.selectedScene++;
         } else if (key == Gui.Key.ENTER && this.selectedScene < this.scenes.size()) {
-            this.initModel();
+            this.initModel(this.scenes.get(this.selectedScene));
             this.initScene(this.scenes.get(this.selectedScene));
             this.state = new GameState(this);
         } else if (key == Gui.Key.ENTER && this.selectedScene == this.scenes.size()) {
@@ -135,7 +135,6 @@ public class Controller implements Observer {
 
         if (key == Gui.Key.QUIT) {
             this.state = new MenuState(this);
-            this.setScenes();
         }
 
         this.gui.drawScene(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
@@ -188,7 +187,6 @@ public class Controller implements Observer {
 
         if (key == Gui.Key.QUIT) {
             this.state = new MenuState(this);
-            this.setScenes();
         }
     }
 
