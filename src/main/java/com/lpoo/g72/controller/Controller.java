@@ -73,7 +73,6 @@ public class Controller implements Observer {
     }
 
     private void initScene(Scene scene) {
-        this.setScenes();
         this.gui.setScene(scene);
         this.collisionController.initScene(scene);
 
@@ -123,6 +122,7 @@ public class Controller implements Observer {
         } else if (key == Gui.Key.DOWN && this.selectedScene < this.scenes.size()) {
             this.selectedScene++;
         } else if (key == Gui.Key.ENTER && this.selectedScene < this.scenes.size()) {
+            this.setScenes();
             this.initModel(this.scenes.get(this.selectedScene));
             this.initScene(this.scenes.get(this.selectedScene));
             this.state = new GameState(this);

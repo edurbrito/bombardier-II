@@ -94,13 +94,13 @@ public class Gui {
         this.messageDrawer.drawMessage(this.messageDrawer.getGameTitle(), color1, "THE REVENGE OF THE SKYSCRAPPERS");
 
         String s;
-        for (int i = 0; i < menuOptions.size(); i++) {
+        for (int i = 0; i < this.menuOptions.size(); i++) {
             if (i == selected) {
                 this.graphics.setForegroundColor(TextColor.Factory.fromString(color2));
-                s = ">>  " + menuOptions.get(i).toUpperCase() + "  <<";
+                s = ">>  " + this.menuOptions.get(i).toUpperCase() + "  <<";
             } else {
                 this.graphics.setForegroundColor(TextColor.Factory.fromString(color1));
-                s = menuOptions.get(i).toUpperCase();
+                s = this.menuOptions.get(i).toUpperCase();
             }
             this.graphics.putString((this.width - s.length()) / 2, this.height / 2 + 2 + 3 * i, s);
         }
