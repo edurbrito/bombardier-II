@@ -21,18 +21,22 @@ import java.util.Random;
 public class Controller implements Observer {
 
     private final Gui gui;
-    private final HighscoreController highscoreController;
-    protected CommandInvoker commandInvoker;
+
     private Model model;
     private State state;
+
     private int destroyedBlocks;
     private int score;
+
     private int selectedScene;
     private List<Scene> scenes;
-    private List<String> menuOptions;
+
     private HelicopterController helicopterController;
     private List<MonsterController> monsterControllers;
     private CollisionController collisionController;
+    private final HighscoreController highscoreController;
+
+    protected CommandInvoker commandInvoker;
 
     public Controller(Gui gui, Model model) {
         this.gui = gui;
@@ -57,11 +61,7 @@ public class Controller implements Observer {
         this.scenes.add(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
         this.scenes.add(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
 
-        this.menuOptions = new ArrayList<>();
-        for (Scene scene : this.scenes) {
-            this.menuOptions.add(scene.getName());
-        }
-        this.menuOptions.add("Highscores");
+        this.gui.setMenuOptions(this.scenes);
     }
 
     private void initModel() {
@@ -114,7 +114,7 @@ public class Controller implements Observer {
 
     public void menu(Gui.Key key) throws IOException {
 
-        this.gui.drawMenu(this.selectedScene, this.menuOptions);
+        this.gui.drawMenu(this.selectedScene);
 
         if (key == Gui.Key.QUIT) {
             this.quit();
@@ -151,7 +151,7 @@ public class Controller implements Observer {
 
         if (this.gameEnded()) {
             this.score += this.gui.getHeight() - this.helicopterController.getAltitude();
-            this.highscoreController.addScore(this.menuOptions.get(this.selectedScene), this.score);
+            this.highscoreController.addScore(this.scenes.get(this.selectedScene).getName(), this.score);
             this.state = new EndGame(this);
         }
     }

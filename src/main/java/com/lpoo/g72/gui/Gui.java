@@ -14,17 +14,21 @@ import com.lpoo.g72.model.element.Helicopter;
 import com.lpoo.g72.model.element.Monster;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Gui {
 
-    private final TerminalScreen screen;
     private final int width;
     private final int height;
     private final MessageDrawer messageDrawer;
     private Scene scene;
+
+    private final TerminalScreen screen;
     private TextGraphics graphics;
+
+    private List<String> menuOptions;
 
     public Gui(int width, int height) throws IOException {
         this.width = width;
@@ -79,7 +83,7 @@ public class Gui {
         this.graphics.putString(this.width - 17, this.height - 3, "Score: " + score);
     }
 
-    public void drawMenu(int selected, List<String> menuOptions) {
+    public void drawMenu(int selected) {
 
         this.drawBackground();
 
@@ -224,4 +228,12 @@ public class Gui {
     }
 
     public enum Key {UP, DOWN, SPACE, RIGHT, QUIT, ENTER, NULL}
+
+    public void setMenuOptions(List<Scene> scenes){
+        this.menuOptions = new ArrayList<>();
+        for (Scene scene : scenes) {
+            this.menuOptions.add(scene.getName());
+        }
+        this.menuOptions.add("Highscores");
+    }
 }
