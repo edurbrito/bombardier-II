@@ -329,25 +329,26 @@ Some advantages of this pattern:
 ### Visual Elements animate in distinct ways
 
 ##### Problem in Context
-In our game there are two parallel class hierarchies, one for our Elements and other for the Visual Elements, which, as mentioned above, represent Views for each of the Elements. We wanted each Visual Element to animate differently, which led us to believe each SubClass should implement an abstract 'animation()' method from the Superclass Visual Element, according to the desired movement.
+In our game there are two parallel class hierarchies, one for our Elements and other for the VisualElements, which, as mentioned above, represent Views for each of the Elements. We wanted each VisualElement to animate differently, so we created an abstract `animation()` method in the superclass VisualElement, implemented in every subclass, according to the desired movement.
 
 ##### The Pattern
-By developing our classes hierarchy and methods in a structured way, we ended up intuitively applying a *variant* of the **Strategy** Pattern. This allowed us to vary the way the components of each Visual Element animate themselves, without affecting the behavior and attributes they have in common.
+By developing our classes hierarchy and methods in a structured way, we ended up intuitively applying a *variant* of the **Strategy** Pattern. This allowed us to vary the way the components of each VisualElement animate themselves, without affecting the behavior and attributes they have in common.
 
 ##### Implementation
 
 ![](../images/strategyPattern.svg)
 
-* Context = [Scene](../src/main/java/com/lpoo/g72/gui/Scene.java) which has a [VisualHelicopter](../src/main/java/com/lpoo/g72/gui/VisualElements/VisualHelicopter.java) and a list of [Visual Monsters](../src/main/java/com/lpoo/g72/gui/VisualElements/visualMonsters) and [Scene](../src/main/java/com/lpoo/g72/gui/VisualElements/VisualHelicopter.java) which has a list of [Visual Missiles](../src/main/java/com/lpoo/g72/gui/VisualElements/visualMissiles) behave as a Context because they maintain a reference to one of the concrete strategies. 
-However, in the first case, it is not the Scene that invokes the Strategy method. The [Element Controllers](../src/main/java/com/lpoo/g72/controller/ElementController.java) are the ones that, in their `move()` function call `animation()` method of the Visual Elements they control.
-In the second case, the [VisualHelicopter](../src/main/java/com/lpoo/g72/gui/VisualElements/VisualHelicopter.java) is the one that calls the `animation()`method for the [Visual Missiles](../src/main/java/com/lpoo/g72/gui/VisualElements/VisualMissiles) in its `animation()` function.
-
-* Strategy = [Strategy](../src/main/java/com/lpoo/g72/gui/VisualElements/VisualElement.java), an abstract class which declares the following abstract method:
+* Strategy = [VisualElement](../src/main/java/com/lpoo/g72/gui/VisualElements/VisualElement.java), an abstract class which declares the following abstract method:
    * execute() = `public abstract void animation()`.
 
-* Concrete Strategies = all contained in [Visual Elements](../src/main/java/com/lpoo/g72/gui/VisualElements) package, this classes implement the abstract method `animation()`.
+* Concrete Strategies = all contained in the [Visual Elements](../src/main/java/com/lpoo/g72/gui/visualElement/) package, these classes implement the abstract method `animation()`.
+
+* Context = The [Element Controllers](../src/main/java/com/lpoo/g72/controller/ElementController.java) are the ones that, in their `move()` function, call the `animation()` method of the Visual Elements they control, mantaining a reference to the concrete animation strategy they represent.
 
 ##### Consequences
+
+* Isolated the implementation details of the `animation()` strategy from the code/controller that calls it.
+* Open/Closed Principle. New strategies were introduced, especially as new [VisualMonsters](../src/main/java/com/lpoo/g72/gui/visualElement/visualMonsters) with different moving techniques and forms, without having to change the context.
 
 ## KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
 
