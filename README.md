@@ -6,8 +6,10 @@
 
 > A suicide helicopter tries to bomb a city taken by the forces of evil, while escaping from monsters moving in its direction.
 
-![](images/menu.png) | ![](images/game.png)
-------------------------|------------------------
+![](images/menuDemo.gif) | ![](images/gameDemo.gif)
+-------------------------|-------------------------
+
+*[See BombardierII demo here](/docs/bombardierIIDemo.gif)*
 
 ## Description
 

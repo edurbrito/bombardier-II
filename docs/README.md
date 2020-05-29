@@ -6,8 +6,10 @@
 
 > A suicide helicopter tries to bomb a city taken by the forces of evil, while escaping from monsters moving in its direction.
 
-![](../images/menu.png) | ![](../images/game.png)
-------------------------|------------------------
+![](../images/menuDemo.gif) | ![](../images/gameDemo.gif)
+----------------------------|-----------------------------
+
+*[See BombardierII demo here](bombardierIIDemo.gif)*
 
 ## Description
 
@@ -352,13 +354,17 @@ By developing our classes hierarchy and methods in a structured way, we ended up
 
 ## KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
 
-### Switch Statement && Conditionals
+### Conditional Expressions
 
-// TODO - explain why the switch statement in menu() and in Gui's getKey() are not a problem.
+Even though conditional blocks usually indicate a design violation, we decided to keep two methods in our classes that contain if-else conditional blocks.
+One of these methods, the [`getKey()`](../src/main/java/com/lpoo/g72/gui/Gui.java), which integrates [Gui](../src/main/java/com/lpoo/g72/gui/Gui.java) Class and is used 
+to interpret the input from the User, performs such a simple and unambiguous action that further modifications would only make the code hard to understand. Therefore, keeping the conditionals seemed the right option in this case.
+The other method that caught our attention was Controller's [`menu(Gui.key key)`](../src/main/java/com/lpoo/g72/controller/Controller.java). In the game menu, the User can choose from a finite set of options and thus we need to associate each pressed key with a distinct action. Trying to implement this without using the conditionals, we concluded that it would be necessary to create new classes to separate distinct behaviors. Although, at first, the alternatives to refactor de code seemed like a great option, we found that the methods of the new classes accessed data from other objects more than its own and that most of the time the classes were too connected to be kept apart. This lead us to keep the current implementation.
+
 
 ### Large Class
 
-Classes that contain many fields/methods may exist. The [Controller](../src/main/java/com/lpoo/g72/controller/Controller.java) and the [Gui](../src/main/java/com/lpoo/g72/gui/Gui.java) are our top scorers. We have done some refactorings to *Extract Classes* from these. What remains may only be the fundamental blocks that keep them cohesive and intuitive, so we do not intend to reduce their size.
+Classes that contain many fields/methods may exist. The [Controller](../src/main/java/com/lpoo/g72/controller/Controller.java) and the [Gui](../src/main/java/com/lpoo/g72/gui/Gui.java) are our top scorers. We have done some refactoring to *Extract Classes* from these. What remains may only be the fundamental blocks that keep them cohesive and intuitive, so we do not intend to reduce their size.
 
 ### Long Method
 
