@@ -30,12 +30,16 @@ public class Model {
         this.monsters.add(monster);
     }
 
-    public void deleteMonsters() {
+    private void deleteMonsters() {
         this.monsters.clear();
     }
 
     public void reset(Helicopter helicopter) {
         this.helicopter = helicopter;
         this.deleteMonsters();
+    }
+
+    public boolean gameOver(){
+        return this.helicopter.getLives() < 0;
     }
 }

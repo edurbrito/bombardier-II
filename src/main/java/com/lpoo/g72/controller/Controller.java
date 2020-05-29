@@ -149,12 +149,15 @@ public class Controller implements Observer {
 
         this.collisions();
 
-        Helicopter helicopter = this.model.getHelicopter();
-        if (helicopter.getLives() < 0 || this.collisionController.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks()) {
+        if (this.gameEnded()) {
             this.score += this.gui.getHeight() - this.helicopterController.getAltitude();
             this.highscoreController.addScore(this.menuOptions.get(this.selectedScene), this.score);
             this.state = new EndGame(this);
         }
+    }
+
+    private boolean gameEnded() {
+        return this.model.gameOver() || this.collisionController.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks();
     }
 
     private void collisions() {
@@ -177,7 +180,7 @@ public class Controller implements Observer {
 
         MessageDrawer messageDrawer = this.gui.getMessageDrawer();
 
-        if (this.model.getHelicopter().getLives() < 0 || this.destroyedBlocks != this.gui.getScene().getSceneBlocks()) {
+        if ( this.model.gameOver()  || this.destroyedBlocks != this.gui.getScene().getSceneBlocks()) {
             messageDrawer.drawMessage(messageDrawer.getGameOverMessage(), "#b10000", "Score: " + score);
         } else {
             messageDrawer.drawMessage(messageDrawer.getVictoryMessage(), "#28a016", "Score: " + score);
