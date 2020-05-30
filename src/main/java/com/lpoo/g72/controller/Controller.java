@@ -66,7 +66,7 @@ public class Controller implements Observer {
     private void initModel(Scene scene) {
         int bombs, missiles;
 
-        bombs = (int) Math.round(scene.getSceneBlocks() / this.gui.getHeight() / 4.3);
+        bombs = (int) Math.round(((float) scene.getSceneBlocks() / this.gui.getHeight()) / 4.3);
         missiles = 2;
 
         this.model.reset(new Helicopter(new Position(0, 1), bombs, missiles));
