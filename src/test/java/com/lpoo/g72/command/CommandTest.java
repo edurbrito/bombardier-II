@@ -16,10 +16,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class CommandTest {
 
@@ -27,9 +27,9 @@ public class CommandTest {
     List<Command> commandList;
 
     @Before
-    public void commandInit(){
+    public void commandInit() {
 
-        Position position = new Position(12,24);
+        Position position = new Position(12, 24);
         elementStub = Mockito.spy(new ElementStub(position));
         commandList = new ArrayList<>();
 
@@ -45,11 +45,11 @@ public class CommandTest {
     }
 
     @Test
-    public void testDirectionalCommands(){
+    public void testDirectionalCommands() {
 
         Position position = elementStub.getPosition();
 
-        for(Command command : commandList){
+        for (Command command : commandList) {
 
             Mockito.clearInvocations(elementStub);
 
@@ -57,38 +57,38 @@ public class CommandTest {
 
             Mockito.verify(command, Mockito.times(1)).execute();
 
-            Mockito.verify(elementStub,Mockito.times(1)).getPosition();
+            Mockito.verify(elementStub, Mockito.times(1)).getPosition();
 
-            Mockito.verify(elementStub,Mockito.times(1)).setPosition(Mockito.any());
+            Mockito.verify(elementStub, Mockito.times(1)).setPosition(Mockito.any());
 
         }
 
-        assertEquals(position.down().up().right().left(),elementStub.getPosition());
+        assertEquals(position.down().up().right().left(), elementStub.getPosition());
     }
 
     @Test
-    public void testCommandInvoker(){
+    public void testCommandInvoker() {
         CommandInvoker commandInvoker = Mockito.spy(CommandInvoker.getInstance());
 
         assertNotNull(commandInvoker);
 
-        for(Command command : commandList){
+        for (Command command : commandList) {
             commandInvoker.addCommand(command);
         }
 
-        Position pbefore = new Position(elementStub.getX(),elementStub.getY()).down().up().right().left();
+        Position pbefore = new Position(elementStub.getX(), elementStub.getY()).down().up().right().left();
 
         commandInvoker.executeCommands();
 
         assertTrue(pbefore.equals(elementStub.getPosition()));
 
-        for(Command command : commandList){
-            Mockito.verify(command,Mockito.times(1)).execute();
+        for (Command command : commandList) {
+            Mockito.verify(command, Mockito.times(1)).execute();
         }
 
         commandInvoker.addCommand(new DownCommand(elementStub));
 
-        pbefore = new Position(elementStub.getX(),elementStub.getY()).down();
+        pbefore = new Position(elementStub.getX(), elementStub.getY()).down();
 
         commandInvoker.executeCommands();
 
@@ -100,173 +100,173 @@ public class CommandTest {
     }
 
     @Test
-    public void testDropMissiles(){
-        Helicopter helicopter = Mockito.spy(new Helicopter(new Position(0,1),5,5));
+    public void testDropMissiles() {
+        Helicopter helicopter = Mockito.spy(new Helicopter(new Position(0, 1), 5, 5));
         DropMissile dropMissile = new DropMissile(helicopter);
 
         dropMissile.execute();
-        Mockito.verify(helicopter,Mockito.times(1)).drop();
+        Mockito.verify(helicopter, Mockito.times(1)).drop();
 
-        assertEquals(1,helicopter.getVerticalMissiles().size());
+        assertEquals(1, helicopter.getVerticalMissiles().size());
 
-        for(Missile missile : helicopter.getVerticalMissiles()){
+        for (Missile missile : helicopter.getVerticalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().down().left()));
         }
 
-        assertEquals(4,helicopter.unusedVerticalMissiles());
+        assertEquals(4, helicopter.unusedVerticalMissiles());
 
         dropMissile.execute();
         dropMissile.execute();
 
-        assertEquals(3,helicopter.getVerticalMissiles().size());
+        assertEquals(3, helicopter.getVerticalMissiles().size());
 
-        for(Missile missile : helicopter.getVerticalMissiles()){
+        for (Missile missile : helicopter.getVerticalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().down().left()));
         }
 
-        assertEquals(2,helicopter.unusedVerticalMissiles());
+        assertEquals(2, helicopter.unusedVerticalMissiles());
 
         dropMissile.execute();
         dropMissile.execute();
 
-        assertEquals(5,helicopter.getVerticalMissiles().size());
+        assertEquals(5, helicopter.getVerticalMissiles().size());
 
-        for(Missile missile : helicopter.getVerticalMissiles()){
+        for (Missile missile : helicopter.getVerticalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().down().left()));
         }
 
-        assertEquals(0,helicopter.unusedVerticalMissiles());
+        assertEquals(0, helicopter.unusedVerticalMissiles());
 
-        Mockito.verify(helicopter,Mockito.times(5)).drop();
+        Mockito.verify(helicopter, Mockito.times(5)).drop();
 
         helicopter.resetMissiles();
 
-        assertEquals(0,helicopter.getVerticalMissiles().size());
+        assertEquals(0, helicopter.getVerticalMissiles().size());
 
-        for(Missile missile : helicopter.getVerticalMissiles()){
+        for (Missile missile : helicopter.getVerticalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().down().left()));
         }
 
-        assertEquals(5,helicopter.unusedVerticalMissiles());
+        assertEquals(5, helicopter.unusedVerticalMissiles());
 
         dropMissile.execute();
-        Mockito.verify(helicopter,Mockito.times(6)).drop();
+        Mockito.verify(helicopter, Mockito.times(6)).drop();
 
-        assertEquals(1,helicopter.getVerticalMissiles().size());
+        assertEquals(1, helicopter.getVerticalMissiles().size());
 
-        for(Missile missile : helicopter.getVerticalMissiles()){
+        for (Missile missile : helicopter.getVerticalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().down().left()));
         }
 
-        assertEquals(4,helicopter.unusedVerticalMissiles());
+        assertEquals(4, helicopter.unusedVerticalMissiles());
 
-        for (Missile missile : helicopter.getVerticalMissiles()){
+        for (Missile missile : helicopter.getVerticalMissiles()) {
             missile.setExploded();
         }
 
-        assertEquals(0,helicopter.getVerticalMissiles().size());
+        assertEquals(0, helicopter.getVerticalMissiles().size());
 
-        for(Missile missile : helicopter.getVerticalMissiles()){
+        for (Missile missile : helicopter.getVerticalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().down().left()));
         }
 
-        assertEquals(4,helicopter.unusedVerticalMissiles());
+        assertEquals(4, helicopter.unusedVerticalMissiles());
 
         dropMissile.execute();
-        Mockito.verify(helicopter,Mockito.times(7)).drop();
+        Mockito.verify(helicopter, Mockito.times(7)).drop();
 
-        assertEquals(1,helicopter.getVerticalMissiles().size());
+        assertEquals(1, helicopter.getVerticalMissiles().size());
 
-        for(Missile missile : helicopter.getVerticalMissiles()){
+        for (Missile missile : helicopter.getVerticalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().down().left()));
         }
 
-        assertEquals(3,helicopter.unusedVerticalMissiles());
+        assertEquals(3, helicopter.unusedVerticalMissiles());
     }
 
     @Test
-    public void testShootMissiles(){
-        Helicopter helicopter = Mockito.spy(new Helicopter(new Position(0,1),5,5));
+    public void testShootMissiles() {
+        Helicopter helicopter = Mockito.spy(new Helicopter(new Position(0, 1), 5, 5));
         ShootMissile shootMissile = new ShootMissile(helicopter);
 
         shootMissile.execute();
-        Mockito.verify(helicopter,Mockito.times(1)).shoot();
+        Mockito.verify(helicopter, Mockito.times(1)).shoot();
 
-        assertEquals(1,helicopter.getHorizontalMissiles().size());
+        assertEquals(1, helicopter.getHorizontalMissiles().size());
 
 
-        for(Missile missile : helicopter.getHorizontalMissiles()){
+        for (Missile missile : helicopter.getHorizontalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().right().right()));
         }
 
-        assertEquals(4,helicopter.unusedHorizontalMissiles());
+        assertEquals(4, helicopter.unusedHorizontalMissiles());
 
         shootMissile.execute();
         shootMissile.execute();
 
-        assertEquals(3,helicopter.getHorizontalMissiles().size());
+        assertEquals(3, helicopter.getHorizontalMissiles().size());
 
-        for(Missile missile : helicopter.getHorizontalMissiles()){
+        for (Missile missile : helicopter.getHorizontalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().right().right()));
         }
 
-        assertEquals(2,helicopter.unusedHorizontalMissiles());
+        assertEquals(2, helicopter.unusedHorizontalMissiles());
 
         shootMissile.execute();
         shootMissile.execute();
 
-        assertEquals(5,helicopter.getHorizontalMissiles().size());
+        assertEquals(5, helicopter.getHorizontalMissiles().size());
 
-        for(Missile missile : helicopter.getHorizontalMissiles()){
+        for (Missile missile : helicopter.getHorizontalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().right().right()));
         }
 
-        assertEquals(0,helicopter.unusedHorizontalMissiles());
+        assertEquals(0, helicopter.unusedHorizontalMissiles());
 
-        Mockito.verify(helicopter,Mockito.times(5)).shoot();
+        Mockito.verify(helicopter, Mockito.times(5)).shoot();
 
         helicopter.resetMissiles();
 
-        assertEquals(0,helicopter.getHorizontalMissiles().size());
+        assertEquals(0, helicopter.getHorizontalMissiles().size());
 
-        for(Missile missile : helicopter.getHorizontalMissiles()){
+        for (Missile missile : helicopter.getHorizontalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().right().right()));
         }
 
-        assertEquals(5,helicopter.unusedHorizontalMissiles());
+        assertEquals(5, helicopter.unusedHorizontalMissiles());
 
         shootMissile.execute();
-        Mockito.verify(helicopter,Mockito.times(6)).shoot();
+        Mockito.verify(helicopter, Mockito.times(6)).shoot();
 
-        assertEquals(1,helicopter.getHorizontalMissiles().size());
+        assertEquals(1, helicopter.getHorizontalMissiles().size());
 
-        for(Missile missile : helicopter.getHorizontalMissiles()){
+        for (Missile missile : helicopter.getHorizontalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().right().right()));
         }
 
-        assertEquals(4,helicopter.unusedHorizontalMissiles());
+        assertEquals(4, helicopter.unusedHorizontalMissiles());
 
-        for (Missile missile : helicopter.getHorizontalMissiles()){
+        for (Missile missile : helicopter.getHorizontalMissiles()) {
             missile.setExploded();
         }
 
-        assertEquals(0,helicopter.getHorizontalMissiles().size());
+        assertEquals(0, helicopter.getHorizontalMissiles().size());
 
-        for(Missile missile : helicopter.getHorizontalMissiles()){
+        for (Missile missile : helicopter.getHorizontalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().right().right()));
         }
 
-        assertEquals(4,helicopter.unusedHorizontalMissiles());
+        assertEquals(4, helicopter.unusedHorizontalMissiles());
 
         shootMissile.execute();
-        Mockito.verify(helicopter,Mockito.times(7)).shoot();
+        Mockito.verify(helicopter, Mockito.times(7)).shoot();
 
-        assertEquals(1,helicopter.getHorizontalMissiles().size());
+        assertEquals(1, helicopter.getHorizontalMissiles().size());
 
-        for(Missile missile : helicopter.getHorizontalMissiles()){
+        for (Missile missile : helicopter.getHorizontalMissiles()) {
             assertTrue(missile.getPosition().equals(helicopter.getPosition().right().right()));
         }
 
-        assertEquals(3,helicopter.unusedHorizontalMissiles());
+        assertEquals(3, helicopter.unusedHorizontalMissiles());
     }
 }

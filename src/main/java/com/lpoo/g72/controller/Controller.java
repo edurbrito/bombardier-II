@@ -1,49 +1,40 @@
 package com.lpoo.g72.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextColor;
 import com.lpoo.g72.commands.CommandInvoker;
 import com.lpoo.g72.controller.states.*;
 import com.lpoo.g72.creator.LisbonSceneCreator;
 import com.lpoo.g72.creator.OportoSceneCreator;
 import com.lpoo.g72.creator.RandomSceneCreator;
 import com.lpoo.g72.gui.Gui;
+import com.lpoo.g72.gui.MessageDrawer;
 import com.lpoo.g72.gui.Scene;
 import com.lpoo.g72.model.Model;
 import com.lpoo.g72.model.Position;
 import com.lpoo.g72.model.element.Helicopter;
-import com.lpoo.g72.model.element.Missile;
 import com.lpoo.g72.model.element.Monster;
 
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-public class Controller implements Observer{
+public class Controller implements Observer {
 
     private final Gui gui;
+
     private Model model;
     private State state;
 
     private int destroyedBlocks;
     private int score;
-    private final int pointsPerBlock;
-    private final int pointsPerMonster;
 
     private int selectedScene;
     private List<Scene> scenes;
-    private List<String> menuOptions;
-
-    Map<String,List<Integer>> highscores;
 
     private HelicopterController helicopterController;
     private List<MonsterController> monsterControllers;
+    private CollisionController collisionController;
+    private final HighscoreController highscoreController;
 
     protected CommandInvoker commandInvoker;
 
@@ -54,49 +45,39 @@ public class Controller implements Observer{
         this.state = new MenuState(this);
         this.selectedScene = 0;
         this.setScenes();
+        this.gui.setMenuOptions(this.scenes);
 
+        this.collisionController = new CollisionController(this.model);
         this.destroyedBlocks = 0;
         this.score = 0;
-        this.pointsPerBlock = 2;
-        this.pointsPerMonster = 1;
 
-        this.highscores = new HashMap<>();
-        this.readHighscores();
+        this.highscoreController = new HighscoreController();
 
         this.commandInvoker = CommandInvoker.getInstance();
     }
 
-    private void setScenes(){
+    private void setScenes() {
         this.scenes = new ArrayList<>();
         this.scenes.add(new OportoSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
         this.scenes.add(new LisbonSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
         this.scenes.add(new RandomSceneCreator().createScene(this.gui.getWidth(), this.gui.getHeight()));
-
-        this.setMenuOptions();
     }
 
-    private void setMenuOptions(){
-        this.menuOptions = new ArrayList<>();
-        for(int i = 0; i< this.scenes.size(); i++){
-           this.menuOptions.add(this.scenes.get(i).getName());
-        }
-        this.menuOptions.add("Highscores");
-    }
+    private void initModel(Scene scene) {
+        int bombs, missiles;
 
-    private void initModel(){
-        int bombs , missiles;
-
-        bombs = (int) Math.round(Math.pow(this.scenes.get(selectedScene).getSceneBlocks(),1/5.0));
+        bombs = (int) Math.round(((float) scene.getSceneBlocks() / this.gui.getHeight()) / 4.3);
         missiles = 2;
 
-        this.model.reset( new Helicopter(new Position(0,1),bombs,missiles));
+        this.model.reset(new Helicopter(new Position(0, 1), bombs, missiles));
     }
 
     private void initScene(Scene scene) {
         this.gui.setScene(scene);
+        this.collisionController.initScene(scene);
 
-        for(int i = 0; i < this.gui.getScene().getVisualMonsters().size(); i++){
-            this.model.addMonster(new Monster(new Position(this.gui.getScene().getWidth() + new Random().nextInt(20),i%2)));
+        for (int i = 0; i < this.gui.getScene().getVisualMonsters().size(); i++) {
+            this.model.addMonster(new Monster(new Position(this.gui.getScene().getWidth() + new Random().nextInt(20), i % 2)));
         }
 
         this.score = 0;
@@ -105,19 +86,19 @@ public class Controller implements Observer{
     }
 
     private void initElementControllers() {
-        this.helicopterController = new HelicopterController(this.gui.getVisualHelicopter(), this.model.getHelicopter(),this.gui.getScene().getWidth() - 1, this.gui.getScene().getHeight() - 5);
+        this.helicopterController = new HelicopterController(this.gui.getScene().getVisualHelicopter(), this.model.getHelicopter(), this.gui.getScene().getWidth() - 1, this.gui.getScene().getHeight() - 5);
 
         this.monsterControllers = new ArrayList<>();
 
-        for(int i = 0; i < this.model.getMonsters().size(); i++){
-            this.monsterControllers.add(new MonsterController(this.gui.getScene().getVisualMonsters().get(i), this.model.getMonsters().get(i), this.gui.getScene().getWidth()-1));
+        for (int i = 0; i < this.model.getMonsters().size(); i++) {
+            this.monsterControllers.add(new MonsterController(this.gui.getScene().getVisualMonsters().get(i), this.model.getMonsters().get(i), this.gui.getScene().getWidth() - 1));
             this.helicopterController.addObserver(this.monsterControllers.get(i));
         }
 
         this.helicopterController.addObserver(this);
     }
 
-    public void run(){
+    public void run() {
 
         while (true) {
             try {
@@ -127,186 +108,103 @@ public class Controller implements Observer{
                 break;
             }
         }
+
     }
 
     public void menu(Gui.Key key) throws IOException {
 
-        this.gui.drawMenu(this.selectedScene,this.menuOptions);
+        this.gui.drawMenu(this.selectedScene);
 
-        if(key == Gui.Key.QUIT){
+        if (key == Gui.Key.QUIT) {
             this.quit();
-        }
-        else if(key == Gui.Key.UP && this.selectedScene > 0){
-            this.selectedScene --;
-        }
-        else if(key == Gui.Key.DOWN && this.selectedScene < this.scenes.size()){
-            this.selectedScene ++;
-        }
-        else if(key == Gui.Key.ENTER && this.selectedScene < this.scenes.size()){
-            this.initModel();
+        } else if (key == Gui.Key.UP && this.selectedScene > 0) {
+            this.selectedScene--;
+        } else if (key == Gui.Key.DOWN && this.selectedScene < this.scenes.size()) {
+            this.selectedScene++;
+        } else if (key == Gui.Key.ENTER && this.selectedScene < this.scenes.size()) {
+            this.setScenes();
+            this.initModel(this.scenes.get(this.selectedScene));
             this.initScene(this.scenes.get(this.selectedScene));
             this.state = new GameState(this);
-        }
-        else if(key == Gui.Key.ENTER && this.selectedScene == this.scenes.size()){
+        } else if (key == Gui.Key.ENTER && this.selectedScene == this.scenes.size()) {
             this.state = new Highscores(this);
         }
     }
 
-    public void play(Gui.Key key) throws IOException {
+    public void play(Gui.Key key) {
 
-        if(key == Gui.Key.QUIT){
+        if (key == Gui.Key.QUIT) {
             this.state = new MenuState(this);
         }
 
-        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
+        this.gui.drawScene(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
 
         this.helicopterController.run(key);
 
-        for(MonsterController monsterController : this.monsterControllers)
+        for (MonsterController monsterController : this.monsterControllers)
             monsterController.move();
 
         this.commandInvoker.executeCommands();
 
-        this.horizontalCollisions();
-        this.verticalCollisions();
+        this.collisions();
 
-        Helicopter helicopter = this.model.getHelicopter();
-        if(helicopter.getLives() < 0 || this.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks()){
-            this.addScore();
+        if (this.gameEnded()) {
+            this.score += this.gui.getHeight() - this.helicopterController.getAltitude();
+            this.highscoreController.addScore(this.scenes.get(this.selectedScene).getName(), this.score);
             this.state = new EndGame(this);
-            return;
         }
     }
 
-    public void highscores(Gui.Key key) throws IOException {
-        this.gui.drawHighscores(this.highscores);
-        this.gui.refreshScreen();
-
-        if(key == Gui.Key.QUIT){
-            this.state = new MenuState(this);
-        }
+    private boolean gameEnded() {
+        return this.model.gameOver() || this.collisionController.buildingsCollisions() || this.destroyedBlocks == this.gui.getScene().getSceneBlocks();
     }
 
-    public void endGame(Gui.Key key) throws IOException {
-
-        this.gui.draw(this.model.getHelicopter(),this.model.getMonsters(), this.destroyedBlocks, this.score);
-
-        if(this.model.getHelicopter().getLives() < 0 || this.destroyedBlocks != this.gui.getScene().getSceneBlocks()){
-            this.gui.drawMessage(this.gui.getGameOverMessage(), "#b10000","Score: " + score);
-        }
-        else{
-            this.gui.drawMessage(this.gui.getVictoryMessage(), "#28a016","Score: " + score);
-        }
-
-        if(key == Gui.Key.QUIT){
-            this.state = new MenuState(this);
-        }
-    }
-
-    private void horizontalCollisions(){
-        List<Missile> horizontalMissiles = this.model.getHelicopter().getHorizontalMissiles();
-        List<Monster> monsters = this.model.getMonsters();
-        Helicopter helicopter = this.model.getHelicopter();
-
-        for(Monster monster : monsters){
-            for(Missile missile : horizontalMissiles){
-                if(horizontalCollisionChecker(missile.getPosition(),monster.getPosition()) && monster.isAlive()){
-                    missile.setExploded();
-                    monster.kill();
-                    this.score += this.pointsPerMonster;
-                }
-            }
-
-            if(horizontalCollisionChecker(helicopter.getPosition(),monster.getPosition()) && monster.isAlive()){
-                helicopter.loseLife();
-                monster.kill();
-            }
-        }
-    }
-
-    private boolean horizontalCollisionChecker(Position pos1, Position pos2){
-        return pos1.equals(pos2) || pos1.equals(pos2.right()) || pos1.equals(pos2.right().right())|| pos1.equals(pos2.left());
-    }
-
-    private void verticalCollisions(){
-        int blocks = 0;
-
-        List<Missile> verticalMissiles = this.model.getHelicopter().getVerticalMissiles();
-
-        for(Missile missile : verticalMissiles){
-            if(!missile.hasExploded() && missile.isActive()){
-                int x = missile.getX();
-                int y = missile.getY() % (this.gui.getScene().getBuildings().length - 2);
-
-                for(int i = 0; i < 3; i++){
-                    blocks += this.gui.getScene().removeBuilding( x, y + i);
-                }
-            }
-        }
+    private void collisions() {
+        int blocks = this.collisionController.blocksDestroyed();
         this.destroyedBlocks += blocks;
-        this.score += this.pointsPerBlock * blocks;
+        this.score += this.collisionController.horizontalCollisions() + 2 * blocks;
     }
 
-    private boolean buildingsCollisions(){
-        Helicopter helicopter = this.model.getHelicopter();
-        int heliSize = this.gui.getVisualHelicopter().getForm().length - 1;
-        if(this.gui.getScene().removeBuilding(helicopter.getX() + heliSize,helicopter.getY()) > 0){
-            return true;
+    public void highscores(Gui.Key key) {
+        this.gui.drawHighscores(this.highscoreController.getHighscores());
+
+        if (key == Gui.Key.QUIT) {
+            this.state = new MenuState(this);
         }
-        return false;
     }
 
-    void quit() throws IOException {
-        this.writeHighscores();
+    public void endGame(Gui.Key key) {
+
+        this.gui.drawScene(this.model.getHelicopter(), this.model.getMonsters(), this.destroyedBlocks, this.score);
+
+        MessageDrawer messageDrawer = this.gui.getMessageDrawer();
+
+        if ( this.model.gameOver()  || this.destroyedBlocks != this.gui.getScene().getSceneBlocks()) {
+            messageDrawer.drawMessage(messageDrawer.getGameOverMessage(), "#b10000", "Score: " + score);
+        } else {
+            messageDrawer.drawMessage(messageDrawer.getVictoryMessage(), "#28a016", "Score: " + score);
+        }
+
+        if (key == Gui.Key.QUIT) {
+            this.state = new MenuState(this);
+        }
+    }
+
+    private void quit() throws IOException {
+        this.highscoreController.write();
         this.gui.closeScreen();
         throw new IOException();
     }
 
     @Override
-    public void update(int info){
-        try{
-            this.gui.drawMessage(this.gui.getNewRoundMessage(),"#0000b1","Current Altitude: " + (this.gui.getHeight() - info));
+    public void update(int info) {
+        try {
+            MessageDrawer messageDrawer = this.gui.getMessageDrawer();
+            messageDrawer.drawMessage(messageDrawer.getNewRoundMessage(), "#0000b1", "Current Altitude: " + (this.gui.getHeight() - info));
             this.gui.refreshScreen();
             Thread.sleep(800);
-        } catch (Exception e){
+        } catch (Exception ignored) {
 
-        }
-    }
-
-    private void readHighscores(){
-
-        try {
-            Type type = new TypeToken<Map<String, List<Integer>>>(){}.getType();
-            this.highscores = new Gson().fromJson(new FileReader("src/main/java/com/lpoo/g72/highscores.json"), type);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void writeHighscores(){
-        try {
-            Writer writer = new FileWriter("src/main/java/com/lpoo/g72/highscores.json");
-
-            new Gson().toJson(this.highscores, writer);
-
-            writer.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void addScore(){
-
-        this.highscores.get(this.menuOptions.get(this.selectedScene)).add(this.score);
-
-        for (Map.Entry<String, List<Integer>> entry : this.highscores.entrySet()) {
-            Collections.sort(entry.getValue(), Collections.reverseOrder());
-            while (entry.getValue().size() > 5){
-                entry.getValue().remove(entry.getValue().size()-1);
-            }
         }
     }
 

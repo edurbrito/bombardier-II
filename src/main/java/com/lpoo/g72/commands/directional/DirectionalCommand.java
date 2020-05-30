@@ -4,9 +4,10 @@ import com.lpoo.g72.commands.Command;
 import com.lpoo.g72.model.element.Element;
 
 public abstract class DirectionalCommand implements Command {
+
     Element element;
 
-    public DirectionalCommand(Element element){
+    public DirectionalCommand(Element element) {
         this.element = element;
     }
 }

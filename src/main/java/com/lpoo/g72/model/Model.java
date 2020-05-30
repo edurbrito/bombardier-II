@@ -14,10 +14,6 @@ public class Model {
         this.monsters = new ArrayList<>();
     }
 
-    public void setHelicopter(Helicopter helicopter){
-        this.helicopter = helicopter;
-    }
-
     public List<Monster> getMonsters() {
         return monsters;
     }
@@ -26,14 +22,24 @@ public class Model {
         return helicopter;
     }
 
-    public void addMonster(Monster monster){ this.monsters.add(monster);}
+    public void setHelicopter(Helicopter helicopter) {
+        this.helicopter = helicopter;
+    }
 
-    public void deleteMonsters(){
+    public void addMonster(Monster monster) {
+        this.monsters.add(monster);
+    }
+
+    private void deleteMonsters() {
         this.monsters.clear();
     }
 
-    public void reset(Helicopter helicopter){
+    public void reset(Helicopter helicopter) {
         this.helicopter = helicopter;
         this.deleteMonsters();
+    }
+
+    public boolean gameOver(){
+        return this.helicopter.getLives() < 0;
     }
 }

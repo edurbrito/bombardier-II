@@ -13,7 +13,7 @@ public class ShootMissile implements Command {
     @Override
     public void execute() {
         Missile missile = this.helicopter.shoot();
-        if(missile != null){
+        if (missile != null) {
             missile.setPosition(this.helicopter.getPosition().right().right());
             missile.activate();
         }

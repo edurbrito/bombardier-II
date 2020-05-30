@@ -1,6 +1,8 @@
 package com.lpoo.g72.gui.visualElement;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.lpoo.g72.gui.visualElement.visualMissiles.VisualHorizontalMissile;
+import com.lpoo.g72.gui.visualElement.visualMissiles.VisualVerticalMissile;
 import com.lpoo.g72.gui.visualElement.visualMonsters.VisualCretaceous;
 import com.lpoo.g72.gui.visualElement.visualMonsters.VisualDimorphodon;
 import com.lpoo.g72.gui.visualElement.visualMonsters.VisualPteranodon;
@@ -12,21 +14,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class VisualElementTest {
 
     private VisualElement visualElement;
 
     @Before
-    public void createStub(){
+    public void createStub() {
 
-        this.visualElement = new VisualElementStub( new char[]{'a','b','c'},new String[]{"A","B","C"});
+        this.visualElement = new VisualElementStub(new char[]{'a', 'b', 'c'}, new String[]{"A", "B", "C"});
 
     }
 
     @Test
-    public void testInit(){
+    public void testInit() {
 
         assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
 
@@ -66,10 +69,10 @@ public class VisualElementTest {
     }
 
     @Test
-    public void testSetters(){
+    public void testSetters() {
 
-        visualElement.setForm(new char[]{'q','w','e','r','t', 'y'});
-        visualElement.setColorPallet(new String[]{"A","B","C","D","E","F"});
+        visualElement.setForm(new char[]{'q', 'w', 'e', 'r', 't', 'y'});
+        visualElement.setColorPallet(new String[]{"A", "B", "C", "D", "E", "F"});
 
         assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
         assertEquals(6, visualElement.getForm().length);
@@ -124,16 +127,16 @@ public class VisualElementTest {
     }
 
     @Test
-    public void testDraw(){
-        Position position = Mockito.spy(new Position(1,2));
-        Element element = Mockito.spy(new Helicopter(position,4,5));
+    public void testDraw() {
+        Position position = Mockito.spy(new Position(1, 2));
+        Element element = Mockito.spy(new Helicopter(position, 4, 5));
         TextGraphics graphics = Mockito.mock(TextGraphics.class);
 
         this.visualElement.draw(graphics, element);
 
-        Mockito.verify(element,Mockito.times(this.visualElement.getForm().length * 2)).getPosition();
-        Mockito.verify(position,Mockito.times(this.visualElement.getForm().length)).getY();
-        Mockito.verify(position,Mockito.times(this.visualElement.getForm().length)).getX();
+        Mockito.verify(element, Mockito.times(this.visualElement.getForm().length * 2)).getPosition();
+        Mockito.verify(position, Mockito.times(this.visualElement.getForm().length)).getY();
+        Mockito.verify(position, Mockito.times(this.visualElement.getForm().length)).getX();
 
         Mockito.clearInvocations(element);
         Mockito.clearInvocations(position);
@@ -141,20 +144,20 @@ public class VisualElementTest {
 
         this.visualElement = new VisualHelicopter();
 
-        this.visualElement.draw(graphics,element);
+        this.visualElement.draw(graphics, element);
 
-        Mockito.verify(element,Mockito.times(this.visualElement.getForm().length * 2)).getPosition();
-        Mockito.verify(position,Mockito.times(this.visualElement.getForm().length)).getY();
-        Mockito.verify(position,Mockito.times(this.visualElement.getForm().length)).getX();
+        Mockito.verify(element, Mockito.times(this.visualElement.getForm().length * 2)).getPosition();
+        Mockito.verify(position, Mockito.times(this.visualElement.getForm().length)).getY();
+        Mockito.verify(position, Mockito.times(this.visualElement.getForm().length)).getX();
 
         Mockito.verify(graphics, Mockito.times(1)).enableModifiers(Mockito.any());
         Mockito.verify(graphics, Mockito.times(1)).setBackgroundColor(Mockito.any());
 
         Mockito.verify(graphics, Mockito.times(this.visualElement.getForm().length)).setForegroundColor(Mockito.any());
 
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(1,2 ,'/');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(2,2 ,'-');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(3,2 ,'Õ');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(1, 2, '/');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(2, 2, '-');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(3, 2, 'Õ');
 
         Mockito.clearInvocations(element);
         Mockito.clearInvocations(position);
@@ -163,22 +166,22 @@ public class VisualElementTest {
         VisualVerticalMissile visualVerticalMissile = new VisualVerticalMissile();
         Missile missile = ((Helicopter) element).drop();
         missile.setPosition(element.getPosition().down().left());
-        visualVerticalMissile.draw(graphics,missile);
+        visualVerticalMissile.draw(graphics, missile);
 
         Mockito.verify(graphics, Mockito.times(1)).enableModifiers(Mockito.any());
         Mockito.verify(graphics, Mockito.times(1)).setBackgroundColor(Mockito.any());
         Mockito.verify(graphics, Mockito.times(visualVerticalMissile.getForm().length)).setForegroundColor(Mockito.any());
 
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0,3 ,'_');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0,4 ,'|');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0,5 ,'W');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0, 3, '_');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0, 4, '|');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0, 5, 'W');
 
         visualVerticalMissile.animation();
-        visualVerticalMissile.draw(graphics,missile);
+        visualVerticalMissile.draw(graphics, missile);
 
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0,3 ,'.');
-        Mockito.verify(graphics, Mockito.times(2)).setCharacter(0,4 ,'|');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0,5 ,'U');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0, 3, '.');
+        Mockito.verify(graphics, Mockito.times(2)).setCharacter(0, 4, '|');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(0, 5, 'U');
 
         Mockito.clearInvocations(element);
         Mockito.clearInvocations(position);
@@ -187,26 +190,26 @@ public class VisualElementTest {
         VisualHorizontalMissile visualHorizontalMissile = new VisualHorizontalMissile();
         Missile missile2 = ((Helicopter) element).shoot();
         missile2.setPosition(element.getPosition().right().right());
-        visualHorizontalMissile.draw(graphics,missile2);
+        visualHorizontalMissile.draw(graphics, missile2);
 
         Mockito.verify(graphics, Mockito.times(1)).enableModifiers(Mockito.any());
         Mockito.verify(graphics, Mockito.times(1)).setBackgroundColor(Mockito.any());
         Mockito.verify(graphics, Mockito.times(visualHorizontalMissile.getForm().length)).setForegroundColor(Mockito.any());
 
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(3,2 ,'»');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(4,2 ,'»');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(5,2 ,'-');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(6,2 ,'-');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(7,2 ,'►');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(3, 2, '»');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(4, 2, '»');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(5, 2, '-');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(6, 2, '-');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(7, 2, '►');
 
         visualHorizontalMissile.animation();
-        visualHorizontalMissile.draw(graphics,missile2);
+        visualHorizontalMissile.draw(graphics, missile2);
 
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(3,2 ,'>');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(4,2 ,'>');
-        Mockito.verify(graphics, Mockito.times(2)).setCharacter(5,2 ,'-');
-        Mockito.verify(graphics, Mockito.times(2)).setCharacter(6,2 ,'-');
-        Mockito.verify(graphics, Mockito.times(2)).setCharacter(7,2 ,'►');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(3, 2, '>');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(4, 2, '>');
+        Mockito.verify(graphics, Mockito.times(2)).setCharacter(5, 2, '-');
+        Mockito.verify(graphics, Mockito.times(2)).setCharacter(6, 2, '-');
+        Mockito.verify(graphics, Mockito.times(2)).setCharacter(7, 2, '►');
 
         Mockito.clearInvocations(element);
         Mockito.clearInvocations(position);
@@ -216,7 +219,7 @@ public class VisualElementTest {
         ((Helicopter) element).drop().activate();
         ((Helicopter) element).drop().activate();
 
-        this.visualElement.draw(graphics,element);
+        this.visualElement.draw(graphics, element);
 
         Mockito.verify(graphics, Mockito.times(4)).enableModifiers(Mockito.any());
         Mockito.verify(graphics, Mockito.times(4)).setBackgroundColor(Mockito.any());
@@ -224,7 +227,7 @@ public class VisualElementTest {
         ((Helicopter) element).shoot().activate();
         ((Helicopter) element).shoot().activate();
 
-        this.visualElement.draw(graphics,element);
+        this.visualElement.draw(graphics, element);
 
         Mockito.verify(graphics, Mockito.times(10)).enableModifiers(Mockito.any());
         Mockito.verify(graphics, Mockito.times(10)).setBackgroundColor(Mockito.any());
@@ -235,11 +238,11 @@ public class VisualElementTest {
 
         this.visualElement = new VisualPteranodon();
 
-        this.visualElement.draw(graphics,element);
+        this.visualElement.draw(graphics, element);
 
-        Mockito.verify(element,Mockito.times(this.visualElement.getForm().length * 2)).getPosition();
-        Mockito.verify(position,Mockito.times(this.visualElement.getForm().length)).getY();
-        Mockito.verify(position,Mockito.times(this.visualElement.getForm().length)).getX();
+        Mockito.verify(element, Mockito.times(this.visualElement.getForm().length * 2)).getPosition();
+        Mockito.verify(position, Mockito.times(this.visualElement.getForm().length)).getY();
+        Mockito.verify(position, Mockito.times(this.visualElement.getForm().length)).getX();
 
         Mockito.verify(graphics, Mockito.times(1)).enableModifiers(Mockito.any());
         Mockito.verify(graphics, Mockito.times(1)).setBackgroundColor(Mockito.any());
@@ -247,16 +250,16 @@ public class VisualElementTest {
 
         Mockito.verify(graphics, Mockito.times(this.visualElement.getForm().length)).setForegroundColor(Mockito.any());
 
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(1,2 ,'<');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(2,2 ,'-');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(3,2 ,'/');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(4,2 ,'-');
-        Mockito.verify(graphics, Mockito.times(1)).setCharacter(5,2 ,'{');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(1, 2, '<');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(2, 2, '-');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(3, 2, '/');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(4, 2, '-');
+        Mockito.verify(graphics, Mockito.times(1)).setCharacter(5, 2, '{');
 
     }
 
     @Test
-    public void testVisualHelicopter(){
+    public void testVisualHelicopter() {
         visualElement = new VisualHelicopter();
 
         assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
@@ -274,7 +277,7 @@ public class VisualElementTest {
     }
 
     @Test
-    public void testVisualMonster(){
+    public void testVisualMonster() {
         visualElement = new VisualPteranodon();
 
         assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
@@ -296,7 +299,7 @@ public class VisualElementTest {
     }
 
     @Test
-    public void testConcreteAnimationsVH(){
+    public void testConcreteAnimationsVH() {
         visualElement = new VisualHelicopter();
 
         assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);
@@ -327,7 +330,7 @@ public class VisualElementTest {
     }
 
     @Test
-    public void testConcreteAnimationsVM(){
+    public void testConcreteAnimationsVM() {
         visualElement = new VisualPteranodon();
 
         assertTrue(visualElement.getForm().length == visualElement.getColorPallet().length);

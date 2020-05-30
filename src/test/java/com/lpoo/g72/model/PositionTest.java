@@ -1,4 +1,5 @@
 package com.lpoo.g72.model;
+
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -9,9 +10,9 @@ import static org.junit.Assert.assertEquals;
 public class PositionTest {
 
     @Test
-    public void getPosition(){
-        Position pos1 = new Position(20,34);
-        Position pos2 = new Position(6,0);
+    public void getPosition() {
+        Position pos1 = new Position(20, 34);
+        Position pos2 = new Position(6, 0);
 
         assertEquals(20, pos1.getX());
         assertEquals(34, pos1.getY());
@@ -24,9 +25,9 @@ public class PositionTest {
     }
 
     @Test
-    public void getLeft(){
-        Position pos1 = new Position(20,34);
-        Position pos2 = new Position(6,0);
+    public void getLeft() {
+        Position pos1 = new Position(20, 34);
+        Position pos2 = new Position(6, 0);
 
         Position left = pos1.left();
         assertEquals(19, left.getX());
@@ -42,9 +43,9 @@ public class PositionTest {
     }
 
     @Test
-    public void getRight(){
-        Position pos1 = new Position(20,34);
-        Position pos2 = new Position(6,0);
+    public void getRight() {
+        Position pos1 = new Position(20, 34);
+        Position pos2 = new Position(6, 0);
 
         Position right = pos1.right();
         assertEquals(21, right.getX());
@@ -60,9 +61,9 @@ public class PositionTest {
     }
 
     @Test
-    public void getUp(){
-        Position pos1 = new Position(20,34);
-        Position pos2 = new Position(6,0);
+    public void getUp() {
+        Position pos1 = new Position(20, 34);
+        Position pos2 = new Position(6, 0);
 
         Position up = pos1.up();
         assertEquals(20, up.getX());
@@ -78,9 +79,9 @@ public class PositionTest {
     }
 
     @Test
-    public void getDown(){
-        Position pos1 = new Position(20,34);
-        Position pos2 = new Position(6,0);
+    public void getDown() {
+        Position pos1 = new Position(20, 34);
+        Position pos2 = new Position(6, 0);
 
         Position down = pos1.down();
         assertEquals(20, down.getX());
@@ -96,13 +97,13 @@ public class PositionTest {
     }
 
     @Test
-    public void equalPosition(){
+    public void equalPosition() {
         Map<Position, Integer> positions = new HashMap<>();
-        Position pos1 = new Position(20,34);
-        Position pos2 = new Position(20,34);
+        Position pos1 = new Position(20, 34);
+        Position pos2 = new Position(20, 34);
 
-        positions.put(pos1,1);
-        positions.put(pos2,2);
+        positions.put(pos1, 1);
+        positions.put(pos2, 2);
         assertEquals(true, positions.containsKey(pos1));
 
         assertEquals(true, pos1.equals(pos2));

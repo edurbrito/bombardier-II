@@ -12,11 +12,11 @@ public class Missile extends Element {
         this.exploded = false;
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         return this.active;
     }
 
-    public boolean hasExploded(){
+    public boolean hasExploded() {
         return this.exploded;
     }
 
@@ -25,7 +25,7 @@ public class Missile extends Element {
         this.exploded = false;
     }
 
-    public void setExploded(){
+    public void setExploded() {
         this.exploded = true;
     }
 

@@ -16,7 +16,7 @@ public abstract class VisualElement {
     }
 
     public char[] getForm() {
-        return form;
+        return this.form;
     }
 
     public void setForm(char[] form) {
@@ -24,7 +24,7 @@ public abstract class VisualElement {
     }
 
     public String[] getColorPallet() {
-        return colorPallet;
+        return this.colorPallet;
     }
 
     public void setColorPallet(String[] colorPallet) {
@@ -33,13 +33,13 @@ public abstract class VisualElement {
 
     public abstract void animation();
 
-    public void draw(TextGraphics graphics, Element element){
+    public void draw(TextGraphics graphics, Element element) {
         graphics.enableModifiers(SGR.BOLD);
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#C0C0C0"));
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#cccccc"));
 
         for (int i = 0; i < this.form.length; i++) {
             graphics.setForegroundColor(TextColor.Factory.fromString(this.colorPallet[i]));
-            graphics.setCharacter(element.getPosition().getX() + i,element.getPosition().getY() , this.form[i]);
+            graphics.setCharacter(element.getPosition().getX() + i, element.getPosition().getY(), this.form[i]);
         }
     }
 }
