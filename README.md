@@ -1,7 +1,5 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&display=swap" rel="stylesheet">
 
-###### [LPOO-2020-G72](https://web.fe.up.pt/~arestivo/page/courses/2020/lpoo/project/)
-
 # Bombardier II : The Revenge of The Skyscrapers
 
 > A suicide helicopter tries to bomb a city taken by the forces of evil, while escaping from monsters moving in its direction.
@@ -21,7 +19,7 @@ The helicopter, starting from the top left corner of the scene, will have to des
 
 ----
 
-This project was developed by Diana Freitas ([up201806230@fe.up.pt](mailto:up201806230@fe.up.pt)) and Eduardo Brito ([up201806271@fe.up.pt](mailto:up201806271@fe.up.pt)) for LPOO 2019⁄2020.
+This project was developed by Diana Freitas ([@dianaamfr](https://github.com/dianaamfr)) and Eduardo Brito ([@edurbrito](https://github.com/edurbrito)).
 
 ## MAIN FEATURES
 
