@@ -19,6 +19,10 @@ The helicopter, starting from the top left corner of the scene, will have to des
 
 ----
 
+## Design
+
+*[See the full description of the design patterns and design choices here.](https://github.com/edurbrito/bombardier-II/tree/master/docs#design)*
+
 This project was developed by Diana Freitas ([@dianaamfr](https://github.com/dianaamfr)) and Eduardo Brito ([@edurbrito](https://github.com/edurbrito)).
 
 ## MAIN FEATURES
